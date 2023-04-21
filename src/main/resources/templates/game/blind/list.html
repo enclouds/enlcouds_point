@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+
+<body>
+
+<!-- modal S -->
+<div class="modal fade small" id="reg_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">Blind 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">Blind 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th scope="row"><em class="required">*</em>LVL</th>
+                                <td>
+                                    <input type="text" name="lvl" id="lvl">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><em class="required">*</em>time(초단위)</th>
+                                <td>
+                                    <input type="text" name="time" id="time">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">break 여부</th>
+                                <td>
+                                    <input type="checkbox" name="breakYn" id="breakYn">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><em class="required">*</em>small blind</th>
+                                <td>
+                                    <input type="text" name="smallBlind" id="smallBlind">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><em class="required">*</em>big blind</th>
+                                <td>
+                                    <input type="text" name="bigBlind" id="bigBlind">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ante</th>
+                                <td>
+                                    <input type="text" name="ante" id="ante" value="0">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:regBlind();">저장</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('reg_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="upt_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">Blind 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">Blind 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th scope="row"><em class="required">*</em>LVL</th>
+                                <td>
+                                    <input type="text" name="uptLvl" id="uptLvl">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><em class="required">*</em>time(초단위)</th>
+                                <td>
+                                    <input type="text" name="uptTime" id="uptTime">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">break 여부</th>
+                                <td>
+                                    <input type="checkbox" name="uptBreakYn" id="uptBreakYn">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><em class="required">*</em>small blind</th>
+                                <td>
+                                    <input type="text" name="uptSmallBlind" id="uptSmallBlind">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><em class="required">*</em>big blind</th>
+                                <td>
+                                    <input type="text" name="uptBigBlind" id="uptBigBlind">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">ante</th>
+                                <td>
+                                    <input type="text" name="uptAnte" id="uptAnte">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:uptBlind();">저장</button>
+                <button type="button" class="btn red btn-primary" th:onclick="javascript:delBlind();">삭제</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('upt_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- container S -->
+<div class="container">
+    <!-- header S -->
+    <div th:replace="/fragments/left.html :: fragment-left('m3', '/game/list')"></div>
+    <!-- header E -->
+
+    <!-- content S -->
+    <div class="content">
+        <div class="con_top">
+            <ul>
+                <li>게임 관리</li>
+                <li>Blind 목록</li>
+            </ul>
+        </div>
+        <p class="page_info">Blind 목록</p>
+
+        <form id="schFrm">
+            <div class="search_option">
+                <span class="input_group">
+                    <select id="gameSeq" name="gameSeq" style="width:100px;">
+                        <option th:each="list:${gameList}" th:value="${list.seq}" th:text="${list.gameName}" th:selected="${list.seq} == ${gameSeq}"></option>
+                    </select>
+                </span>
+                <button type="button" class="add_btn" th:onclick="javascript:fnRegModal()">등록</button>
+            </div>
+        </form>
+
+        <div class="list_box">
+            <table class="list">
+                <colgroup>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">lvl</th>
+                    <th scope="col">time(초단위)</th>
+                    <th scope="col">small blind</th>
+                    <th scope="col">big blind</th>
+                    <th scope="col">ante</th>
+                    <th scope="col">break 여부</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="list:${blindList}">
+                    <td><a href="javascript:callFunction();" th:text="${list.lvl}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.seq}]], [[${list.lvl}]], [[${list.time}]], [[${list.breakYn}]], [[${list.smallBlind}]], [[${list.bigBlind}]], [[${list.ante}]])"></a></td>
+                    <td th:text="${list.time}"></td>
+                    <td th:text="${#numbers.formatInteger(list.smallBlind, 0, 'COMMA')}"></td>
+                    <td th:text="${#numbers.formatInteger(list.bigBlind, 0, 'COMMA')}"></td>
+                    <td th:text="${#numbers.formatInteger(list.ante, 0, 'COMMA')}"></td>
+                    <td th:text="${list.breakYn}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- content E -->
+
+</div>
+<!-- container E -->
+</body>
+<script th:src="@{/static/js/common.js}"></script>
+<script th:inline="javascript">
+
+    var selectTrSeq;
+
+    $( function() {
+        $("#gameSeq").change(function(){
+            location.href = "/game/blind/list?gameSeq="+$(this).val();
+        })
+    });
+
+    function fnSearch(){
+        $("#schFrm").submit();
+    }
+
+    function fnModalClose(id){
+        $("#"+id).hide();
+    }
+
+    function fnRegModal(){
+        $("#reg_modal").show();
+    }
+
+    function fnUptModal(seq, lvl, time, breakYn, smallBlind, bigBlind, ante){
+        selectTrSeq = seq;
+
+        $("#uptLvl").val(lvl);
+        $("#uptTime").val(time);
+
+        if(breakYn == "Y"){
+            $('input:checkbox[id="uptBreakYn"]').attr("checked", true);
+        }
+
+        $("#uptSmallBlind").val(smallBlind);
+        $("#uptBigBlind").val(bigBlind);
+        $("#uptAnte").val(ante);
+        $("#upt_modal").show();
+    }
+
+    function regBlind(){
+        var formData = new FormData();
+
+        if($("#lvl").val() == ''){
+            alert("레벨은 필수 입니다.");
+            $("#lvl").focus();
+            return;
+        }
+
+        if($("#time").val() == ''){
+            alert("타임은 필수 입니다.");
+            $("#time").focus();
+            return;
+        }
+
+        if($("#smallBlind").val() == ''){
+            alert("스몰 블라인드는 필수 입니다.");
+            $("#smallBlind").focus();
+            return;
+        }
+
+        if($("#bigBlind").val() == ''){
+            alert("빅 블라인드는 필수 입니다.");
+            $("#bigBlind").focus();
+            return;
+        }
+
+        formData.append("gameSeq", $("#gameSeq").val());
+        formData.append("lvl", $("#lvl").val());
+        formData.append("time", $("#time").val());
+
+        var check_break = "N";
+        if($('#breakYn').prop("checked")){
+            check_break = "Y";
+        }
+
+        formData.append("breakYn", check_break);
+        formData.append("smallBlind", $("#smallBlind").val());
+        formData.append("bigBlind", $("#bigBlind").val());
+        formData.append("ante", $("#ante").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/game/blind/insertBlindAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function uptBlind(){
+
+        if($("#uptLvl").val() == ''){
+            alert("레벨은 필수 입니다.");
+            $("#uptLvl").focus();
+            return;
+        }
+
+        if($("#uptTime").val() == ''){
+            alert("타임은 필수 입니다.");
+            $("#uptTime").focus();
+            return;
+        }
+
+        if($("#uptSmallBlind").val() == ''){
+            alert("스몰 블라인드는 필수 입니다.");
+            $("#uptSmallBlind").focus();
+            return;
+        }
+
+        if($("#uptBigBlind").val() == ''){
+            alert("빅 블라인드는 필수 입니다.");
+            $("#uptBigBlind").focus();
+            return;
+        }
+
+        var formData = new FormData();
+
+        formData.append("seq", selectTrSeq);
+        formData.append("lvl", $("#uptLvl").val());
+        formData.append("time", $("#uptTime").val());
+
+        var check_break = "N";
+        if($('#uptBreakYn').prop("checked")){
+            check_break = "Y";
+        }
+
+        formData.append("breakYn", check_break);
+        formData.append("smallBlind", $("#uptSmallBlind").val());
+        formData.append("bigBlind", $("#uptBigBlind").val());
+        formData.append("ante", $("#uptAnte").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/game/blind/updateBlindAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function delBlind(){
+        var formData = new FormData();
+
+        formData.append("seq", selectTrSeq);
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/game/blind/deleteBlindAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function callFunction() {
+        console.log('call function');
+    }
+
+</script>
+
+</html>

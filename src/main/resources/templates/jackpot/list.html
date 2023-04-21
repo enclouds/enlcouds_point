@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+
+<body>
+
+<!-- modal S -->
+<div class="modal fade small" id="reg_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">JackPot 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">JackPot 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th scope="row"><em class="required">*</em>JackPot Title</th>
+                                <td>
+                                    <input type="text" name="jackpotTitle" id="jackpotTitle">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:regJackpot();">저장</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('reg_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="upt_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">JackPot 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">JackPot 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row"><em class="required">*</em>JackPot Title</th>
+                            <td>
+                                <input type="text" name="uptJackpotTitle" id="uptJackpotTitle">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">사용구분</th>
+                            <td>
+                                <input type="text" name="uptUseYn" id="uptUseYn">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:uptJackpot();">저장</button>
+                <button type="button" class="btn red btn-primary" th:onclick="javascript:delJackpot();">삭제</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('upt_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="add_jackpot_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">JackPot 적립</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">JackPot 적립</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th scope="row">적립금액</th>
+                                <td>
+                                    <input type="text" name="addJackpotPrize" id="addJackpotPrize" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:addJackpot();">저장</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('add_jackpot_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="minus_jackpot_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">JackPot 차감</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">JackPot 차감</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">차감금액</th>
+                            <td>
+                                <input type="text" name="minusJackpotPrize" id="minusJackpotPrize" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:minusJackpot();">저장</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('minus_jackpot_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- container S -->
+<div class="container">
+    <!-- header S -->
+    <div th:replace="/fragments/left.html :: fragment-left('m2', '/user/list')"></div>
+    <!-- header E -->
+
+    <!-- content S -->
+    <div class="content">
+        <div class="con_top">
+            <ul>
+                <li>JackPot 관리</li>
+                <li>JackPot 목록</li>
+            </ul>
+        </div>
+        <p class="page_info">JackPot 목록</p>
+
+        <form id="schFrm">
+            <div class="search_option">
+                <button type="button" class="search_btn" th:onclick="javascript:fnSearch();">조회</button>
+                <button type="button" class="add_btn" th:onclick="javascript:fnRegModal()">등록</button>
+            </div>
+        </form>
+
+        <div class="list_box">
+            <table class="list">
+                <colgroup>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">seq</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Prize</th>
+                    <th scope="col">사용구분</th>
+                    <th scope="col">적립</th>
+                    <th scope="col">차감</th>
+                    <th scope="col">View</th>
+                    <th scope="col">등록일자</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="list:${jackpotList}">
+                    <td th:text="${list.seq}"></td>
+                    <td><a href="javascript:callFunction();" th:text="${list.jackpotTitle}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.seq}]], [[${list.jackpotTitle}]], [[${list.useYn}]])"></a></td>
+                    <td th:text="${#numbers.formatInteger(list.jackpotPrize, 0, 'COMMA')}"></td>
+                    <td th:text="${list.useYn}"></td>
+                    <td>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddJackpot([[${list.seq}]])">적립</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn red" th:onclick="javascript:fnMinusJackpot([[${list.seq}]], [[${list.jackpotPrize}]])">차감</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn green" th:onclick="javascript:fnJackpotView([[${list.seq}]])">View</button>
+                    </td>
+                    <td th:text="${list.regDate}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- pagination -->
+        <div class="paging" title="페이지">
+
+            <th:block layout:fragment="paging">
+                <nav th:replace="/fragments/pagination.html :: fragment-pagination"></nav>
+            </th:block>
+
+            <th:block layout:fragment="script">
+                <script th:inline="javascript">
+						/*<![CDATA[*/
+
+						function movePage(uri, queryString) {
+							location.href = uri + queryString;
+						}
+
+						/*]]>*/
+					</script>
+            </th:block>
+
+        </div>
+        <!-- /pagination -->
+
+    </div>
+    <!-- content E -->
+
+</div>
+<!-- container E -->
+</body>
+<script th:src="@{/static/js/common.js}"></script>
+<script th:inline="javascript">
+
+    var selectTrSeq;
+    var totalPrize;
+
+    $( function() {
+    });
+
+    function fnSearch(){
+        $("#schFrm").submit();
+    }
+
+    function fnModalClose(id){
+        $("#"+id).hide();
+    }
+
+    function fnRegModal(){
+        $("#reg_modal").show();
+    }
+
+    function fnUptModal(seq, jackpotTitle, useYn){
+        selectTrSeq = seq;
+
+        $("#uptJackpotTitle").val(jackpotTitle);
+        $("#uptUseYn").val(useYn);
+        $("#upt_modal").show();
+    }
+
+    function regJackpot(){
+        var formData = new FormData();
+
+        if($("#jackpotTitle").val() == ''){
+            alert("Jackpot Title은 필수 입니다.");
+            $("#jackpotTitle").focus();
+            return;
+        }
+
+        formData.append("jackpotTitle", $("#jackpotTitle").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/jackpot/insertJackpotAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function uptJackpot(){
+
+        if($("#uptJackpotTitle").val() == ''){
+            alert("Jackpot Title은 필수 입니다.");
+            $("#uptJackpotTitle").focus();
+            return;
+        }
+
+        if($("#uptUseYn").val() == ''){
+            alert("사용구분은 필수 입니다.");
+            $("#uptUseYn").focus();
+            return;
+        }
+
+        var formData = new FormData();
+
+        formData.append("seq", selectTrSeq);
+        formData.append("jackpotTitle", $("#uptJackpotTitle").val());
+        formData.append("useYn", $("#uptUseYn").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/jackpot/updateJackpotAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function delJackpot(){
+        var formData = new FormData();
+
+        formData.append("seq", selectTrSeq);
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/jackpot/deleteJackpotAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function callFunction() {
+        console.log('call function');
+    }
+
+    function fnJackpotView(jackpotSeq){
+        window.open("/jackpot/view?jackpotSeq="+jackpotSeq, "_blank", "height=" + screen.height + ",width=" + screen.width + "fullscreen=yes, status=no, menubar=no, toolbar=no, resizable=no");
+    }
+
+    function fnAddJackpot(jackpotSeq){
+        selectTrSeq = jackpotSeq;
+
+        $("#add_jackpot_modal").show();
+    }
+
+    function fnMinusJackpot(jackpotSeq, prize){
+        if(prize < 1){
+            alert("차감할 Jackpot이 없습니다.");
+            return;
+        }else {
+            totalPrize = prize;
+        }
+
+        selectTrSeq = jackpotSeq;
+
+        $("#minus_jackpot_modal").show();
+    }
+
+    function addJackpot(){
+        var formData = new FormData();
+
+        formData.append("jackpotSeq", selectTrSeq);
+        formData.append("addJackpotPrize", $("#addJackpotPrize").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/jackpot/addJackpotAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function minusJackpot(){
+        var formData = new FormData();
+
+        formData.append("jackpotSeq", selectTrSeq);
+        formData.append("minusJackpotPrize", $("#minusJackpotPrize").val());
+
+        if($("#minusJackpotPrize").val() > totalPrize){
+            alert("현재 JackPot보다 차감 금액이 많습니다.");
+            $("#minusJackpotPrize").val(0);
+            $("#minusJackpotPrize").focus();
+            return false;
+        }
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/jackpot/minusJackpotAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+</script>
+
+</html>

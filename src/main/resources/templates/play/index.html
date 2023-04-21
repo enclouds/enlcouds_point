@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title th:text="${title}"></title>
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="description" content="킹스라운지" />
+  <meta name="keywords" content="킹스라운지" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="" />
+  <meta property="og:title" content="킹스라운지" />
+  <meta property="og:description" content="킹스라운지" />
+  <link th:rel="stylesheet" th:href="@{/static/css/play/common.css}">
+  <link href='http://fonts.googleapis.com/css?family=Josefin+Sans&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+  <script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script th:src="@{/static/js/common.js}"></script>
+
+  <script th:inline="javascript">
+      /*<![CDATA[*/
+
+      var time = 0;
+      var breakTime = 0;
+      var starFlag = true;
+      var blindList = /*[[${blindList}]]*/;
+      var blindLvl = 0;
+      var timer;
+      var player = 0;
+      var totalPlayer = 0;
+      var startStack = /*[[${gameInfo.startStackInt}]]*/;
+      var rebuyStack = /*[[${gameInfo.rebuyStackInt}]]*/;
+      var avgStackTotal = 0;
+
+      $(document).ready(function(){
+          breakTimeSum();
+
+          $("#lvl").text(blindList[blindLvl].lvl);
+          $("#smallBlind").text(blindList[blindLvl].smallBlind);
+          $("#bigBlind").text(blindList[blindLvl].bigBlind);
+          $("#ante").text(blindList[blindLvl].ante);
+
+          if(blindList[blindLvl+1] != null){
+              $("#nextLvlSmallBlind").text(blindList[blindLvl+1].smallBlind);
+              $("#nextLvlBigBlind").text(blindList[blindLvl+1].bigBlind);
+              $("#nextLvlAnte").text(blindList[blindLvl+1].ante);
+          }
+
+          min = Math.floor(blindList[0].time/60);
+          hour = Math.floor(min/60);
+          sec = blindList[0].time%60;
+
+          var tm = min;
+          var ts = sec;
+
+          if(tm < 10){
+              tm = "0" + min;
+          }
+
+          if(ts < 10){
+              ts = "0" + sec;
+          }
+
+          document.getElementById("timeMi").innerHTML = tm;
+          document.getElementById("timeSs").innerHTML = ts;
+
+          time = blindList[blindLvl].time;
+
+          b_min = Math.floor(breakTime/60%60);
+          b_hour = Math.floor(breakTime/60/60);
+          b_sec = breakTime%60;
+
+          var b_th = b_hour;
+          var b_tm = b_min;
+          var b_ts = b_sec;
+
+          if(b_th < 10){
+              b_th = "0" + b_hour;
+          }
+
+          if(b_tm < 10){
+              b_tm = "0" + b_min;
+          }
+
+          if(b_ts < 10){
+              b_ts = "0" + b_sec;
+          }
+
+          $("#breakTime").text(b_th + ":" + b_tm + ":" + b_ts);
+
+          $("#pausebtn").click(function(){
+              if(time != 0){
+                  clearInterval(timer);
+                  starFlag = true;
+              }
+          });
+
+          $("#stopbtn").click(function(){
+              window.location.href = "/game";
+          });
+
+          $("#lvlUp").click(function(){
+              blindLvl++;
+              breakTimeSum();
+              nextLvl();
+          });
+
+          $("#lvlDown").click(function(){
+              if(blindLvl != 0){
+                  blindLvl--;
+                  breakTimeSum();
+                  nextLvl();
+              }
+          });
+
+          $("#playerPlus").click(function(){
+              player++;
+
+              $("#nowPlayer").text(player);
+              avgTotal();
+          });
+
+          $("#playerMinus").click(function(){
+              player--;
+
+              $("#nowPlayer").text(player);
+              avgTotal();
+          });
+
+          $("#rebuyPlus").click(function(){
+              player++;
+              totalPlayer++;
+
+              avgStackTotal += rebuyStack;
+
+              $("#nowPlayer").text(player);
+              $("#totalPlayer").text(totalPlayer);
+
+              avgTotal();
+          });
+
+          $("#rebuyMinus").click(function(){
+              if(player != 0){
+                  player--;
+              }
+
+              if(totalPlayer != 0){
+                  totalPlayer--;
+              }
+
+              if(avgStackTotal != 0){
+                  avgStackTotal -= rebuyStack;
+              }
+
+              $("#nowPlayer").text(player);
+              $("#totalPlayer").text(totalPlayer);
+
+              avgTotal();
+          });
+
+          $("#entryPlus").click(function(){
+              player++;
+              totalPlayer++;
+
+              avgStackTotal += startStack;
+
+              $("#nowPlayer").text(player);
+              $("#totalPlayer").text(totalPlayer);
+
+              avgTotal();
+          });
+
+          $("#entryMinus").click(function(){
+              if(player != 0){
+                  player--;
+              }
+
+              if(totalPlayer != 0){
+                  totalPlayer--;
+              }
+
+              if(avgStackTotal != 0){
+                  avgStackTotal -= startStack;
+              }
+
+              $("#nowPlayer").text(player);
+              $("#totalPlayer").text(totalPlayer);
+
+              avgTotal();
+          });
+
+          $("#timePlusBtn").click(function(){
+              time = time + 60;
+              breakTime = breakTime + 60;
+
+              min = Math.floor(time/60);
+              hour = Math.floor(min/60);
+              sec = time%60;
+              min = min%60;
+
+              var tm = min;
+              var ts = sec;
+
+              if(tm < 10){
+                  tm = "0" + min;
+              }
+
+              if(ts < 10){
+                  ts = "0" + sec;
+              }
+
+              document.getElementById("timeMi").innerHTML = tm;
+              document.getElementById("timeSs").innerHTML = ts;
+
+              b_min = Math.floor(breakTime/60%60);
+              b_hour = Math.floor(breakTime/60/60);
+              b_sec = breakTime%60;
+
+              var b_th = b_hour;
+              var b_tm = b_min;
+              var b_ts = b_sec;
+
+              if(b_th < 10){
+                  b_th = "0" + b_hour;
+              }
+
+              if(b_tm < 10){
+                  b_tm = "0" + b_min;
+              }
+
+              if(b_ts < 10){
+                  b_ts = "0" + b_sec;
+              }
+
+              $("#breakTime").text(b_th + ":" + b_tm + ":" + b_ts);
+          });
+
+          $("#timeMinusBtn").click(function(){
+              if((time - 10) < 1){
+                  time = 1;
+              }else {
+                  time = time - 60;
+                  breakTime = breakTime - 60;
+              }
+
+              min = Math.floor(time/60);
+              hour = Math.floor(min/60);
+              sec = time%60;
+              min = min%60;
+
+              var tm = min;
+              var ts = sec;
+
+              if(tm < 10){
+                  tm = "0" + min;
+              }
+
+              if(ts < 10){
+                  ts = "0" + sec;
+              }
+
+              document.getElementById("timeMi").innerHTML = tm;
+              document.getElementById("timeSs").innerHTML = ts;
+
+              b_min = Math.floor(breakTime/60%60);
+              b_hour = Math.floor(breakTime/60/60);
+              b_sec = breakTime%60;
+
+              var b_th = b_hour;
+              var b_tm = b_min;
+              var b_ts = b_sec;
+
+              if(b_th < 10){
+                  b_th = "0" + b_hour;
+              }
+
+              if(b_tm < 10){
+                  b_tm = "0" + b_min;
+              }
+
+              if(b_ts < 10){
+                  b_ts = "0" + b_sec;
+              }
+
+              $("#breakTime").text(b_th + ":" + b_tm + ":" + b_ts);
+          });
+
+          $("#refreshBtn").click(function(){
+              clearInterval(timer);
+              starFlag = true;
+
+              location.reload();
+          });
+
+    });
+
+    function timeGo(){
+        if(starFlag){
+            starFlag = false;
+
+            timer = setInterval(function(){
+                time--;
+                breakTime--;
+
+                min = Math.floor(time/60);
+                hour = Math.floor(min/60);
+                sec = time%60;
+                min = min%60;
+
+                var tm = min;
+                var ts = sec;
+
+                if(tm < 10){
+                    tm = "0" + min;
+                }
+
+                if(ts < 10){
+                    ts = "0" + sec;
+                }
+
+                document.getElementById("timeMi").innerHTML = tm;
+                document.getElementById("timeSs").innerHTML = ts;
+
+                if(blindList[blindLvl].breakYn == 'N'){
+                    b_min = Math.floor(breakTime/60%60);
+                    b_hour = Math.floor(breakTime/60/60);
+                    b_sec = breakTime%60;
+
+                    var b_th = b_hour;
+                    var b_tm = b_min;
+                    var b_ts = b_sec;
+
+                    if(b_th < 10){
+                        b_th = "0" + b_hour;
+                    }
+
+                    if(b_tm < 10){
+                        b_tm = "0" + b_min;
+                    }
+
+                    if(b_ts < 10){
+                        b_ts = "0" + b_sec;
+                    }
+
+                    $("#breakTime").text(b_th + ":" + b_tm + ":" + b_ts);
+                } else {
+                    $("#breakTime").text("00:00:00");
+                }
+
+
+                if(time < 1){
+                    nextBeep();
+                    clearInterval(timer);
+                    blindLvl++;
+                    nextLvl();
+                }
+            }, 1000);
+        }
+    }
+
+    function breakTimeSum(){
+        breakTime = 0;
+        for(var i=blindLvl ; i<blindList.length ; i++){
+            if(blindList[i].breakYn == 'N'){
+                breakTime = breakTime + blindList[i].time;
+            }else {
+                break;
+            }
+        }
+    }
+
+    function avgTotal(){
+        var avg = Math.floor(avgStackTotal / player);
+
+        if (isNaN(avg)) {
+            avg = 0;
+        }
+
+        if(!isFinite(avg)){
+            avg = 0;
+        }
+
+        $("#avgStackTotal").text(addComma(avg));
+    }
+
+    function nextLvl(){
+        breakTimeSum();
+
+        if(blindList[blindLvl].breakYn == 'Y'){
+            $("#lvl").text("BREAK");
+            $("#smallBlind").text("0");
+            $("#bigBlind").text("0");
+            $("#ante").text("0");
+        }else {
+            $("#lvl").text(blindList[blindLvl].lvl);
+            $("#smallBlind").text(blindList[blindLvl].smallBlind);
+            $("#bigBlind").text(blindList[blindLvl].bigBlind);
+            $("#ante").text(blindList[blindLvl].ante);
+
+            if(blindList[blindLvl+1] != null){
+                if(blindList[blindLvl+1].breakYn == 'Y'){
+                    $("#nextLvlSmallBlind").text("0");
+                    $("#nextLvlBigBlind").text("0");
+                    $("#nextLvlAnte").text("0");
+                }else {
+                    $("#nextLvlSmallBlind").text(blindList[blindLvl+1].smallBlind);
+                    $("#nextLvlBigBlind").text(blindList[blindLvl+1].bigBlind);
+                    $("#nextLvlAnte").text(blindList[blindLvl+1].ante);
+                }
+            }
+        }
+
+        time = blindList[blindLvl].time;
+        clearInterval(timer);
+        starFlag = true;
+
+        timeGo();
+    }
+
+    function nextBeep() {
+        var snd = new Audio("../../static/sound/next_beep.mp3");
+        snd.play();
+    }
+
+    function getPrizeInfo(seq){
+        var formData = new FormData();
+        formData.append("seq", seq);
+
+        $.ajax({
+            type: "POST",
+            url: "/game/getPrizeInfoAjax",
+            data: formData,
+            async : false,
+            contentType : false,
+            processData : false,
+            success: function(response) {
+                var rank1 = document.getElementById('rank1');
+                var rank2 = document.getElementById('rank2');
+                var startDl = "<dl>";
+                var endDl = "</dl>";
+
+                var rank1Html = "";
+                if(response.prizeList1.length > 0){
+                    for(var i=0 ; i<response.prizeList1.length ; i++){
+                        rank1Html += startDl;
+                        rank1Html += "<dt>";
+                        if(response.prizeList1[i].rank == "1"){
+                            rank1Html += "1st";
+                        }else if(response.prizeList1[i].rank == "2"){
+                            rank1Html += "2nd";
+                        }else if(response.prizeList1[i].rank == "3"){
+                            rank1Html += "3rd";
+                        }
+                        rank1Html += "</dt>";
+
+                        rank1Html += "<dd>" + response.prizeList1[i].prize.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + "</dd>";
+                        rank1Html += endDl;
+                    }
+                }else {
+                  rank1Html = startDl + "<p style='font-size: xx-large;'>Prize shows on end of level 10</p>" + endDl;
+                }
+                rank1.innerHTML = rank1Html;
+
+                var rank2Html = "";
+                if(response.prizeList2.length > 0){
+                    for(var i=0 ; i<response.prizeList2.length ; i++){
+                        rank2Html += startDl;
+                        rank2Html += "<dt>" + response.prizeList2[i].rank + "</dt>";
+                        rank2Html += "<dd>" + response.prizeList2[i].prize.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + "</dd>";
+                        rank2Html += endDl;
+                    }
+                }
+
+                rank2.innerHTML = rank2Html;
+
+                $("#totalPrize").text(response.totalPrize.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
+            },
+            error: function(error) {
+                alert("결제 실패");
+            }
+        });
+    }
+
+    /*]]>*/
+</script>
+
+</head>
+
+<body>
+  <div class="wrap">
+
+    <div class="container">
+
+      <div class="content">
+        <div class="left">
+          <h1><img th:src="@{${imgUrl}}" th:alt="${title}" style="width:100%;height:100%;"></h1>
+          <div class="inner">
+            <div class="rank1" id="rank1">
+              <dl th:if="${!#lists.isEmpty(prizeList1)}" th:each="prizeList1:${prizeList1}">
+                <dt th:text="${prizeList1.rank} == '1' ? '1st' : (${prizeList1.rank} == '2' ? '2nd' : (${prizeList1.rank} == '3' ? '3rd' : ''))"></dt>
+                <dd th:text="${#numbers.formatInteger(prizeList1.prize, 0, 'COMMA')}"></dd>
+              </dl>
+              <dl th:if="${#lists.isEmpty(prizeList1)}">
+                <p style="font-size: xx-large;">Prize shows on end of level 10</p>
+              </dl>
+            </div>
+
+            <div class="rank2" id="rank2">
+              <dl th:each="prizeList2:${prizeList2}">
+                <dt th:text="${prizeList2.rank}"></dt>
+                <dd th:text="${#numbers.formatInteger(prizeList2.prize, 0, 'COMMA')}"></dd>
+              </dl>
+            </div>
+
+            <div class="total">
+              <dl>
+                <dt th:onclick="javascript:getPrizeInfo([[${gameInfo.seq}]]);">TOTAL PRIZE</dt>
+                <dd id="totalPrize" th:text="${#numbers.formatInteger(totalPrize, 0, 'COMMA')}">
+                </dd>
+              </dl>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="center">
+          <h2><span th:text="${gameInfo.gameName}"></span></h2>
+          <div class="inner">
+            <dl class="info1">
+              <dt>LEVEL</dt>
+              <dd id="lvl">0</dd>
+            </dl>
+            <p class="info2">
+              <span id="timeMi">00</span>:<span id="timeSs">00</span>
+            </p>
+            <div class="info3">
+              <dl>
+                <dt>BLINDS</dt>
+                <dd><span id="smallBlind">0</span>/<span id="bigBlind">0</span></dd>
+              </dl>
+              <dl>
+                <dt>ANTE</dt>
+                <dd><span id="ante">100</span></dd>
+              </dl>
+            </div>
+            <dl class="info4">
+              <dt>NEXT LEVEL</dt>
+              <dd>
+                <span id="nextLvlSmallBlind">0</span>/<span id="nextLvlBigBlind">0</span>(<span id="nextLvlAnte">0</span>)
+              </dd>
+            </dl>
+            <p style="text-align: center;">Copyright 2022 Enclouds_Nal'K', All Right Reserved.</p>
+          </div>
+        </div>
+
+        <div class="right">
+          <div class="inner">
+            <dl class="info1">
+              <dt>NEXT BREAK</dt>
+              <dd id="breakTime">00:00:00</dd>
+            </dl>
+            <dl class="info2">
+              <dt>AVG.STACK</dt>
+              <dd id="avgStackTotal">0</dd>
+            </dl>
+            <dl class="info3">
+              <dt>PLAYER</dt>
+              <dd>
+                <span id="nowPlayer">0</span>/<span id="totalPlayer">0</span>
+              </dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom">
+        <div class="inner">
+          <dl>
+            <dt>PLAYER</dt>
+            <dd>
+              <a class="up" href="#" id="playerPlus"><span>+</span></a>
+              <a class="down" href="#" id="playerMinus"><span>-</span></a>
+            </dd>
+          </dl>
+          <dl>
+            <dt>ENTRY</dt>
+            <dd>
+              <a class="up" href="#" id="entryPlus"><span>+</span></a>
+              <a class="down" href="#" id="entryMinus"><span>-</span></a>
+            </dd>
+          </dl>
+          <dl>
+            <dt>RE-Entry IN</dt>
+            <dd>
+              <a class="up" href="#" id="rebuyPlus"><span>+</span></a>
+              <a class="down" href="#" id="rebuyMinus"><span>-</span></a>
+            </dd>
+          </dl>
+          <dl>
+            <dt>LEVEL</dt>
+            <dd>
+              <a class="up" href="#" id="lvlUp"><span>+</span></a>
+              <a class="down" href="#" id="lvlDown"><span>-</span></a>
+            </dd>
+          </dl>
+          <div class="btn">
+            <a id="pausebtn" class="btn1" href="#">stop</a>
+            <a id="startbtn" class="btn2" href="#" onclick="javascript:timeGo();">play</a>
+            <a id="timePlusBtn" class="btn3" href="#">prev</a>
+            <a id="timeMinusBtn" class="btn4" href="#">next</a>
+            <a id="stopbtn" class="btn5" href="#" th:if="${gameInfo.regUserId == 'hunters'}">on/off</a>
+            <a id="refreshBtn" class="btn6" href="#">refresh</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

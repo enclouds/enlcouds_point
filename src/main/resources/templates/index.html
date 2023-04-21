@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <div th:replace="/fragments/header.html :: fragment-header"></div>
+
+  <script>
+
+    $(function() {
+        var id = getCookie("c_userid");
+        if (id == null || typeof id == "undefined") {
+            id = "";
+            $('#login-option1').prop('checked',false);
+        }else {
+            $("#username").val(id);
+            $('#login-option1').prop('checked',true);
+        }
+    });
+
+    function fnLogin(){
+        $("#loginFrm").attr("action", "/login");
+        $("#loginFrm").submit();
+    }
+
+    function fnAppDownload(){
+        $("#loginFrm").attr("action", "/download/app");
+        $("#loginFrm").submit();
+    }
+
+  </script>
+
+</head>
+
+<body>
+<form id="loginFrm" th:action="@{/login}" th:object="${loginDto}" method="post">
+  <!-- container S -->
+  <div class="container">
+
+    <!-- content S -->
+    <div class="content login">
+      <div class="login_wrap">
+        <h1><img src="/static/img/jackpot/kingsloungelogo.png" alt="킹스힐포인트"></h1>
+        <div class="login_box">
+          <p class="tit">로그인</p>
+          <div class="input_box">
+            <p class="group">
+              <input type="text" id="username" name="username" placeholder="로그인 ID">
+              <input type="password" id="password" name="password" placeholder="비밀번호" onkeypress="javascript:if(event.keyCode == 13) fnLogin();">
+            </p>
+            <button type="button" class="btn_login" onclick="javascript:fnLogin();">로그인</button>
+          </div>
+          <p class="check_group">
+                            <span class="check_box">
+                                <input type="checkbox" id="login-option1" onclick="chk()"><label for="login-option1">아이디 저장</label>
+                            </span>
+            <!--                            <span class="check_box">-->
+            <!--                                <input type="checkbox" id="rememberMe"><label for="rememberMe">자동 로그인</label>-->
+            <!--                            </span>-->
+          </p>
+          <div th:if="${param.error}" style="text-align:center;">
+            <font style="color:orange;">ID 와 비밀번호를 확인 바랍니다.</font>
+          </div>
+          <P class="bt_link">
+            <a href="javascript:fnAppDownload();">APP 다운로드</a>
+          </p>
+
+        </div>
+        <p class="copy" style="margin-top: 10px;text-align: right;">Copyright 2023 Enclouds_Nal'K', All Right Reserved.</p>
+      </div>
+    </div>
+    <!-- content E -->
+
+  </div>
+  <!-- container E -->
+</form>
+</body>
+</html>

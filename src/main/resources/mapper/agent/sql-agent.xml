@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.enclouds.enpoint.agent.mapper.AgentMapper">
+
+	<select id="selectAgentListTotalCount" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="int">
+		select count(*)
+		from p_agent pa
+		where 1=1
+		and agent_up_code = #{schAgentCode}
+		<if test="schCond1 == 'name'">
+			AND pa.agent_name like '%${schText}%'
+		</if>
+		<if test="schCond1 == 'id'">
+			AND pa.id like '%${schText}%'
+		</if>
+	</select>
+
+	<select id="selectAgentList" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="com.enclouds.enpoint.agent.dto.AgentDto">
+		select agent_code
+		, agent_up_code
+		, id
+		, password
+		, password_str
+		, agent_name
+		, memo
+		, format(point, 0) as point
+		, date_format(reg_date, '%Y-%m-%d') as regDate
+		, ticket
+		, format(ticket, 0) as ticketStr
+		from p_agent pa
+		where 1=1
+		and agent_up_code = #{schAgentCode}
+
+		<if test="schCond1 == 'nick'">
+			AND pu.nick_name like '%${schText}%'
+		</if>
+		<if test="schCond1 == 'phoneNum'">
+			AND pu.phone_num like '%${schText}%'
+		</if>
+
+		LIMIT
+		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
+	</select>
+
+	<select id="selectAgentTotalList" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="com.enclouds.enpoint.agent.dto.AgentDto">
+		select agent_code
+		, agent_up_code
+		, id
+		, password
+		, password_str
+		, agent_name
+		, memo
+		, format(point, 0) as point
+		, date_format(reg_date, '%Y-%m-%d') as regDate
+		from p_agent pa
+		where 1=1
+	</select>
+
+	<select id="selectDuplAgent" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="int">
+		SELECT count(*)
+		FROM p_agent
+		WHERE 1=1
+		AND id = #{id}
+	</select>
+
+	<insert id="insertAgent" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+		INSERT INTO p_agent
+		( agent_up_code
+		, id
+		, password
+		, agent_name
+		, memo
+		, point
+		, password_str
+		, agent_gbn
+		, reg_date
+		, login_yn )
+		VALUES
+		( #{agentUpCode}
+		, #{id}
+		, #{password}
+		, #{agentName}
+		, #{memo}
+		, 0
+		, #{passwordStr}
+		, 'AG'
+		, NOW()
+		, 'Y' )
+	</insert>
+
+	<update id="updateAgent" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+		UPDATE p_agent
+		SET agent_name = #{agentName}
+		, memo = #{memo}
+		, password = #{password}
+		, password_str = #{passwordStr}
+		WHERE 1=1
+		AND agent_code = #{agentCode}
+	</update>
+
+	<delete id="deleteAgent" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+		DELETE FROM p_agent
+		WHERE 1=1
+		AND agent_code = #{agentCode}
+	</delete>
+
+	<update id="updateAgentAddPoint" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+		UPDATE p_agent
+		SET point = point + #{addPoint}
+		WHERE 1=1
+		AND agent_code = #{agentCode}
+	</update>
+
+	<update id="updateAgentAddTicket" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+		UPDATE p_agent
+		SET ticket = ticket + #{addTicket}
+		WHERE 1=1
+		AND agent_code = #{agentCode}
+	</update>
+
+	<insert id="insertAddAgentPoint" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+		INSERT INTO p_agent_point
+		( point_gbn
+		, point
+		, agent_code
+		, reg_date)
+		VALUES
+		( 'ADD'
+		, #{addPoint}
+		, #{agentCode}
+		, NOW() )
+	</insert>
+
+	<insert id="insertAddAgentTicket" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+		INSERT INTO p_agent_ticket
+		( ticket_gbn
+		, ticket
+		, agent_code
+		, reg_date)
+		VALUES
+		( 'ADD'
+		, #{addTicket}
+		, #{agentCode}
+		, NOW() )
+	</insert>
+
+	<update id="updateAgentMinusPoint" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+		UPDATE p_agent
+		SET point = point - #{minusPoint}
+		WHERE 1=1
+		AND agent_code = #{agentCode}
+	</update>
+
+	<insert id="insertMinusAgentPoint" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+		INSERT INTO p_agent_point
+		( point_gbn
+		, point
+		, agent_code
+		, reg_date)
+		VALUES
+		( 'MINUS'
+		, #{minusPoint}
+		, #{agentCode}
+		, NOW() )
+	</insert>
+
+	<update id="updateAgentMinusTicket" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+		UPDATE p_agent
+		SET ticket = ticket - #{minusTicket}
+		WHERE 1=1
+		AND agent_code = #{agentCode}
+	</update>
+
+	<insert id="insertMinusAgentTicket" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+		INSERT INTO p_agent_ticket
+		( ticket_gbn
+		, ticket
+		, agent_code
+		, reg_date)
+		VALUES
+		( 'MINUS'
+		, #{minusTicket}
+		, #{agentCode}
+		, NOW() )
+	</insert>
+
+	<select id="selectAgentPointHistory" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
+		SELECT seq
+		, point_gbn
+		, case when point_gbn = 'ADD' then '적립' else '차감' end as pointGbnNm
+		, case when point_gbn = 'ADD' then format(pap.point, 0) else format(pap.point * -1, 0) end as point
+		, date_format(pap.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		, pap.agent_code
+		, pa.agent_name
+		FROM p_agent_point pap
+		left join p_agent pa on pap.agent_code = pa.agent_code
+		WHERE 1=1
+		AND pap.agent_code = #{agentCode}
+		order by pap.reg_date desc
+	</select>
+
+	<select id="selectAgentTicketHistory" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
+		SELECT seq
+		, ticket_gbn
+		, case when ticket_gbn = 'ADD' then '적립' else '차감' end as ticketGbnNm
+		, case when ticket_gbn = 'ADD' then format(pat.ticket, 0) else format(pat.ticket * -1, 0) end as ticket
+		, date_format(pat.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		, pat.agent_code
+		, pa.agent_name
+		FROM p_agent_ticket pat
+		left join p_agent pa on pat.agent_code = pa.agent_code
+		WHERE 1=1
+		AND pat.agent_code = #{agentCode}
+		order by pat.reg_date desc
+	</select>
+
+	<select id="selectAgentInfo" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="com.enclouds.enpoint.agent.dto.AgentDto">
+		SELECT *
+		, point as pointInt
+		, ticket as ticketInt
+		FROM p_agent
+		WHERE 1=1
+		AND agent_code = #{agentCode}
+	</select>
+
+</mapper>
+
+

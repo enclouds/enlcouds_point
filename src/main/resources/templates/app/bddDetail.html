@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <div th:replace="/app/appHeader.html :: fragment-app-header"></div>
+</head>
+
+<body>
+
+  <!-- container S -->
+  <div class="container">
+    <!-- content S -->
+    <div class="content">
+      <div class="main">
+
+        <div class="top">
+          <div class="inner">
+            <p class="tit"><span class="name" th:text="${userInfo.nickName}"></span>님 반갑습니다.</p>
+          </div>
+        </div>
+
+        <div class="con">
+          <div class="notice">
+            <div class="view">
+              <p class="tit" th:text="${bddInfo.title}"></p>
+              <p class="text" th:text="${bddInfo.content}"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom">
+          <div class="inner">
+            <button type="button" class="tab1" onclick="location.href='/app/main'">정보</button>
+            <button type="button" class="tab2 on" onclick="location.href='/app/bdd'">공지사항</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- content E -->
+  </div>
+  <!-- container E -->
+</body>
+
+</html>

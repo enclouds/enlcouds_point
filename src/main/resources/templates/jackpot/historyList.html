@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+
+<body>
+
+<!-- container S -->
+<div class="container">
+    <!-- header S -->
+    <div th:replace="/fragments/left.html :: fragment-left('m2', '/jackpot/history/list')"></div>
+    <!-- header E -->
+
+    <!-- content S -->
+    <div class="content">
+        <div class="con_top">
+            <ul>
+                <li>JackPot 관리</li>
+                <li>JackPot History</li>
+            </ul>
+        </div>
+        <p class="page_info">JackPot History</p>
+
+        <form id="schFrm">
+            <div class="search_option">
+                <span class="datepicker_group">
+                      <input type="text" id="schStartDte" name="schStartDte" class="datepicker" placeholder="시작일" th:value="${params.schStartDte}">
+                      <em>~</em>
+                      <input type="text" id="schEndDte" name="schEndDte" class="datepicker" placeholder="종료일" th:value="${params.schEndDte}">
+                </span>
+                <button type="button" class="search_btn" th:onclick="javascript:fnSearch();">조회</button>
+            </div>
+        </form>
+
+        <div class="list_box">
+            <table class="list">
+                <colgroup>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">Jackpot 명</th>
+                    <th scope="col">적립 내용</th>
+                    <th scope="col">적립 금액</th>
+                    <th scope="col">적립 일시</th>
+                    <th scope="col">적립 상점</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="list:${jackpotHistoryList}">
+                    <td th:text="${list.jackpotTitle}"></td>
+                    <td th:text="${list.alertContent}"></td>
+                    <td th:text="${#numbers.formatInteger(list.jackpotPrize, 0, 'COMMA')}"></td>
+                    <td th:text="${list.regDate}"></td>
+                    <td th:text="${list.agentName}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- pagination -->
+        <div class="paging" title="페이지">
+
+            <th:block layout:fragment="paging">
+                <nav th:replace="/fragments/pagination.html :: fragment-pagination"></nav>
+            </th:block>
+
+            <th:block layout:fragment="script">
+                <script th:inline="javascript">
+						/*<![CDATA[*/
+
+						function movePage(uri, queryString) {
+							location.href = uri + queryString;
+						}
+
+						/*]]>*/
+					</script>
+            </th:block>
+
+        </div>
+        <!-- /pagination -->
+
+    </div>
+    <!-- content E -->
+
+</div>
+<!-- container E -->
+</body>
+<script th:src="@{/static/js/common.js}"></script>
+<script th:inline="javascript">
+
+    var selectTrSeq;
+
+    $( function() {
+    });
+
+    function fnSearch(){
+        $("#schFrm").submit();
+    }
+
+</script>
+
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+
+<body>
+
+<!-- modal S -->
+<div class="modal fade small" id="reg_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">게시물 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">게시물 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th scope="row"><em class="required">*</em>제목</th>
+                                <td>
+                                    <input type="text" name="title" id="title">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><em class="required">*</em>내용</th>
+                                <td>
+                                    <textarea id="content" name="content" rows="10" cols="100"></textarea>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:regBdd();">저장</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('reg_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="upt_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">게시물 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">게시물 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row"><em class="required">*</em>제목</th>
+                            <td>
+                                <input type="text" name="uptTitle" id="uptTitle">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><em class="required">*</em>내용</th>
+                            <td>
+                                <textarea id="uptContent" name="uptContent" rows="10" cols="100"></textarea>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:uptBdd();">저장</button>
+                <button type="button" class="btn red btn-primary" th:onclick="javascript:delBdd();">삭제</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('upt_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- container S -->
+<div class="container">
+    <!-- header S -->
+    <div th:replace="/fragments/left.html :: fragment-left('m2', '/user/list')"></div>
+    <!-- header E -->
+
+    <!-- content S -->
+    <div class="content">
+        <div class="con_top">
+            <ul>
+                <li>게시판 관리</li>
+                <li>게시물 목록</li>
+            </ul>
+        </div>
+        <p class="page_info">게시물 목록</p>
+
+        <form id="schFrm">
+            <div class="search_option">
+                <span class="input_group">
+                    <select id="schCond1" name="schCond1" style="width:100px;">
+                        <option value="title">제목</option>
+                        <option value="content">내용</option>
+                    </select>
+                    <input type="text" style="width:1000px;" id="schText" name="schText" placeholder="검색어" th:value="${params.schText}">
+                </span>
+                <button type="button" class="search_btn" th:onclick="javascript:fnSearch();">조회</button>
+                <button type="button" class="add_btn" th:onclick="javascript:fnRegModal()">등록</button>
+            </div>
+        </form>
+
+        <div class="list_box">
+            <table class="list">
+                <colgroup>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">seq</th>
+                    <th scope="col">제목</th>
+                    <th scope="col">조회수</th>
+                    <th scope="col">등록일자</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="list:${bddList}">
+                    <td th:text="${list.seq}"></td>
+                    <td><a href="javascript:callFunction();" th:text="${list.title}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.seq}]], [[${list.title}]], [[${list.content}]])"></a></td>
+                    <td th:text="${list.clickCnt}"></td>
+                    <td th:text="${list.regDate}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- pagination -->
+        <div class="paging" title="페이지">
+
+            <th:block layout:fragment="paging">
+                <nav th:replace="/fragments/pagination.html :: fragment-pagination"></nav>
+            </th:block>
+
+            <th:block layout:fragment="script">
+                <script th:inline="javascript">
+						/*<![CDATA[*/
+
+						function movePage(uri, queryString) {
+							location.href = uri + queryString;
+						}
+
+						/*]]>*/
+					</script>
+            </th:block>
+
+        </div>
+        <!-- /pagination -->
+
+    </div>
+    <!-- content E -->
+
+</div>
+<!-- container E -->
+</body>
+<script th:src="@{/static/js/common.js}"></script>
+<script th:inline="javascript">
+
+    var selectTrSeq;
+
+    $( function() {
+    });
+
+    function fnSearch(){
+        $("#schFrm").submit();
+    }
+
+    function fnModalClose(id){
+        $("#"+id).hide();
+    }
+
+    function fnRegModal(){
+        $("#reg_modal").show();
+    }
+
+    function fnUptModal(seq, title, content){
+        selectTrSeq = seq;
+
+        $("#uptTitle").val(title);
+        $("#uptContent").val(content);
+        $("#upt_modal").show();
+    }
+
+    function regBdd(){
+        var formData = new FormData();
+
+        if($("#title").val() == ''){
+            alert("제목은 필수 입니다.");
+            $("#title").focus();
+            return;
+        }
+
+        if($("#content").val() == ''){
+            alert("내용은 필수 입니다.");
+            $("#content").focus();
+            return;
+        }
+
+        formData.append("title", $("#title").val());
+        formData.append("content", $("#content").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/bdd/insertBddAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function uptBdd(){
+
+        if($("#uptTitle").val() == ''){
+            alert("제목은 필수 입니다.");
+            $("#uptTitle").focus();
+            return;
+        }
+
+        if($("#uptContent").val() == ''){
+            alert("내용은 필수 입니다.");
+            $("#uptContent").focus();
+            return;
+        }
+
+        var formData = new FormData();
+
+        formData.append("seq", selectTrSeq);
+        formData.append("title", $("#uptTitle").val());
+        formData.append("content", $("#uptContent").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/bdd/updateBddAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function delBdd(){
+        var msg = "삭제 하시겠습니까?";
+        if(confirm(msg)){
+            var formData = new FormData();
+
+            formData.append("seq", selectTrSeq);
+
+            $.ajax({
+                contentType:false,
+                processData:false,
+                type: "POST",
+                url: "/bdd/deleteBddAjax",
+                data: formData,
+                success: function(response) {
+                    // 성공 시 동작
+                    alert(response.resultMsg);
+                    fnSearch();
+                },
+                error: function(error) {
+                    // 실패 시 동작
+                }
+            });
+        }
+    }
+
+    function callFunction() {
+        console.log('call function');
+    }
+
+</script>
+
+</html>

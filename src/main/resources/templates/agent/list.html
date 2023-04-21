@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+
+<body>
+
+<!-- modal S -->
+<div class="modal fade small" id="reg_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">가맹점 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">가맹점정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th scope="row"><em class="required">*</em>ID</th>
+                                <td>
+                                    <input type="text" name="id" id="id">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><em class="required">*</em>비밀번호</th>
+                                <td>
+                                    <input type="text" name="password" id="password">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><em class="required">*</em>가맹점 명</th>
+                                <td>
+                                    <input type="text" name="agentName" id="agentName">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">메모</th>
+                                <td>
+                                    <textarea id="memo" name="memo"></textarea>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:regAgent();">저장</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('reg_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="upt_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">가맹점 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">가맹점 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row"><em class="required">*</em>가맹점 명</th>
+                            <td>
+                                <input type="text" name="uptAgentName" id="uptAgentName">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><em class="required">*</em>비밀번호</th>
+                            <td>
+                                <input type="text" name="uptPassword" id="uptPassword">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">메모</th>
+                            <td>
+                                <textarea id="uptMemo" name="uptMemo"></textarea>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:uptAgent();">저장</button>
+                <button type="button" class="btn red btn-primary" th:onclick="javascript:delAgent();">삭제</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('upt_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="add_point_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">포인트 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">포인트 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">가맹점명</th>
+                            <td>
+                                <input type="text" name="addPointAgentName" id="addPointAgentName" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">총 포인트</th>
+                            <td>
+                                <input type="text" name="totalPoint" id="totalPoint" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">적립 포인트</th>
+                            <td>
+                                <input type="text" name="addPoint" id="addPoint">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:addPoint();">적립</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('add_point_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="add_ticket_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">티켓 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">티켓 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">가맹점명</th>
+                            <td>
+                                <input type="text" name="addTicketAgentName" id="addTicketAgentName" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">총 티켓</th>
+                            <td>
+                                <input type="text" name="totalTicket" id="totalTicket" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">적립 티켓</th>
+                            <td>
+                                <input type="text" name="addTicket" id="addTicket">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:addTicket();">적립</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('add_ticket_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="minus_point_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">포인트 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">포인트 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">가맹점</th>
+                            <td>
+                                <input type="text" name="minusPointAgentName" id="minusPointAgentName" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">총 포인트</th>
+                            <td>
+                                <input type="text" name="totalMinusPoint" id="totalMinusPoint" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">차감 포인트</th>
+                            <td>
+                                <input type="text" name="minusPoint" id="minusPoint">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn red btn-primary" th:onclick="javascript:minusPoint();">차감</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('minus_point_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="minus_ticket_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">티켓 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">티켓 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">가맹점</th>
+                            <td>
+                                <input type="text" name="minusTicketAgentName" id="minusTicketAgentName" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">총 티켓</th>
+                            <td>
+                                <input type="text" name="totalMinusTicket" id="totalMinusTicket" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">차감 티켓</th>
+                            <td>
+                                <input type="text" name="minusTicket" id="minusTicket">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn red btn-primary" th:onclick="javascript:minusTicket();">차감</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('minus_ticket_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade large" id="history_point_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">포인트 사용 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box" style="height:400px;">
+                    <p class="tb_tit">포인트 사용 정보</p>
+                    <table class="form">
+                        <thead>
+                            <tr>
+                                <th scope="col">적립구분</th>
+                                <th scope="col">포인트</th>
+                                <th scope="col">일자</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('history_point_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade large" id="history_ticket_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">티켓 사용 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box" style="height:400px;">
+                    <p class="tb_tit">티켓 사용 정보</p>
+                    <table class="form">
+                        <thead>
+                        <tr>
+                            <th scope="col">사용구분</th>
+                            <th scope="col">티켓</th>
+                            <th scope="col">일자</th>
+                        </tr>
+                        </thead>
+                        <tbody id="historyTicketTbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('history_ticket_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- container S -->
+<div class="container">
+    <!-- header S -->
+    <div th:replace="/fragments/left.html :: fragment-left('m2', '/user/list')"></div>
+    <!-- header E -->
+
+    <!-- content S -->
+    <div class="content">
+        <div class="con_top">
+            <ul>
+                <li>가맹점관리</li>
+                <li>가맹점 목록</li>
+            </ul>
+        </div>
+        <p class="page_info">가맹점 목록</p>
+
+        <form id="schFrm">
+            <div class="search_option">
+                <span class="input_group">
+                    <select id="schCond1" name="schCond1" style="width:100px;">
+                        <option value="name">가맹점명</option>
+                        <option value="id">id</option>
+                    </select>
+                    <input type="text" style="width:1000px;" id="schText" name="schText" placeholder="검색어" th:value="${params.schText}">
+                </span>
+                <button type="button" class="search_btn" th:onclick="javascript:fnSearch();">조회</button>
+                <button type="button" class="add_btn" th:onclick="javascript:fnRegModal()">등록</button>
+            </div>
+        </form>
+
+        <div class="list_box">
+            <table class="list">
+                <colgroup>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col" rowspan="2">code</th>
+                    <th scope="col" rowspan="2">가맹점 명</th>
+                    <th scope="col" rowspan="2">가맹점 ID</th>
+                    <th scope="col" rowspan="2">비밀번호</th>
+                    <th scope="col" rowspan="2">총 잔여 포인트</th>
+                    <th scope="col" colspan="3">포인트</th>
+                    <th scope="col" rowspan="2">총 잔여 티켓</th>
+                    <th scope="col" colspan="3">티켓</th>
+                    <th scope="col" rowspan="2">메모</th>
+                    <th scope="col" rowspan="2">등록일자</th>
+                </tr>
+                <tr>
+                    <th scope="col">적립</th>
+                    <th scope="col">차감</th>
+                    <th scope="col">내역</th>
+                    <th scope="col">적립</th>
+                    <th scope="col">차감</th>
+                    <th scope="col">내역</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="list:${agentList}">
+                    <td th:text="${list.agentCode}"></td>
+                    <td><a href="javascript:callFunction();" th:text="${list.agentName}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.agentCode}]], [[${list.agentName}]], [[${list.memo}]], [[${list.passwordStr}]])"></a></td>
+                    <td th:text="${list.id}"></td>
+                    <td th:text="${list.passwordStr}"></td>
+                    <td th:text="${list.point}"></td>
+                    <td>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddPoint([[${list.agentCode}]], [[${list.agentName}]], [[${list.point}]])">적립</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn red" th:onclick="javascript:fnMinusPoint([[${list.agentCode}]], [[${list.agentName}]], [[${list.point}]])">차감</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnPointHistory([[${list.agentCode}]])">내역</button>
+                    </td>
+                    <td th:text="${list.ticketStr}"></td>
+                    <td>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket([[${list.agentCode}]], [[${list.agentName}]], [[${list.ticket}]])">적립</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn red" th:onclick="javascript:fnMinusTicket([[${list.agentCode}]], [[${list.agentName}]], [[${list.ticket}]])">차감</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnTicketHistory([[${list.agentCode}]])">내역</button>
+                    </td>
+                    <td th:text="${list.memo}"></td>
+                    <td th:text="${list.regDate}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- pagination -->
+        <div class="paging" title="페이지">
+
+            <th:block layout:fragment="paging">
+                <nav th:replace="/fragments/pagination.html :: fragment-pagination"></nav>
+            </th:block>
+
+            <th:block layout:fragment="script">
+                <script th:inline="javascript">
+						/*<![CDATA[*/
+
+						function movePage(uri, queryString) {
+							location.href = uri + queryString;
+						}
+
+						/*]]>*/
+					</script>
+            </th:block>
+
+        </div>
+        <!-- /pagination -->
+
+    </div>
+    <!-- content E -->
+
+</div>
+<!-- container E -->
+</body>
+<script th:src="@{/static/js/common.js}"></script>
+<script th:inline="javascript">
+
+    var selectTrSeq;
+
+    $( function() {
+    });
+
+    function fnSearch(){
+        $("#schFrm").submit();
+    }
+
+    function fnModalClose(id){
+        $("#"+id).hide();
+    }
+
+    function fnRegModal(){
+        $("#reg_modal").show();
+    }
+
+    function fnUptModal(agentCode, agentName, memo, password){
+        selectTrSeq = agentCode;
+
+        $("#uptAgentName").val(agentName);
+        $("#uptPassword").val(password);
+        $("#uptMemo").val(memo);
+        $("#upt_modal").show();
+    }
+
+    function fnAddPoint(agentCode, agentName, point){
+        selectTrSeq = agentCode;
+
+        $("#addPointAgentName").val(agentName);
+        $("#totalPoint").val(point);
+        $("#add_point_modal").show();
+    }
+
+    function fnAddTicket(agentCode, agentName, ticket){
+        selectTrSeq = agentCode;
+
+        $("#addTicketAgentName").val(agentName);
+        $("#totalTicket").val(ticket);
+        $("#add_ticket_modal").show();
+    }
+
+    function fnMinusPoint(agentCode, agentName, point){
+        selectTrSeq = agentCode;
+
+        $("#minusPointAgentName").val(agentName);
+        $("#totalMinusPoint").val(point);
+        $("#minus_point_modal").show();
+    }
+
+    function fnMinusTicket(agentCode, agentName, ticket){
+        selectTrSeq = agentCode;
+
+        $("#minusTicketAgentName").val(agentName);
+        $("#totalMinusTicket").val(ticket);
+        $("#minus_ticket_modal").show();
+    }
+
+    function fnPointHistory(agentCode){
+        $("#historyTbody").empty();
+
+        var formData = new FormData();
+
+        formData.append("agentCode", agentCode);
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/agent/selectAgentPointHistoryAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                if(response.historyPointList != null){
+                    var appendStr = '';
+                    for(var i=0 ; i<response.historyPointList.length ; i++){
+                        var appendStr_01 = "<td>"+response.historyPointList[i]['pointGbnNm']+"</td>>";
+                        var appendStr_02 = "<td>"+response.historyPointList[i]['point']+"</td>>";
+                        var appendStr_03 = "<td>"+response.historyPointList[i]['regDate']+"</td>>";
+
+                        appendStr += "<tr>" + appendStr_01 + appendStr_02 + appendStr_03 + "</>tr>";
+                    }
+
+                    $("#historyTbody").append(appendStr);
+                }
+
+                $("#history_point_modal").show();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function fnTicketHistory(agentCode){
+        $("#historyTicketTbody").empty();
+
+        var formData = new FormData();
+
+        formData.append("agentCode", agentCode);
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/agent/selectAgentTicketHistoryAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                if(response.historyTicketList != null){
+                    var appendStr = '';
+                    for(var i=0 ; i<response.historyTicketList.length ; i++){
+                        var appendStr_01 = "<td>"+response.historyTicketList[i]['ticketGbnNm']+"</td>>";
+                        var appendStr_02 = "<td>"+response.historyTicketList[i]['ticket']+"</td>>";
+                        var appendStr_03 = "<td>"+response.historyTicketList[i]['regDate']+"</td>>";
+
+                        appendStr += "<tr>" + appendStr_01 + appendStr_02 + appendStr_03 + "</>tr>";
+                    }
+
+                    $("#historyTicketTbody").append(appendStr);
+                }
+
+                $("#history_ticket_modal").show();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function regAgent(){
+        var formData = new FormData();
+
+        if($("#id").val() == ''){
+            alert("ID는 필수 입니다.");
+            $("#id").focus();
+            return;
+        }
+
+        if($("#password").val() == ''){
+            alert("비밀번호는 필수 입니다.");
+            $("#password").focus();
+            return;
+        }
+
+        if($("#agentName").val() == ''){
+            alert("가맹점명은 필수 입니다.");
+            $("#agentName").focus();
+            return;
+        }
+
+        formData.append("id", $("#id").val());
+        formData.append("password", $("#password").val());
+        formData.append("agentName", $("#agentName").val());
+        formData.append("memo", $("#memo").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/agent/insertAgentAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function uptAgent(){
+
+        if($("#uptAgentName").val() == ''){
+            alert("가맹점명은 필수 입니다.");
+            $("#uptAgentName").focus();
+            return;
+        }
+
+        if($("#uptPassword").val() == ''){
+            alert("비밀번호는 필수 입니다.");
+            $("#uptPassword").focus();
+            return;
+        }
+
+        var formData = new FormData();
+
+        formData.append("agentCode", selectTrSeq);
+        formData.append("agentName", $("#uptAgentName").val());
+        formData.append("password", $("#uptPassword").val());
+        formData.append("memo", $("#uptMemo").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/agent/updateAgentAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function delAgent(){
+        var msg = "삭제 하시겠습니까?";
+        if(confirm(msg)){
+            var formData = new FormData();
+
+            formData.append("agentCode", selectTrSeq);
+
+            $.ajax({
+                contentType:false,
+                processData:false,
+                type: "POST",
+                url: "/agent/deleteAgentAjax",
+                data: formData,
+                success: function(response) {
+                    // 성공 시 동작
+                    alert(response.resultMsg);
+                    fnSearch();
+                },
+                error: function(error) {
+                    // 실패 시 동작
+                }
+            });
+        }
+    }
+
+    function addPoint(){
+        var formData = new FormData();
+
+        formData.append("agentCode", selectTrSeq);
+        formData.append("addPoint", $("#addPoint").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/agent/updateAgentAddPointAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function addTicket(){
+        var formData = new FormData();
+
+        formData.append("agentCode", selectTrSeq);
+        formData.append("addTicket", $("#addTicket").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/agent/updateAgentAddTicketAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function minusPoint(){
+        var formData = new FormData();
+
+        formData.append("agentCode", selectTrSeq);
+        formData.append("minusPoint", $("#minusPoint").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/agent/updateAgentMinusPointAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function minusTicket(){
+        var formData = new FormData();
+
+        formData.append("agentCode", selectTrSeq);
+        formData.append("minusTicket", $("#minusTicket").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/agent/updateAgentMinusTicketAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function callFunction() {
+        console.log('call function');
+    }
+
+</script>
+
+</html>

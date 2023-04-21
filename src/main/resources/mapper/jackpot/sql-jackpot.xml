@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.enclouds.enpoint.jackpot.mapper.JackpotMapper">
+
+	<select id="selectJackpotListTotalCount" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto" resultType="int">
+		select count(*)
+		from p_jackpot pj
+		where 1=1
+		and store_gbn = #{schText}
+	</select>
+
+	<select id="selectJackpotList" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto" resultType="com.enclouds.enpoint.jackpot.dto.JackpotDto">
+		select seq
+		, jackpot_title
+		, jackpot_prize
+		, use_yn
+		, date_format(reg_date, '%Y-%m-%d') as regDate
+		from p_jackpot pa
+		where 1=1
+		and store_gbn = #{schText}
+
+		LIMIT
+		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
+	</select>
+
+	<select id="selectJackpotListTotal" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto" resultType="com.enclouds.enpoint.jackpot.dto.JackpotDto">
+		select seq
+		, jackpot_title
+		, jackpot_prize
+		, use_yn
+		, date_format(reg_date, '%Y-%m-%d') as regDate
+		from p_jackpot pa
+		where 1=1
+		and store_gbn = #{schText}
+	</select>
+
+	<insert id="insertJackpot" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto">
+		INSERT INTO p_jackpot
+		(jackpot_title
+		,reg_date
+		,store_gbn)
+		VALUES
+		(#{jackpotTitle}
+		,NOW()
+		,#{storeGbn})
+	</insert>
+
+	<update id="updateJackpot" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto">
+		UPDATE p_jackpot
+		SET jackpot_title = #{jackpotTitle}
+		, use_yn = #{useYn}
+		WHERE 1=1
+		AND seq = #{seq}
+	</update>
+
+	<delete id="deleteJackpot" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto">
+		DELETE FROM p_jackpot
+		WHERE 1=1
+		AND seq = #{seq}
+	</delete>
+
+	<select id="selectJackPotInfo" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto" resultType="com.enclouds.enpoint.jackpot.dto.JackpotDto">
+		SELECT max(seq) as seq
+		FROM p_jackpot
+		WHERE 1=1
+		AND use_yn = 'Y'
+		AND store_gbn = #{storeGbn}
+	</select>
+
+	<select id="selectJackPotInfoTotal" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto" resultType="com.enclouds.enpoint.jackpot.dto.JackpotDto">
+		SELECT *
+		FROM p_jackpot
+		WHERE 1=1
+		AND seq = #{jackpotSeq}
+	</select>
+
+	<update id="updateJackpotPoint" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto">
+		UPDATE p_jackpot
+		SET jackpot_prize = jackpot_prize + 10000
+		WHERE 1=1
+		AND seq = #{jackpotSeq}
+	</update>
+
+	<insert id="insertAddJackpot" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto">
+		INSERT INTO p_jackpot_alert
+		(jackpot_seq
+		,alert_content
+		,reg_date
+		,reg_agent_code
+		,jackpot_prize
+		,jackpot_gbn)
+		VALUES
+		(#{jackpotSeq}
+		,#{alertContent}
+		,NOW()
+		,#{regAgentCode}
+		,#{jackpotPrize}
+		,#{jackpotGbn})
+	</insert>
+
+	<select id="selectJackpotNotiListTotalCount" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto" resultType="int">
+		SELECT count(*)
+		FROM p_jackpot_noti
+		WHERE 1=1
+		AND jackpot_seq = #{jackpotSeq}
+	</select>
+
+	<select id="selectJackpotNotiList" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto" resultType="com.enclouds.enpoint.jackpot.dto.JackpotDto">
+		SELECT seq
+		, jackpot_seq
+		, order_no
+		, content
+		, date_format(reg_date, '%Y-%m-%d') as regDate
+		FROM p_jackpot_noti
+		WHERE 1=1
+		AND jackpot_seq = #{jackpotSeq}
+		ORDER BY order_no
+
+		LIMIT
+		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
+	</select>
+
+	<insert id="insertNotiAjax" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto">
+		INSERT INTO p_jackpot_noti
+		(jackpot_seq
+		,order_no
+		,content
+		,reg_date)
+		VALUES
+		(#{jackpotSeq}
+		,#{orderNo}
+		,#{content}
+		,NOW())
+	</insert>
+
+	<update id="updateNotiAjax" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto">
+		UPDATE p_jackpot_noti
+		SET order_no = #{orderNo}
+		, content = #{content}
+		WHERE 1=1
+		AND seq = #{seq}
+	</update>
+
+	<delete id="deleteNotiAjax" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto">
+		DELETE FROM p_jackpot_noti
+		WHERE 1=1
+		AND seq = #{seq}
+	</delete>
+
+	<select id="selectJackpotNotiListTotal" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto" resultType="com.enclouds.enpoint.jackpot.dto.JackpotDto">
+		SELECT seq
+		, jackpot_seq
+		, order_no
+		, content
+		, date_format(reg_date, '%Y-%m-%d') as regDate
+		FROM p_jackpot_noti
+		WHERE 1=1
+		AND jackpot_seq = #{jackpotSeq}
+		ORDER BY order_no
+	</select>
+
+	<update id="addJackpotAjax" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto">
+		UPDATE p_jackpot
+		SET jackpot_prize = jackpot_prize + #{addJackpotPrize}
+		WHERE 1=1
+		AND seq = #{jackpotSeq}
+	</update>
+
+	<update id="minusJackpotAjax" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto">
+		UPDATE p_jackpot
+		SET jackpot_prize = jackpot_prize - #{minusJackpotPrize}
+		WHERE 1=1
+		AND seq = #{jackpotSeq}
+	</update>
+
+	<select id="selectJackpotHistoryList" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto" resultType="com.enclouds.enpoint.jackpot.dto.JackpotDto">
+		SELECT pja.seq
+		, pja.jackpot_seq
+		, pja.alert_content
+		, pja.alert_yn
+		, date_format(pja.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		, pja.jackpot_prize
+		, pj.jackpot_title
+		, pa.agent_name
+		FROM p_jackpot_alert pja
+		LEFT JOIN p_jackpot pj on pj.seq = pja.jackpot_seq
+		LEFT JOIN p_agent pa on pa.agent_code = pja.reg_agent_code
+		WHERE 1=1
+		<if test="regAgentCode != 1">
+			AND reg_agent_code = #{regAgentCode}
+		</if>
+		ORDER BY pja.reg_date DESC
+
+		LIMIT
+		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
+	</select>
+
+	<select id="selectJackpotHistoryListTotalCount" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto" resultType="int">
+		SELECT count(*) as cnt
+		FROM p_jackpot_alert pja
+		LEFT JOIN p_jackpot pj on pj.seq = pja.jackpot_seq
+		LEFT JOIN p_agent pa on pa.agent_code = pja.reg_agent_code
+		WHERE 1=1
+		<if test="regAgentCode != 1">
+			AND reg_agent_code = #{regAgentCode}
+		</if>
+	</select>
+
+</mapper>
+
+

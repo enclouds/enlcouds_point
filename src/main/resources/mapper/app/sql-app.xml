@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.enclouds.enpoint.app.mapper.AppMapper">
+
+	<select id="login" parameterType="com.enclouds.enpoint.app.dto.AppDto" resultType="int">
+		select count(*)
+		from p_user
+		where 1=1
+		and phone_num = #{id}
+		and password = #{password}
+	</select>
+
+	<update id="updateAuthCode" parameterType="com.enclouds.enpoint.app.dto.AppDto">
+		UPDATE p_user
+		SET auth_code = #{authCode}
+		WHERE phone_num = #{phoneNum}
+	</update>
+
+	<select id="getAuthCodeChk" parameterType="com.enclouds.enpoint.app.dto.AppDto" resultType="int">
+		SELECT count(*)
+		from p_user
+		where 1=1
+		and phone_num = #{phoneNum}
+		and auth_code = #{authCode}
+	</select>
+
+	<update id="setPassword" parameterType="com.enclouds.enpoint.app.dto.AppDto">
+		UPDATE p_user
+		SET password_str = #{passwordStr}
+		, password = #{password}
+		WHERE phone_num = #{phoneNum}
+	</update>
+
+</mapper>
+
+

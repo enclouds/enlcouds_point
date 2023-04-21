@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>타바요</title>
+    <meta name="description" content="퍼블리싱 현황" />
+    <meta name="keywords" content="퍼블리싱 현황" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="" />
+    <meta property="og:title" content="퍼블리싱 현황" />
+    <meta property="og:description" content="퍼블리싱 현황" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap">
+    <style>
+        *{margin:0;padding:0;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;font-size:12px;color:#1a1a1a;font-weight:normal;font-family: 'Noto Sans KR', sans-serif !important}
+        strong{font-weight:400}
+        body{width: 100%;height: 100%;position: relative;box-sizing: border-box;overscroll-behavior: contain;max-width: 1200px;margin: 0 auto;overflow-x: hidden;}
+        table{border-collapse:collapse;border-spacing:0;empty-cells:show;width:100%;border-bottom:1px solid #999}
+        caption,legend{position:absolute;top:-9999px;left:-9999px;font-size:0;line-height:0}
+        a{text-decoration:none}
+        a:active{background-color:transparent}
+        .y{color:#337AFF}
+        .e{color:#FF337A}
+        .n{color:#A6ACAF}
+        h1{margin-bottom:10px;font-size:30px;font-weight:600}
+        th,td{border-top:1px solid #ececec;padding:6px 4px;text-align:left;}
+        th{background-color:#565656;font-weight:400;color:#fff;text-align:center;}
+        th:last-child,td:last-child{border-right:none}
+        tr:last-child td,tr:last-child th{}
+        .container{padding-bottom:100px;}
+        .container>div{width:90%;max-width:1200px;margin:0 auto}
+        .container>.tit{width:100%;max-width:100%;background-color:#242425;padding-top:10vh;padding-bottom:5vh;margin-bottom:50px}
+        .container>.tit>div{width:90%;max-width:1200px;margin:0 auto;font-size:0}
+        .container>.tit span{display:inline-block;color:#999;font-size:14px;line-height:24px}
+        .container>.tit span::after{content:"|";font-size:14px;display:inline-block;margin:0 8px;line-height:24px}
+        .container>.tit span:last-child::after{content:none}
+        .container .info{border:1px solid #999;padding:20px;box-sizing:border-box;border-radius:5px}
+        .container .info li{list-style:none;text-indent:-13px;padding-left:13px;line-height: 20px;}
+        .container .info li+li{margin-top: 10px;}
+        .container .info li::before{content:"ㆍ"}
+        .container .info p{font-weight:400;margin-bottom:10px;font-size:14px;font-weight: bold}
+        .container .info ul+p{margin-top:25px}
+        .url{text-align:center;}
+        h1{display:block;font-size:42px;letter-spacing:-1px;line-height:1.1;margin:0 auto;color:#fff;margin-bottom:10px;word-break:keep-all}
+        h2{font-size:18px;font-weight:400;line-height:1;margin-top:30px;margin-bottom:6px}
+        a{vertical-align: top;}
+        a i{margin-left:3px}
+        i{font-size: 14px; vertical-align: top;}
+        @media screen and (max-width:768px) {
+        th,td,span,.url a{font-size:10px}
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="tit">
+            <div>
+                <h1>ENCLOUDS_타바요</h1>
+                <span>퍼블리싱</span>
+                <span>기간 : 2021.07.20 ~ </span>
+                <span>언어 : HTML, CSS, jQuery</span>
+                <span>테스트 환경 : 반응형웹(IE,Chrome,safari,firefox),아이폰, 안드로이드, 태블릿</span>
+            </div>
+        </div>
+        <div style="display:none;">
+            <h2>코멘트</h2>
+            <div class="info">
+                <p>안내</p>
+                <ul>
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+
+        <div>
+            <h2>퍼블리싱 - 공통</h2>
+            <table>
+                <colgroup>
+                    <col style="width: auto;" />
+                    <col style="width: 30%;" />
+                    <col style="width: 30%;" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">Depth1</th>
+                        <th scope="col">링크</th>
+                        <th scope="col">비고</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1.레이아웃</td>
+                        <td class="url"><a href="#">layout</a></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>2.로그인</td>
+                        <td class="url"><a href="#">login<i class="y xi-check-circle"></i></a></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>3.상품등록/리스트</td>
+                        <td class="url"><a href="#">product<i class="y xi-check-circle"></i></a></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>4.리스트 공통</td>
+                        <td class="url"><a href="#">list<i class="y xi-check-circle"></i></a></td>
+                        <td>메모기능 팝업으로 추가</td>
+                    </tr>
+                    <tr>
+                        <td>5.입력폼 공통</td>
+                        <td class="url"><a href="#">form<i class="y xi-check-circle"></i></a></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>7.팝업</td>
+                        <td class="url"><a href="#">popup<i class="y xi-check-circle"></i></a></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>9.FAQ게시판</td>
+                        <td class="url"><a href="#">faq<i class="y xi-check-circle"></i></a></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+
+
+
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('.container div').find('tr').each(function () {
+                var link = $(this).find('.url a').text();
+                $(this).find('.url a').attr('href', './' + link + '.html');
+                $(this).find('.url-blank a').attr('href', './' + link + '.html');
+            });
+        });
+    </script>
+</body>
+
+</html>

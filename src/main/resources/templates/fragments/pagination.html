@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<nav th:fragment="fragment-pagination" th:if="${params != null and params.paginationInfo.totalRecordCount > 0}" th:object="${params.paginationInfo}" th:with="info=${params.paginationInfo}" aria-label="Page navigation">
+
+	<ul class="pagination">
+		<!--		<li th:if="*{hasPreviousPage == true}">-->
+		<!--			<a class="page-link prev" href="javascript:void(0)" title="맨앞 페이지" th:onclick="movePage([[ ${#request.requestURI} ]], [[ ${params.makeQueryString(1)} ]])"></a>-->
+		<!--		</li>-->
+		<li th:if="*{hasPreviousPage == true}">
+			<a class="page-link prev" href="javascript:void(0)" title="이전 페이지" th:onclick="movePage([[ ${#request.requestURI} ]], [[ ${params.makeQueryString(info.firstPage - 1)} ]])" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+		</li>
+		<li class="page-item" th:each="pageNo : *{#numbers.sequence( firstPage, lastPage )}" th:classappend="${pageNo == params.currentPageNo} ? 'active'">
+			<a class="page-link" href="javascript:void(0)" th:text="${pageNo}" th:onclick="movePage([[ ${#request.requestURI} ]], [[ ${params.makeQueryString(pageNo)} ]])"></a>
+		</li>
+		<li th:if="*{hasNextPage == true}">
+			<a href="javascript:void(0)" th:onclick="movePage([[ ${#request.requestURI} ]], [[ ${params.makeQueryString(info.lastPage + 1)} ]])" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+		</li>
+		<!--		<li th:if="*{hasNextPage == true}">-->
+		<!--			<a href="javascript:void(0)" th:onclick="movePage([[ ${#request.requestURI} ]], [[ ${params.makeQueryString(info.totalPageCount)} ]])" title="맨끝 페이지"><img src="/assets/images/double-Next.png"></a>-->
+		<!--		</li>-->
+	</ul>
+
+</nav>
+
+</html>

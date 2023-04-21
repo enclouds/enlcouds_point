@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+
+<script>
+
+    function playGame(seq){
+        location.href = "/game/play?seq="+seq;
+    }
+
+</script>
+
+<body>
+<div class="list_box">
+    <table class="list">
+        <thead>
+            <th>게임명</th>
+            <th>시작</th>
+        </thead>
+        <tbody>
+            <tr th:each="list:${gameList}">
+                <td th:text="${list.gameName}"></td>
+                <td>
+                    <button type="button" class="tb_btn blue" th:onclick="javascript:playGame([[${list.seq}]]);">시작</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

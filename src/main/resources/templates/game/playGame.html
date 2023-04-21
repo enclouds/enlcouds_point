@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
+        body{
+            height: 100vh;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+        .box{
+            width: 100%;
+            height: 100%;
+        }
+        .lvlBox{
+            width: 80%;
+        }
+        .timerBox{
+            width: 80%;
+        }
+        .lvlBox .lvl{
+            font-size: 30pt;
+            color: #4C4C4C;
+            text-align: center;
+            font-family: sans-serif;
+        }
+        .timerBox .time{
+            font-size: 100pt;
+            color: #4C4C4C;
+            text-align: center;
+            font-family: sans-serif;
+        }
+        .btnBox{
+            margin: 20px auto;
+            text-align: center;
+        }
+        .btnBox .fa{
+            margin: 0px 5px;
+            font-size: 30pt;
+            color: #FAED7D;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var time = 0;
+    var starFlag = true;
+    var blindList = /*[[${blindList}]]*/;
+    var blindLvl = 0;
+    var timer;
+
+    $(document).ready(function(){
+
+        $("#lvl").text(blindList[blindLvl].lvl + "레벨  " + blindList[blindLvl].smallBlind + "/" + blindList[blindLvl].bigBlind + "(" + blindList[blindLvl].ante + ")");
+        if(blindList[blindLvl+1] != null){
+            $("#nextLvl").text("NEXT Blind " + blindList[blindLvl+1].smallBlind + "/" + blindList[blindLvl+1].bigBlind + "(" + blindList[blindLvl+1].ante + ")");
+        }
+
+        min = Math.floor(blindList[0].time/60);
+        hour = Math.floor(min/60);
+        sec = blindList[0].time%60;
+
+        var th = hour;
+        var tm = min;
+        var ts = sec;
+
+        if(th<10){
+            th = "0" + hour;
+        }
+
+        if(tm < 10){
+            tm = "0" + min;
+        }
+
+        if(ts < 10){
+            ts = "0" + sec;
+        }
+
+        document.getElementById("time").innerHTML = th + ":" + tm + ":" + ts;
+
+        time = blindList[blindLvl].time;
+
+        // start btn
+        $("#startbtn").click(function(){
+
+            if(starFlag){
+                $(".fa").css("color","#FAED7D")
+                this.style.color = "#4C4C4C";
+                starFlag = false;
+
+                timer = setInterval(function(){
+                    time--;
+
+                    min = Math.floor(time/60);
+                    hour = Math.floor(min/60);
+                    sec = time%60;
+                    min = min%60;
+
+                    var th = hour;
+                    var tm = min;
+                    var ts = sec;
+
+                    if(th<10){
+                        th = "0" + hour;
+                    }
+
+                    if(tm < 10){
+                        tm = "0" + min;
+                    }
+
+                    if(ts < 10){
+                        ts = "0" + sec;
+                    }
+
+                    document.getElementById("time").innerHTML = th + ":" + tm + ":" + ts;
+
+                    if(time < 6 && time > 0){
+                        beep();
+                    }
+
+                    if(time < 1){
+                        nextBeep();
+                        clearInterval(timer);
+                        blindLvl++;
+                        nextLvl();
+                    }
+                }, 1000);
+            }
+        });
+
+        $("#pausebtn").click(function(){
+            if(time != 0){
+                $(".fa").css("color","#FAED7D")
+                this.style.color = "#4C4C4C";
+                clearInterval(timer);
+                starFlag = true;
+            }
+        });
+
+        $("#stopbtn").click(function(){
+            window.location.href = "/game";
+        });
+
+    });
+
+    function nextLvl(){
+
+        if(blindList[blindLvl].breakYn == 'Y'){
+            $("#lvl").text("Break TIME");
+        }else {
+            $("#lvl").text(blindList[blindLvl].lvl + "레벨  " + blindList[blindLvl].smallBlind + "/" + blindList[blindLvl].bigBlind + "(" + blindList[blindLvl].ante + ")");
+
+            if(blindList[blindLvl+1] != null){
+                if(blindList[blindLvl+1].breakYn == 'Y'){
+                    $("#nextLvl").text("NEXT Break TIME");
+                }else {
+                    $("#nextLvl").text("NEXT Blind " + blindList[blindLvl+1].smallBlind + "/" + blindList[blindLvl+1].bigBlind + "(" + blindList[blindLvl+1].ante + ")");
+                }
+            }
+        }
+
+        time = blindList[blindLvl].time;
+        time = time-1;
+
+        timer = setInterval(function(){
+            min = Math.floor(time/60);
+            hour = Math.floor(min/60);
+            sec = time%60;
+            min = min%60;
+
+            var th = hour;
+            var tm = min;
+            var ts = sec;
+
+            if(th<10){
+                th = "0" + hour;
+            }
+
+            if(tm < 10){
+                tm = "0" + min;
+            }
+
+            if(ts < 10){
+                ts = "0" + sec;
+            }
+
+            document.getElementById("time").innerHTML = th + ":" + tm + ":" + ts;
+            if(time < 6 && time > 0){
+                beep();
+            }
+
+            if(time < 1){
+                nextBeep();
+                clearInterval(timer);
+                blindLvl++;
+                nextLvl();
+            }
+            time--;
+        }, 1000);
+    }
+
+    function beep() {
+        var snd = new Audio("../../static/sound/beep.mp3");
+        snd.play();
+    }
+
+    function nextBeep() {
+        var snd = new Audio("../../static/sound/next_beep.mp3");
+        snd.play();
+    }
+
+    /*]]>*/
+</script>
+
+<body>
+<div id='box' class="box">
+    <div>
+        <div th:text="${gameInfo.gameName}"></div>
+    </div>
+    <div id='lvlBox' class="lvlBox">
+        <div class="lvl">
+            <p id="lvl"></p>
+        </div>
+    </div>
+    <div id='timerBox' class="timerBox">
+        <div id="time" class="time">00:00:00</div>
+    </div>
+    <div id='nextLvlBox' class="lvlBox">
+        <div class="lvl">
+            <p id="nextLvl"></p>
+        </div>
+    </div>
+    <div class="btnBox">
+        <span>Player</span>
+        <i id="playerPlusBtn" class="fa fa-plus-square" aria-hidden="true"></i>
+        <i id="playerMinusBtn" class="fa fa-minus-square" aria-hidden="true"></i>
+    </div>
+    <div class="btnBox">
+        <span>Entry</span>
+        <i id="entryPlusBtn" class="fa fa-plus-square" aria-hidden="true"></i>
+        <i id="entryMinusBtn" class="fa fa-minus-square" aria-hidden="true"></i>
+    </div>
+    <div class="btnBox">
+        <span>Rebuy IN</span>
+        <i id="rebuyInPlusBtn" class="fa fa-plus-square" aria-hidden="true"></i>
+        <i id="rebuyInMinusBtn" class="fa fa-minus-square" aria-hidden="true"></i>
+    </div>
+    <div class="btnBox">
+        <i id="startbtn" class="fa fa-play" aria-hidden="true"></i>
+        <i id="pausebtn" class="fa fa-pause" aria-hidden="true"></i>
+        <i id="prebtn" class="fa fa-step-backward" aria-hidden="true"></i>
+        <i id="nextbtn" class="fa fa-step-forward" aria-hidden="true"></i>
+        <i id="stopbtn" class="fa fa-stop" aria-hidden="true"></i>
+    </div>
+</div>
+</body>
+</html>

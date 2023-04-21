@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+
+<body>
+
+<!-- container S -->
+<div class="container">
+    <!-- header S -->
+    <div th:replace="/fragments/left.html :: fragment-left('m2', '/user/rank/list')"></div>
+    <!-- header E -->
+
+    <!-- content S -->
+    <div class="content">
+        <div class="con_top">
+            <ul>
+                <li>회원관리</li>
+                <li>티켓 Ranking</li>
+            </ul>
+        </div>
+        <p class="page_info">티켓 Ranking</p>
+
+        <form id="schFrm">
+            <div class="search_option">
+                <span class="input_group">
+                    <input type="text" style="width:1000px;" id="schText" name="schText" placeholder="검색어" th:value="${params.schText}" onkeyup="if(window.event.keyCode==13){fnSearch()}">
+                </span>
+                <button type="button" class="search_btn" th:onclick="javascript:fnSearch();">조회</button>
+            </div>
+        </form>
+
+        <div class="list_box">
+            <table class="list">
+                <colgroup>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">RANKING</th>
+                    <th scope="col">별명</th>
+                    <th scope="col">티켓</th>
+                    <th scope="col">전화번호</th>
+                    <th scope="col">등록일자</th>
+                    <th scope="col">최근 방문 일자</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="list:${userTicketRankList}">
+                    <td th:text="${listStat.count}" th:styleappend="${listStat.count} < 11 ? 'font-weight: bold;color: coral;font-size: medium;' : ''"></td>
+                    <td th:text="${list.nickName}" th:styleappend="${listStat.count} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
+                    <td th:text="${list.ticketStr}" th:styleappend="${listStat.count} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
+                    <td th:text="${list.phoneNum}" th:styleappend="${listStat.count} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
+                    <td th:text="${list.regDate}"></td>
+                    <td th:text="${list.maxDate}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <!-- content E -->
+
+</div>
+<!-- container E -->
+</body>
+<script th:src="@{/static/js/common.js}"></script>
+<script th:inline="javascript">
+
+    var selectTrSeq;
+
+    $( function() {
+    });
+
+    function fnSearch(){
+        $("#schFrm").submit();
+    }
+
+</script>
+
+</html>

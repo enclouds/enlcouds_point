@@ -1,0 +1,165 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+* {
+  outline: none;
+  box-sizing: border-box;
+  font-family: AppleSDGothicNeoM, sans-serif !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+button {
+  border: none;
+}
+
+body {
+  max-width: 500px;
+  height: 100vh;
+  margin: 0 auto;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+input[type=date] {
+  background-color: transparent;
+}
+
+.divider {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #eee;
+}
+
+@font-face {
+  font-family: "AppleSDGothicNeoM";
+  src: url("../../fonts/AppleSDGothicNeoM.ttf");
+  font-weight: normal;
+}
+@font-face {
+  font-family: "AppleSDGothicNeoB";
+  src: url("../../fonts/AppleSDGothicNeoB.ttf");
+  font-weight: bold;
+}
+footer {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  height: 56px;
+  bottom: 0;
+  padding: 0 20px;
+  background-color: #00ABFF;
+}
+footer .footer__menu--list {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+footer .footer__menu--list .list__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  width: 100px;
+}
+footer .footer__menu--list .list__item a {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+footer .footer__menu--list .list__item .item__text {
+  margin-top: 4px;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+footer .footer__menu--list .list__item .item__text.on {
+  color: white;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  background-color: #00ABFF;
+}
+
+.section--header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex-direction: column;
+  flex: 1;
+  padding: 40px;
+}
+.section--header .header__text {
+  font-size: 40px;
+  text-align: right;
+  margin-top: 50px;
+  color: white;
+  line-height: 52px;
+}
+
+.form--login {
+  width: 100%;
+  flex: 1;
+  padding: 40px;
+  background-color: white;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+.form--login .login__title {
+  font-size: 30px;
+  font-weight: bold;
+}
+.form--login .login__input--container {
+  margin-top: 40px;
+}
+.form--login .login__input--container .container__label {
+  display: block;
+}
+.form--login .login__input--container .container__input {
+  width: 100%;
+  transition: 0.3s;
+  font-size: 16px;
+  padding: 10px;
+  border: none;
+  border-bottom: 1px solid #eee;
+}
+.form--login .login__input--container .container__input:focus {
+  border-bottom: 1px solid black;
+  transition: 0.3s;
+}
+.form--login .login__input--container .container__input::placeholder {
+  display: block;
+  color: #eee;
+}
+.form--login .login__submit {
+  width: 100%;
+  height: 40px;
+  margin-top: 40px;
+  font-size: 16px;
+  color: white;
+  border-radius: 8px;
+  background-color: #00ABFF;
+  transition: 0.3s;
+}
+.form--login .login__submit:hover {
+  background-color: #0088cb;
+  transition: 0.3s;
+}
+
+/*# sourceMappingURL=index.css.map */

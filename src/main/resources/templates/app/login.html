@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <div th:replace="/app/appHeader.html :: fragment-app-header"></div>
+</head>
+
+<body>
+  <form id="loginAppFrm" th:action="@{/loginApp}" th:object="${loginDto}" method="post">
+  <!-- container S -->
+  <div class="container">
+    <!-- content S -->
+    <div class="content login">
+      <div class="login_wrap">
+        <div class="login_box">
+          <h1><img src="/static/img/app/logo.png" alt="KINGS LOUNGE"></h1>
+          <span class="focus_box"><input type="text" id="id" name="id" placeholder="아이디"></span>
+          <span class="focus_box"><input type="password" id="password" name="password" placeholder="비밀번호" autocomplete="on"></span>
+          <button type="button" class="btn_login blue" onclick="javascript:fnLoginApp();">로그인</button>
+          <button type="button" class="btn_login" onclick="javascript:fnAuth();">본인인증</button>
+        </div>
+      </div>
+    </div>
+    <!-- content E -->
+  </div>
+  </form>
+  <!-- container E -->
+</body>
+
+<script>
+    function fnLoginApp(){
+        var formData = new FormData();
+
+        if($("#id").val() == ''){
+            alert("ID는 필수 입니다.");
+            $("#id").focus();
+            return;
+        }
+
+        if($("#password").val() == ''){
+            alert("비밀번호는 필수 입니다.");
+            $("#password").focus();
+            return;
+        }
+
+        formData.append("id", $("#id").val());
+        formData.append("password", $("#password").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/app/loginAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                if(response.resultCode == 0){
+                    window.location = "/app/main";
+                }else {
+                    alert(response.resultMsg);
+                    window.location = "/app/auth";
+                }
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function fnAuth(){
+        window.location = "/app/auth";
+    }
+
+</script>
+
+</html>

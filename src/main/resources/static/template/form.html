@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>타바요</title>
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="description" content="타바요" />
+  <meta name="keywords" content="타바요" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="" />
+  <meta property="og:title" content="타바요" />
+  <meta property="og:description" content="타바요" />
+  <link rel="stylesheet" href="./css/common.css">
+  <script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+
+<body>
+  <!-- modal S -->
+  <div class="modal fade small" id="guide" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title center" id="">안내문</h1>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <ul>
+          <li>적립금이 일정 기준 이하로 줄어들 시 자동으로 등록 계좌에서 출금 되어 적립금 충전이 됩니다.</li>
+          <li>자동이체 등록을 해야만 시간제유상운송보험 상품을 이용하실 수 있습니다.</li>
+          <li>충전기준 금액 선택<br>
+              ex) 1만원 선택 시, 적립금이 1만원 이하로 내려가면 자동이체 등록된 계좌에서 출금</li>
+          <li>자동충전액 : 적립금이 1만원 이하로 내려갔을 때 자동으로 적립금으로 충전되는 금액</li>
+        </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn blue btn-primary" data-dismiss="modal">확인</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">취소</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modal E -->
+  <!-- container S -->
+  <div class="container">
+    <!-- header S -->
+    <div id="header">
+      <div class="top">
+        <h1><a href="#" class="logo"><span class="blind">타바요</span></a></h1>
+        <button type="button" class="btn_side_menu">사이드메뉴</button>
+      </div>
+      <!-- side menu S -->
+      <div class="side_menu">
+        <div class="inner">
+          <div class="top_info">
+            <p class="name"><em>삼천리 방학점</em>님</p>
+            <span class="btn_group">
+              <button type="button" class="btn_logout">로그아웃</button>
+              <button type="button" class="menu_close">메뉴닫기</button>
+            </span>
+          </div>
+          <div class="menu">
+            <p class="home">DASHBOARD</p>
+            <div class="menu_box active">
+              <h2 class="menu1">신청 및 등록</h2>
+              <ul>
+                <li>
+                  <button type="button" class="depth2">빌려타 신청</button>
+                </li>
+                <li>
+                  <button type="button" class="depth2">돌려타 신청</button>
+                </li>
+                <li>
+                  <button type="button" class="depth2">들고타 신청</button>
+                </li>
+              </ul>
+            </div>
+
+            <div class="menu_box active">
+              <h2 class="menu2">타바요 전체 현황</h2>
+              <ul>
+                <li>
+                  <button type="button" class="depth2">빌려타 현황</button>
+                  <ul>
+                    <li><a href="#">본사</a></li>
+                    <li><a href="#">리스사</a></li>
+                    <li><a href="#">회원사</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <button type="button" class="depth2">돌려타 현황</button>
+                  <ul>
+                    <li>미정</li>
+                  </ul>
+                </li>
+                <li>
+                  <button type="button" class="depth2">돌고타 현황</button>
+                  <ul>
+                    <li><a href="#">기사 정보 관리</a></li>
+                    <li><a href="#">보험 내역</a></li>
+                    <li><a href="#">이용 내역</a></li>
+                    <li><a href="#">충전 내역</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <div class="menu_box active">
+              <h2 class="menu3">타바요 회원사 관리</h2>
+              <ul>
+                <li>
+                  <button type="button" class="depth2">회원사 정보관리</button>
+                </li>
+              </ul>
+            </div>
+
+            <div class="menu_box active">
+              <h2 class="menu4">고객센터</h2>
+              <ul>
+                <li>
+                  <button type="button" class="depth2">공지사항</button>
+                </li>
+                <li>
+                  <button type="button" class="depth2">FAQ</button>
+                </li>
+                <li>
+                  <button type="button" class="depth2">보험정보 조회</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- side menu E -->
+    </div>
+    <!-- header E -->
+    <!-- content S -->
+    <div class="content">
+      <div class="con_top">
+        <ul>
+          <li>신청 및 등록</li>
+          <li>빌려타 신청</li>
+        </ul>
+      </div>
+
+      <p class="page_info">빌려타 신청</p>
+
+      <div class="btn_group">
+        <button type="button" class="btn_reset">초기화</button>
+        <button type="button" class="btn_add">등록</button>
+        <button type="button" class="btn_cancel">취소</button>
+      </div>
+
+      <div class="form_box">
+        <p class="tb_tit">차량정보</p>
+        <table class="form">
+          <colgroup>
+            <col width="20%;">
+            <col width="80%;">
+          </colgroup>
+          <tbody>
+            <tr>
+              <th scope="row"><em class="required">*</em>제조사</th>
+              <td>
+                <select>
+                  <option>혼다</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><em class="required">*</em>모델명</th>
+              <td>
+                <select>
+                  <option>PCX abs</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><em class="required">*</em>차량번호</th>
+              <td>
+                <input type="text" value="구로 카 9787" required>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><em class="required">*</em>운행거리</th>
+              <td>
+                <input type="text" value="13,000km">
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">리스구분</th>
+              <td>
+                <select>
+                  <option>금융리스</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">보험구분</th>
+              <td>
+                <input type="text" value="유상운송종합보험">
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">보험연령</th>
+              <td>
+                <select>
+                  <option>만 21세 이상</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">색상</th>
+              <td>
+                <input type="text" value="블랙">
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">일 리스료</th>
+              <td>
+                <input type="text" value="3,500원">
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">리스종료일</th>
+              <td>
+                <input type="text" id="datepicker" class="datepicker" placeholder="가입일">
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">잔여리스일</th>
+              <td>
+                <input type="text" value="D-321">
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">할인정보</th>
+              <td>
+                <input type="text" value="10%">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="tb_tit">신청정보</p>
+        <table class="form">
+          <colgroup>
+            <col width="20%;">
+            <col width="80%;">
+          </colgroup>
+          <tbody>
+            <tr>
+              <th scope="row"><em class="required">*</em>회원사명</th>
+              <td>
+                <input type="text" value="부릉 삼계지점">
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><em class="required">*</em>운영지역</th>
+              <td>
+                <input type="text" value="경남 김해시 삼계">
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><em class="required">*</em>소속대행사</th>
+              <td>
+                <select>
+                  <option>부릉</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">출고요청일</th>
+              <td>
+                <input type="text" id="datepicker2" class="datepicker" placeholder="2021-07-07">
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">출고수량</th>
+              <td>
+                <span class="input_group">
+                  <em class="radio_box">
+                    <input type="radio" id="radio1_1">
+                    <label for="radio1_1">1대</label>
+                  </em>
+                  <em class="radio_box">
+                    <input type="radio" id="radio1_2">
+                    <label for="radio1_2">동일</label>
+                  </em>
+                  <select>
+                    <option>2대</option>
+                  </select>
+                </span>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">메모</th>
+              <td>
+                <textarea class="tb_textarea"></textarea>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="tb_tit">계약사항</p>
+        <table class="form">
+          <colgroup>
+            <col width="20%;">
+            <col width="80%;">
+          </colgroup>
+          <tbody>
+            <tr>
+              <th scope="row">계약사항</th>
+              <td>
+                <p class="sub_tit">계약서 제목</p>
+                <textarea class="tb_textarea">계약서 내용</textarea>
+                <p class="sub_tit">계약서 제목2</p>
+                <textarea class="tb_textarea">계약서 내용2</textarea>
+                <div class="agree_box">
+                  <p class="agree_txt">계약서 내용을 확인 하셨습니까?</p>
+                  <span class="input_group">
+                    <em class="radio_box">
+                      <input type="radio" id="radio1_3">
+                      <label for="radio1_3">동의</label>
+                    </em>
+                    <em class="radio_box">
+                      <input type="radio" id="radio1_4">
+                      <label for="radio1_4">비동의</label>
+                    </em>
+                  </span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="page_info">리스료 관리</p>
+
+      <div class="form_box">
+        <p class="tb_tit">리스료 관리</p>
+        <table class="form">
+          <colgroup>
+            <col width="20%;">
+            <col width="80%;">
+          </colgroup>
+          <tbody>
+            <tr>
+              <th scope="row">계좌이체 상품등록</th>
+              <td>
+                <select>
+                  <option>이용중인 상품</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">출금계좌</th>
+              <td>
+                <select>
+                  <option>은행선택</option>
+                </select>
+                <input type="text" value="계좌번호" class="medium">
+                <button type="button" class="tb_btn blue">본인인증</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="page_info">들고타 등록</p>
+
+      <div class="form_box">
+        <p class="tb_tit">들고타 등록</p>
+        <table class="form">
+          <colgroup>
+            <col width="20%;">
+            <col width="80%;">
+          </colgroup>
+          <tbody>
+            <tr>
+              <th scope="row">소속대행사</th>
+              <td>
+                <input type="text" value="소속대행사" class="full">
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">회원사명</th>
+              <td>
+                <input type="text" value="기사님 성함">
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">소속대행사</th>
+              <td>
+                <input type="text" value="주민등록번호" class="medium">
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">필요 서류 업로드</th>
+              <td>
+                <form>
+                    <input type="file" class="file_up" id="file" multiple>
+                    <div class="drop-zone">파일을 여기로 드래그하세요.</div>
+                  </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="btn_group">
+        <button type="button" class="btn_reset">초기화</button>
+        <button type="button" class="btn_add">가입</button>
+        <button type="button" class="btn_add" data-toggle="modal" data-target="#guide">안내문</button>
+        <button type="button" class="btn_add">등록</button>
+        <button type="button" class="btn_cancel">뒤로가기</button>
+        <button type="button" class="btn_cancel">취소</button>
+      </div>
+
+
+
+
+
+
+
+      </div>
+
+
+  </div>
+  <!-- container E -->
+</body>
+<script src="./js/common.js"></script>
+<script>
+$( function() {
+  $( "#datepicker" ).datepicker({
+    dateFormat: "yy-mm-dd",
+    showMonthAfterYear: true ,
+    dayNamesMin: ['월', '화', '수', '목', '금', '토', '일'],
+    monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+    changeMonth: true,
+    changeYear: true,
+    yearSuffix: '년',
+    showButtonPanel: true,
+  });
+
+  $( "#datepicker2" ).datepicker({
+    dateFormat: "yy-mm-dd",
+    showMonthAfterYear: true ,
+    dayNamesMin: ['월', '화', '수', '목', '금', '토', '일'],
+    monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+    changeMonth: true,
+    changeYear: true,
+    yearSuffix: '년',
+    showButtonPanel: true,
+  });
+});
+
+</script>
+<script>
+
+     (function() {
+
+         var $file = document.getElementById("file")
+         var dropZone = document.querySelector(".drop-zone")
+
+         var toggleClass = function(className) {
+
+             console.log("current event: " + className)
+
+             var list = ["dragenter", "dragleave", "dragover", "drop"]
+
+             for (var i = 0; i < list.length; i++) {
+                 if (className === list[i]) {
+                     dropZone.classList.add("drop-zone-" + list[i])
+                 } else {
+                     dropZone.classList.remove("drop-zone-" + list[i])
+                 }
+             }
+         }
+
+         var showFiles = function(files) {
+             dropZone.innerHTML = ""
+             for(var i = 0, len = files.length; i < len; i++) {
+                 dropZone.innerHTML += "<p>" + files[i].name + "</p>"
+             }
+         }
+
+         var selectFile = function(files) {
+             // input file 영역에 드랍된 파일들로 대체
+             $file.files = files
+             showFiles($file.files)
+
+         }
+
+         $file.addEventListener("change", function(e) {
+             showFiles(e.target.files)
+         })
+
+         // 드래그한 파일이 최초로 진입했을 때
+         dropZone.addEventListener("dragenter", function(e) {
+             e.stopPropagation()
+             e.preventDefault()
+
+             toggleClass("dragenter")
+
+         })
+
+         // 드래그한 파일이 dropZone 영역을 벗어났을 때
+         dropZone.addEventListener("dragleave", function(e) {
+             e.stopPropagation()
+             e.preventDefault()
+
+             toggleClass("dragleave")
+
+         })
+
+         // 드래그한 파일이 dropZone 영역에 머물러 있을 때
+         dropZone.addEventListener("dragover", function(e) {
+             e.stopPropagation()
+             e.preventDefault()
+
+             toggleClass("dragover")
+
+         })
+
+         // 드래그한 파일이 드랍되었을 때
+         dropZone.addEventListener("drop", function(e) {
+             e.preventDefault()
+
+             toggleClass("drop")
+
+             var files = e.dataTransfer && e.dataTransfer.files
+             console.log(files)
+
+             if (files != null) {
+                 if (files.length < 1) {
+                     alert("폴더 업로드 불가")
+                     return
+                 }
+                 selectFile(files)
+             } else {
+                 alert("ERROR")
+             }
+
+         })
+
+     })();
+
+
+ </script>
+</html>

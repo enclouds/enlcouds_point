@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>타바요</title>
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="description" content="타바요" />
+  <meta name="keywords" content="타바요" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="" />
+  <meta property="og:title" content="타바요" />
+  <meta property="og:description" content="타바요" />
+  <link rel="stylesheet" href="./css/common.css">
+  <link rel="stylesheet" href="./css/richtext.min.css">
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+
+<body>
+
+
+
+  <!-- container S -->
+  <div class="container">
+    <!-- header S -->
+    <div id="header">
+      <div class="top">
+        <h1><a href="#" class="logo"><span class="blind">타바요</span></a></h1>
+        <button type="button" class="btn_side_menu">사이드메뉴</button>
+      </div>
+      <!-- side menu S -->
+      <div class="side_menu">
+        <div class="inner">
+          <div class="top_info">
+            <p class="name"><em>삼천리 방학점</em>님</p>
+            <span class="btn_group">
+              <button type="button" class="btn_logout">로그아웃</button>
+              <button type="button" class="menu_close">메뉴닫기</button>
+            </span>
+          </div>
+          <div class="menu">
+            <p class="home">DASHBOARD</p>
+            <div class="menu_box active">
+              <h2 class="menu1">신청 및 등록</h2>
+              <ul>
+                <li>
+                  <button type="button" class="depth2">빌려타 신청</button>
+                </li>
+                <li>
+                  <button type="button" class="depth2">돌려타 신청</button>
+                </li>
+                <li>
+                  <button type="button" class="depth2">들고타 신청</button>
+                </li>
+              </ul>
+            </div>
+
+            <div class="menu_box active">
+              <h2 class="menu2">타바요 전체 현황</h2>
+              <ul>
+                <li>
+                  <button type="button" class="depth2">빌려타 현황</button>
+                  <ul>
+                    <li><a href="#">본사</a></li>
+                    <li><a href="#">리스사</a></li>
+                    <li><a href="#">회원사</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <button type="button" class="depth2">돌려타 현황</button>
+                  <ul>
+                    <li>미정</li>
+                  </ul>
+                </li>
+                <li>
+                  <button type="button" class="depth2">돌고타 현황</button>
+                  <ul>
+                    <li><a href="#">기사 정보 관리</a></li>
+                    <li><a href="#">보험 내역</a></li>
+                    <li><a href="#">이용 내역</a></li>
+                    <li><a href="#">충전 내역</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <div class="menu_box active">
+              <h2 class="menu3">타바요 회원사 관리</h2>
+              <ul>
+                <li>
+                  <button type="button" class="depth2">회원사 정보관리</button>
+                </li>
+              </ul>
+            </div>
+
+            <div class="menu_box active">
+              <h2 class="menu4">고객센터</h2>
+              <ul>
+                <li>
+                  <button type="button" class="depth2">공지사항</button>
+                </li>
+                <li>
+                  <button type="button" class="depth2">FAQ</button>
+                </li>
+                <li>
+                  <button type="button" class="depth2">보험정보 조회</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- side menu E -->
+    </div>
+    <!-- header E -->
+    <!-- content S -->
+    <div class="content">
+      <div class="con_top">
+        <ul>
+          <li>신청 및 등록</li>
+          <li>빌려타 신청</li>
+        </ul>
+      </div>
+
+      <p class="page_info">공지사항 리스트</p>
+
+      <div class="board_box">
+        <div class="tab_box">
+          <button class="btn active">전체</button>
+          <button class="btn">빌려타</button>
+          <button class="btn">돌려타</button>
+          <button class="btn">들고타</button>
+        </div>
+
+        <div class="search_option right">
+          <span class="input_group">
+            <input type="text" placeholder="검색어">
+          </span>
+          <button type="button" class="search_btn">조회</button>
+        </div>
+
+        <table class="board_list">
+          <colgroup>
+            <col width="10%;">
+            <col width="10%;">
+            <col width="10%;">
+            <col width="10%;">
+            <col width="*%;">
+            <col width="15%;">
+            <col width="15%;">
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">선택</th>
+              <th scope="col">공지번호</th>
+              <th scope="col">구분</th>
+              <th scope="col">공지유형</th>
+              <th scope="col">제목</th>
+              <th scope="col">작성자</th>
+              <th scope="col">작성일</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <em class="check_box notxt">
+                  <input type="checkbox" id="check1_1">
+                  <label for="check1_1">선택하기</label>
+                </em>
+              </td>
+              <td>No.1</td>
+              <td>빌려타</td>
+              <td>긴급</td>
+              <td class="tit">2021년 4월 29일 빌려타 출시 2021년 4월 29일 빌려타 출시 2021년 4월 29일 빌려타 출시</td>
+              <td>이과장</td>
+              <td>2021.03.30</td>
+            </tr>
+            <tr>
+              <td>
+                <em class="check_box notxt">
+                  <input type="checkbox" id="check1_2">
+                  <label for="check1_2">선택하기</label>
+                </em>
+              </td>
+              <td>No.1</td>
+              <td>빌려타</td>
+              <td>긴급</td>
+              <td class="tit">2021년 4월 29일 빌려타 출시</td>
+              <td>이과장</td>
+              <td>2021.03.30</td>
+            </tr>
+            <tr>
+              <td>
+                <em class="check_box notxt">
+                  <input type="checkbox" id="check1_3">
+                  <label for="check1_3">선택하기</label>
+                </em>
+              </td>
+              <td>No.1</td>
+              <td>빌려타</td>
+              <td>긴급</td>
+              <td class="tit">2021년 4월 29일 빌려타 출시</td>
+              <td>이과장</td>
+              <td>2021.03.30</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link prev" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">4</a></li>
+          <li class="page-item"><a class="page-link" href="#">5</a></li>
+          <li class="page-item">
+            <a class="page-link next" href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="btn_group">
+        <button type="button" class="btn_add">등록</button>
+        <button type="button" class="btn_cancel">삭제</button>
+        <button type="button" class="btn_cancel">취소</button>
+      </div>
+
+
+      <p class="page_info">게시물 작성</p>
+
+      <div class="board_box">
+        <table class="board_add">
+          <colgroup>
+            <col width="20%;">
+            <col width="80%;">
+          </colgroup>
+          <tbody>
+            <tr>
+              <th scope="row">작성일</th>
+              <td>2021.07.09</td>
+            </tr>
+            <tr>
+              <th scope="row">작성자</th>
+              <td>하재림</td>
+            </tr>
+            <tr>
+              <th scope="row"><em class="required">*</em>공지 유형 및 구분</th>
+              <td>
+                <select>
+                  <option>전체</option>
+                  <option>긴급</option>
+                </select>
+                <select>
+                  <option>공통</option>
+                  <option>빌려타</option>
+                  <option>돌려타</option>
+                  <option>들고타</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">기능설정</th>
+              <td>
+                <em class="check_box">
+                  <input type="checkbox" id="check1_4">
+                  <label for="check1_4">상단 고정</label>
+                </em>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><em class="required">*</em>제목</th>
+              <td><input type="text" class="full" placeholder="제목을 입력하세요"></td>
+            </tr>
+            <tr>
+              <th scope="row"><em class="required">*</em>내용</th>
+              <td><textarea class="richtext_editor"></textarea> </td>
+            </tr>
+            <tr>
+              <th scope="row">파일첨부</th>
+              <td>
+                <form>
+                  <input type="file" class="file_up" id="file" multiple>
+                  <div class="drop-zone">파일을 여기로 드래그하세요.</div>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="page_info">FAQ</p>
+
+      <div class="board_box">
+        <div class="tab_box">
+          <button class="btn active">전체</button>
+          <button class="btn">빌려타</button>
+          <button class="btn">돌려타</button>
+          <button class="btn">들고타</button>
+        </div>
+
+        <div class="search_option right">
+          <span class="input_group">
+            <input type="text" placeholder="검색어">
+          </span>
+          <button type="button" class="search_btn">조회</button>
+        </div>
+
+        <table class="board_list">
+          <colgroup>
+            <col width="10%;">
+            <col width="10%;">
+            <col width="10%;">
+            <col width="*%;">
+            <col width="15%;">
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">선택</th>
+              <th scope="col">공지번호</th>
+              <th scope="col">구분</th>
+              <th scope="col">자주 묻는 질문</th>
+              <th scope="col">작성일</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <em class="check_box notxt">
+                  <input type="checkbox" id="check1_1">
+                  <label for="check1_1">선택하기</label>
+                </em>
+              </td>
+              <td>No.1</td>
+              <td>빌려타</td>
+              <td class="tit">
+                <p class="sub_tit">2021년 4월 29일 빌려타 출시 2021년 4월 29일 빌려타 출시 2021년 4월 29일</p>
+                <button type="button" class="faq_btn">답변 제목이 출력됩니다.클릭하면 내용 보임</button>
+                <div class="comment">
+                  답변의 내용이 출력됩니다.
+                </div>
+              </td>
+              <td>2021.03.30</td>
+            </tr>
+            <tr>
+              <td>
+                <em class="check_box notxt">
+                  <input type="checkbox" id="check1_2">
+                  <label for="check1_2">선택하기</label>
+                </em>
+              </td>
+              <td>No.1</td>
+              <td>빌려타</td>
+              <td class="tit">2021년 4월 29일 빌려타 출시</td>
+              <td>2021.03.30</td>
+            </tr>
+            <tr>
+              <td>
+                <em class="check_box notxt">
+                  <input type="checkbox" id="check1_3">
+                  <label for="check1_3">선택하기</label>
+                </em>
+              </td>
+              <td>No.1</td>
+              <td>빌려타</td>
+              <td class="tit">2021년 4월 29일 빌려타 출시</td>
+              <td>2021.03.30</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link prev" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">4</a></li>
+          <li class="page-item"><a class="page-link" href="#">5</a></li>
+          <li class="page-item">
+            <a class="page-link next" href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+
+
+
+
+
+      <div class="btn_group">
+        <button type="button" class="btn_reset">초기화</button>
+        <button type="button" class="btn_add">등록</button>
+        <button type="button" class="btn_cancel">취소</button>
+      </div>
+
+
+      </div>
+
+
+  </div>
+  <!-- container E -->
+</body>
+<script src="./js/common.js"></script>
+<script src="./js/richtext.js"></script>
+<script>
+$(document).ready(function() {
+    $('.richtext_editor').richText();
+});
+</script>
+</html>

@@ -1,0 +1,107 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css');
+
+$primaryColor: #00ABFF;
+$primaryHoverColor: #0088cb;
+$lightGrayColor: #eee;
+$midGrayColor: rgba(black, .2);
+$grayColor: rgba(black, .6);
+
+* {
+  outline: none;
+  box-sizing: border-box;
+  font-family: AppleSDGothicNeoM, sans-serif !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+button {
+  border: none;
+}
+
+body {
+  max-width: 500px;
+  height: 100vh;
+  margin: 0 auto;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+input[type=date] {
+  background-color: transparent;
+}
+
+.divider {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid $lightGrayColor;
+}
+
+@font-face {
+  font-family: 'AppleSDGothicNeoM';
+  src: url("../fonts/AppleSDGothicNeoM.ttf");
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'AppleSDGothicNeoB';
+  src: url('../fonts/AppleSDGothicNeoB.ttf');
+  font-weight: bold;
+}
+
+footer {
+  position: fixed;
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  max-width: 500px;
+  height: 56px;
+
+  bottom: 0;
+  padding: 0 20px;
+
+  background-color: $primaryColor;
+
+  .footer__menu--list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+
+    .list__item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      width: 100px;
+
+      a {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+      }
+
+      .item__text {
+        margin-top: 4px;
+        font-size: 12px;
+        color: rgba(white, .6);
+
+        &.on {
+          color: white;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <div th:replace="/app/appHeader.html :: fragment-app-header"></div>
+</head>
+
+<body>
+
+  <!-- container S -->
+  <div class="container">
+    <!-- content S -->
+    <div class="content">
+      <div class="main">
+
+        <div class="top">
+          <div class="inner">
+            <p class="tit"><span class="name" th:text="${userInfo.nickName}"></span>님 반갑습니다.</p>
+          </div>
+        </div>
+
+        <div class="con">
+
+          <div class="info1">
+            <dl>
+              <dt>보유 포인트</dt>
+              <dd th:text="|${#numbers.formatInteger(userInfo.point, 0, 'COMMA')} P|"></dd>
+            </dl>
+            <dl>
+              <dt>보유 외식 상품권</dt>
+              <dd th:text="|${#numbers.formatInteger(userInfo.couponPoint, 0, 'COMMA')} 원|"></dd>
+            </dl>
+            <dl>
+              <dt>보유 티켓</dt>
+              <dd th:text="|${#numbers.formatInteger(userInfo.ticket, 0, 'COMMA')} 장|"></dd>
+            </dl>
+            <dl>
+              <dt>주간 승점</dt>
+              <dd th:text="|${#numbers.formatInteger(userInfo.rankPoint, 0, 'COMMA')} 점|"></dd>
+            </dl>
+            <dl>
+              <dt>누적 승점</dt>
+              <dd th:text="|${#numbers.formatInteger(userInfo.rankSumPoint, 0, 'COMMA')} 점|"></dd>
+            </dl>
+            <dl>
+              <dt>현재 랭킹</dt>
+              <dd th:text="|${#numbers.formatInteger(userInfo.rank, 0, 'COMMA')}/${#numbers.formatInteger(userInfo.totalRankCnt, 0, 'COMMA')}|"></dd>
+            </dl>
+          </div>
+
+          <div class="info2">
+            <p class="tit">포인트 적립/차감 List</p>
+            <table cellpadding="0" cellspacing="0">
+              <colgroup>
+                <col width="">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>일시</th>
+                  <th>구분</th>
+                  <th>포인트</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="pointList:${pointList}">
+                  <td style="text-align: center;" th:text="${pointList.regDate}">2023.03.29</td>
+                  <td style="text-align: center;" th:text="${pointList.pointGbnNm}">적립</td>
+                  <td style="text-align: center;" th:text="${pointList.privateDefPointStr}">10000</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="bottom">
+          <div class="inner">
+            <button type="button" class="tab1 on" onclick="location.href='/app/main'">정보</button>
+            <button type="button" class="tab2" onclick="location.href='/app/bdd'">공지사항</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- content E -->
+  </div>
+  <!-- container E -->
+</body>
+
+</html>

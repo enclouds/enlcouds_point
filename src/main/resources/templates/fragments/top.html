@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div class="top" th:fragment="fragment-top">
+  <div class="menuIco"><img src="/assets/images/menuIco.png" style="cursor: pointer"></div>
+  <div class="memberInfo">
+    <ul class="memMenu">
+      <li onclick="javascript:fnPaymoaAppPopup();"><img src="/assets/images/memMenuIco01.png" style="cursor: pointer"></li>
+      <!--<li>
+        <img src="/assets/images/memMenuIco02.png" style="cursor: pointer">
+      </li>-->
+    </ul>
+
+    <div class="infoArea" onclick="javascript:$('#profile').toggle();" style="cursor: pointer">
+      <div class="info">
+        <div class="name" th:text="${userInfo.userGbn == 'store' ? userInfo.storeNm : userInfo.agentNm}"></div>
+        <div class="group" th:text="${userInfo.userGbn == 'store' ? '가맹점' :
+          userInfo.userGbn == 'agent' ? '제휴사' :
+          userInfo.userGbn == 'agent_top' ? '관리자' : '슈퍼관리자'}"></div>
+      </div>
+
+      <div class="profile"><img src="/assets/images/profile.png"></div>
+    </div>
+  </div>
+
+
+  <div class="infoDrop" id="profile" style="display:none;">
+    <ul class="infoDropList">
+
+      <li>
+        <div class="subj">연락처</div>
+        <div class="subs" th:text="${userInfo.userGbn == 'store' ? userInfo.storeTel : userInfo.telNum}"></div>
+      </li>
+
+      <li>
+        <div class="subj">등록일</div>
+        <div class="subs" th:text="${userInfo.regDate}"></div>
+      </li>
+
+<!--      <li>-->
+<!--        <div class="subj">비밀번호</div>-->
+<!--        <div class="subs">-->
+<!--          <div class="chgBTN"><a href="#">변경하기</a></div>-->
+<!--        </div>-->
+<!--      </li>-->
+    </ul>
+
+    <div class="logout">
+      <div class="text">로그아웃</div>
+      <div class="ico"><a th:href="@{/logout}"><img src="/assets/images/logout.png"></a></div>
+    </div>
+  </div>
+
+</div>
+
+</html>

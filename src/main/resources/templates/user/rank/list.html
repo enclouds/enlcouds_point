@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+
+<body>
+
+<!-- container S -->
+<div class="container">
+    <!-- header S -->
+    <div th:replace="/fragments/left.html :: fragment-left('m2', '/user/rank/list')"></div>
+    <!-- header E -->
+
+    <!-- content S -->
+    <div class="content">
+        <div class="con_top">
+            <ul>
+                <li>회원관리</li>
+                <li>회원 Ranking</li>
+            </ul>
+        </div>
+        <p class="page_info">회원 Ranking</p>
+
+        <form id="schFrm">
+            <div class="search_option">
+                <span class="input_group">
+                    <select id="schCond1" name="schCond1" style="width:100px;">
+                        <option value="week" th:selected="${params.schCond1} == 'week'">주간승점순</option>
+                        <option value="sum" th:selected="${params.schCond1} == 'sum'">누적승점순</option>
+                    </select>
+                    <input type="text" style="width:1000px;" id="schText" name="schText" placeholder="검색어" th:value="${params.schText}" onkeyup="if(window.event.keyCode==13){fnSearch()}">
+                </span>
+                <button type="button" class="search_btn" th:onclick="javascript:fnSearch();">조회</button>
+                <button type="button" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" class="change_btn" th:onclick="javascript:fnWeekRankMove();">주간승점 이관</button>
+                <button type="button" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" class="reset_btn" th:onclick="javascript:fnWeekRankDef();">주간승점 초기화</button>
+                <button type="button" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" class="reset_btn" th:onclick="javascript:fnSumRankDef();">누적승점 초기화</button>
+            </div>
+        </form>
+
+        <div class="list_box">
+            <table class="list">
+                <colgroup>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col" rowspan="2">RANKING</th>
+                    <th scope="col" rowspan="2">별명</th>
+                    <th scope="col" colspan="2">승점</th>
+                    <th scope="col" rowspan="2">전화번호</th>
+                    <th scope="col" rowspan="2">등록일자</th>
+                    <th scope="col" rowspan="2">최근 방문 일자</th>
+                </tr>
+                <tr>
+                    <th scope="col">주간 승점</th>
+                    <th scope="col">누적 승점</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="list:${userRankList}">
+                    <td th:text="${listStat.count}" th:styleappend="${listStat.count} < 11 ? 'font-weight: bold;color: coral;font-size: medium;' : ''"></td>
+                    <td th:text="${list.nickName}" th:styleappend="${listStat.count} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
+                    <td th:text="${list.rankPointStr}" th:styleappend="${listStat.count} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
+                    <td th:text="${list.rankSumPointStr}" th:styleappend="${listStat.count} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
+                    <td th:text="${list.phoneNum}" th:styleappend="${listStat.count} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
+                    <td th:text="${list.regDate}"></td>
+                    <td th:text="${list.maxDate}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <!-- content E -->
+
+</div>
+<!-- container E -->
+</body>
+<script th:src="@{/static/js/common.js}"></script>
+<script th:inline="javascript">
+
+    var selectTrSeq;
+
+    $( function() {
+    });
+
+    function fnSearch(){
+        $("#schFrm").submit();
+    }
+
+    function fnWeekRankMove(){
+        var msg = "전체 주간 승점을 누적승점으로 이동 하시겠습니까?";
+        if(confirm(msg)){
+            $.ajax({
+                contentType:false,
+                processData:false,
+                type: "POST",
+                url: "/user/updateAllUserRankMoveAjax",
+                success: function(response) {
+                    // 성공 시 동작
+                    alert(response.resultMsg);
+                    window.location.reload();
+                },
+                error: function(error) {
+                    // 실패 시 동작
+                }
+            });
+        }
+    }
+
+    function fnWeekRankDef(){
+        var msg = "전체 주간 승점 초기화 하시겠습니까?";
+        if(confirm(msg)){
+            $.ajax({
+                contentType:false,
+                processData:false,
+                type: "POST",
+                url: "/user/updateAllUserWeekRankDefAjax",
+                success: function(response) {
+                    // 성공 시 동작
+                    alert(response.resultMsg);
+                    window.location.reload();
+                },
+                error: function(error) {
+                    // 실패 시 동작
+                }
+            });
+        }
+    }
+
+    function fnSumRankDef(){
+        var msg = "전체 누적 승점 초기화 하시겠습니까?";
+        if(confirm(msg)){
+            $.ajax({
+                contentType:false,
+                processData:false,
+                type: "POST",
+                url: "/user/updateAllUserRankDefAjax",
+                success: function(response) {
+                    // 성공 시 동작
+                    alert(response.resultMsg);
+                    window.location.reload();
+                },
+                error: function(error) {
+                    // 실패 시 동작
+                }
+            });
+        }
+    }
+
+</script>
+
+</html>

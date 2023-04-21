@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.enclouds.enpoint.game.mapper.GameMapper">
+
+	<select id="selectGameListTotalCount" parameterType="com.enclouds.enpoint.game.dto.GameDto" resultType="int">
+		select count(*)
+		from g_info gi
+		where 1=1
+
+		<if test="schCond1 == 'name'">
+			AND gi.game_name like '%${schText}%'
+		</if>
+
+		<if test="schCond2 != ''">
+			AND gi.reg_user_id = #{schCond2}
+		</if>
+
+	</select>
+
+	<select id="selectGameList" parameterType="com.enclouds.enpoint.game.dto.GameDto" resultType="com.enclouds.enpoint.game.dto.GameDto">
+		select seq
+		, game_name
+		, date_format(reg_date, '%Y-%m-%d') as regDate
+		, format(start_stack, 0) as start_stack
+		, format(rebuy_stack, 0) as rebuy_stack
+		, format(rebuy_stack2, 0) as rebuy_stack2
+		, format(max_entry, 0) as max_entry
+		from g_info gi
+		where 1=1
+
+		<if test="schCond1 == 'name'">
+			AND gi.game_name like '%${schText}%'
+		</if>
+
+		<if test="schCond2 != ''">
+			AND gi.reg_user_id = #{schCond2}
+		</if>
+
+		LIMIT
+		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
+	</select>
+
+	<select id="selectGameListTotal" parameterType="com.enclouds.enpoint.game.dto.GameDto" resultType="com.enclouds.enpoint.game.dto.GameDto">
+		select seq
+		, game_name
+		, date_format(reg_date, '%Y-%m-%d') as regDate
+		, format(start_stack, 0) as start_stack
+		, format(rebuy_stack, 0) as rebuy_stack
+		, format(rebuy_stack2, 0) as rebuy_stack2
+		, format(max_entry, 0) as max_entry
+		from g_info gi
+		where 1=1
+
+		<if test="schCond2 != ''">
+			AND gi.reg_user_id = #{schCond2}
+		</if>
+
+	</select>
+
+	<select id="selectGameInfo" parameterType="com.enclouds.enpoint.game.dto.GameDto" resultType="com.enclouds.enpoint.game.dto.GameDto">
+		select seq
+		, game_name
+		, date_format(reg_date, '%Y-%m-%d') as regDate
+		, format(start_stack, 0) as start_stack
+		, format(rebuy_stack, 0) as rebuy_stack
+		, format(rebuy_stack2, 0) as rebuy_stack2
+		, format(max_entry, 0) as max_entry
+		, start_stack as startStackInt
+		, rebuy_stack as rebuyStackInt
+		, reg_user_id
+		from g_info gi
+		where 1=1
+		and seq = #{seq}
+
+		<if test="schCond2 == ''">
+			AND gi.reg_user_id like '%${schText}%'
+		</if>
+
+	</select>
+
+	<select id="selectBlindListTotalCount" parameterType="com.enclouds.enpoint.game.dto.BlindDto" resultType="int">
+		select count(*)
+		from g_blind gb
+		where 1=1
+		AND gb.game_seq = #{gameSeq}
+	</select>
+
+	<select id="selectBlindList" parameterType="com.enclouds.enpoint.game.dto.BlindDto" resultType="com.enclouds.enpoint.game.dto.BlindDto">
+		select seq
+		, game_seq
+		, lvl
+		, time
+		, break_yn
+		, small_blind as small_blind
+		, big_blind as big_blind
+		, ante as ante
+		from g_blind gb
+		where 1=1
+		AND gb.game_seq = #{gameSeq}
+		order by gb.lvl, break_yn desc
+	</select>
+
+	<insert id="insertGame" parameterType="com.enclouds.enpoint.game.dto.GameDto">
+		INSERT INTO g_info
+		( game_name
+		, reg_date
+		, start_stack
+		, rebuy_stack
+		, rebuy_stack2
+		, max_entry
+		, reg_user_id)
+		VALUES
+		( #{gameName}
+		, NOW()
+		, #{startStack}
+		, #{rebuyStack}
+		, #{rebuyStack2}
+		, #{maxEntry}
+		, #{regUserId})
+	</insert>
+
+	<update id="updateGame" parameterType="com.enclouds.enpoint.game.dto.GameDto">
+		UPDATE g_info
+		SET game_name = #{gameName}
+		, start_stack = #{startStack}
+		, rebuy_stack = #{rebuyStack}
+		, rebuy_stack2 = #{rebuyStack2}
+		, max_entry = #{maxEntry}
+		WHERE 1=1
+		AND seq = #{seq}
+	</update>
+
+	<delete id="deleteGame" parameterType="com.enclouds.enpoint.game.dto.GameDto">
+		DELETE FROM g_info
+		WHERE 1=1
+		AND seq = #{seq}
+	</delete>
+
+	<insert id="insertBlind" parameterType="com.enclouds.enpoint.game.dto.BlindDto">
+		INSERT INTO g_blind
+		( game_seq
+		, lvl
+		, time
+		, break_yn
+		, small_blind
+		, big_blind
+		, ante)
+		VALUES
+		( #{gameSeq}
+		, #{lvl}
+		, #{time}
+		, #{breakYn}
+		, #{smallBlind}
+		, #{bigBlind}
+		, #{ante})
+	</insert>
+
+	<update id="updateBlind" parameterType="com.enclouds.enpoint.game.dto.BlindDto">
+		UPDATE g_blind
+		SET lvl = #{lvl}
+		, time = #{time}
+		, break_yn = #{breakYn}
+		, small_blind = #{smallBlind}
+		, big_blind = #{bigBlind}
+		, ante = #{ante}
+		WHERE 1=1
+		AND seq = #{seq}
+	</update>
+
+	<delete id="deleteBlind" parameterType="com.enclouds.enpoint.game.dto.BlindDto">
+		DELETE FROM g_blind
+		WHERE 1=1
+		AND seq = #{seq}
+	</delete>
+
+	<select id="selectPrizeList" parameterType="com.enclouds.enpoint.game.dto.PrizeDto" resultType="com.enclouds.enpoint.game.dto.PrizeDto">
+		SELECT *
+		FROM g_prize
+		WHERE 1=1
+		AND game_seq = #{gameSeq}
+		ORDER BY rank asc
+	</select>
+
+	<select id="selectPrizeList1" parameterType="com.enclouds.enpoint.game.dto.PrizeDto" resultType="com.enclouds.enpoint.game.dto.PrizeDto">
+		SELECT *
+		FROM g_prize
+		WHERE 1=1
+		AND game_seq = #{gameSeq}
+		ORDER BY rank asc
+		LIMIT 0, 3
+	</select>
+
+	<select id="selectPrizeList2" parameterType="com.enclouds.enpoint.game.dto.PrizeDto" resultType="com.enclouds.enpoint.game.dto.PrizeDto">
+		SELECT *
+		FROM g_prize
+		WHERE 1=1
+		AND game_seq = #{gameSeq}
+		ORDER BY rank asc
+		LIMIT 3, 20
+	</select>
+
+	<insert id="insertPrize" parameterType="com.enclouds.enpoint.game.dto.PrizeDto">
+		INSERT INTO g_prize
+		( game_seq
+		, rank
+		, prize)
+		VALUES
+		( #{gameSeq}
+		, #{rank}
+		, #{prize})
+	</insert>
+
+	<update id="updatePrize" parameterType="com.enclouds.enpoint.game.dto.PrizeDto">
+		UPDATE g_prize
+		SET rank = #{rank}
+		, prize = #{prize}
+		WHERE 1=1
+		AND seq = #{seq}
+	</update>
+
+	<delete id="deletePrize" parameterType="com.enclouds.enpoint.game.dto.PrizeDto">
+		DELETE FROM g_prize
+		WHERE 1=1
+		AND seq = #{seq}
+	</delete>
+
+</mapper>
+
+

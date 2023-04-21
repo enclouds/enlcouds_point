@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>KINGS LOUNGE</title>
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="description" content="킹스라운지" />
+    <meta name="keywords" content="킹스라운지" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="" />
+    <meta property="og:title" content="킹스라운지" />
+    <meta property="og:description" content="킹스라운지" />
+    <link th:rel="stylesheet" th:href="@{/static/css/jackpot/common.css}">
+    <link href='http://fonts.googleapis.com/css?family=Josefin+Sans&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+    <script th:src="@{/static/js/jquery.counterup.min.js}"></script>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+        var jackpotPrize = /*[[${jackPotInfo.jackpotPrize}]]*/;
+        var jackpotSeq = /*[[${jackPotInfo.seq}]]*/;
+        var today = /*[[${today}]]*/;
+        var timer;
+
+        $(document).ready(function() {
+            $("#today").val(today);
+            $("#jackpotPrize").text(addComma(jackpotPrize.toString()));
+            $('.counter').counterUp({
+                delay: 15,
+                time: 3000
+            });
+
+            timer = setInterval(function(){
+                getPrizeInfo(jackpotSeq)
+            }, 30000);
+        });
+
+        function addComma(value){
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return value;
+        }
+
+        function getPrizeInfo(jackpotSeq){
+            var formData = new FormData();
+            formData.append("jackpotSeq", jackpotSeq);
+
+            $.ajax({
+                type: "POST",
+                url: "/jackpot/getPrizeInfoAjax",
+                data: formData,
+                async : false,
+                contentType : false,
+                processData : false,
+                success: function(response) {
+                    $("#today").val(response.today);
+                    $("#jackpotPrize").text(addComma(response.prize.toString()));
+                    $('.counter').counterUp({
+                        delay: 15,
+                        time: 3000
+                    });
+                },
+                error: function(error) {
+                    window.reload();
+                }
+            });
+        }
+
+    /*]]>*/
+</script>
+
+<body>
+    <div class="wrap">
+        <div class="container">
+            <div class="content">
+                <div class="inner">
+                    <div class="conbox">
+                        <h1 th:if="${jackPotInfo.storeGbn} == 'hunters'"><img src="/static/img/jackpot/kingsloungelogo.png"><p class="name">KINGS LOUNGE</p></h1>
+                        <h1 th:if="${jackPotInfo.storeGbn} == 'raise'"><img src="/static/img/jackpot/raiselogo.png"><p class="name">RAISE</p></h1>
+                        <p class="tit">JACKPOT</p>
+                        <p class="number"><span id="jackpotPrize" class="counter"></span></p>
+                        <p class="date" th:text="${today}" id="today"></p>
+                    </div>
+                    <p class="copy">Copyright 2023 Enclouds_Nal'K', All Right Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

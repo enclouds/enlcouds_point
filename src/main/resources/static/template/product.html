@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>타바요</title>
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="description" content="타바요" />
+  <meta name="keywords" content="타바요" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="" />
+  <meta property="og:title" content="타바요" />
+  <meta property="og:description" content="타바요" />
+  <link rel="stylesheet" href="./css/common.css">
+  <script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+
+<body>
+  <!-- modal S -->
+  <div class="modal fade small" id="memo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title center" id="">메모입력/확인</h1>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <textarea></textarea>
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn blue btn-primary" data-dismiss="modal">확인</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">취소</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modal E -->
+
+
+  <!-- container S -->
+  <div class="container">
+    <!-- header S -->
+    <div id="header">
+      <div class="top">
+        <h1><a href="#" class="logo"><span class="blind">타바요</span></a></h1>
+        <button type="button" class="btn_side_menu">사이드메뉴</button>
+      </div>
+      <!-- side menu S -->
+      <div class="side_menu">
+        <div class="inner">
+          <div class="top_info">
+            <p class="name"><em>삼천리 방학점</em>님</p>
+            <span class="btn_group">
+              <button type="button" class="btn_logout">로그아웃</button>
+              <button type="button" class="menu_close">메뉴닫기</button>
+            </span>
+          </div>
+          <div class="menu">
+            <p class="home">DASHBOARD</p>
+            <div class="menu_box active">
+              <h2 class="menu1">신청 및 등록</h2>
+              <ul>
+                <li>
+                  <button type="button" class="depth2">빌려타 신청</button>
+                </li>
+                <li>
+                  <button type="button" class="depth2">돌려타 신청</button>
+                </li>
+                <li>
+                  <button type="button" class="depth2">들고타 신청</button>
+                </li>
+              </ul>
+            </div>
+
+            <div class="menu_box active">
+              <h2 class="menu2">타바요 전체 현황</h2>
+              <ul>
+                <li>
+                  <button type="button" class="depth2">빌려타 현황</button>
+                  <ul>
+                    <li><a href="#">본사</a></li>
+                    <li><a href="#">리스사</a></li>
+                    <li><a href="#">회원사</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <button type="button" class="depth2">돌려타 현황</button>
+                  <ul>
+                    <li>미정</li>
+                  </ul>
+                </li>
+                <li>
+                  <button type="button" class="depth2">돌고타 현황</button>
+                  <ul>
+                    <li><a href="#">기사 정보 관리</a></li>
+                    <li><a href="#">보험 내역</a></li>
+                    <li><a href="#">이용 내역</a></li>
+                    <li><a href="#">충전 내역</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <div class="menu_box active">
+              <h2 class="menu3">타바요 회원사 관리</h2>
+              <ul>
+                <li>
+                  <button type="button" class="depth2">회원사 정보관리</button>
+                </li>
+              </ul>
+            </div>
+
+            <div class="menu_box active">
+              <h2 class="menu4">고객센터</h2>
+              <ul>
+                <li>
+                  <button type="button" class="depth2">공지사항</button>
+                </li>
+                <li>
+                  <button type="button" class="depth2">FAQ</button>
+                </li>
+                <li>
+                  <button type="button" class="depth2">보험정보 조회</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- side menu E -->
+    </div>
+    <!-- header E -->
+    <!-- content S -->
+    <div class="content">
+      <div class="con_top">
+        <ul>
+          <li>신청 및 등록</li>
+          <li>빌려타 신청</li>
+        </ul>
+      </div>
+
+      <p class="page_info">상품등록</p>
+
+      <div class="btn_group">
+        <button type="button" class="btn_reset">초기화</button>
+        <button type="button" class="btn_add">등록</button>
+        <button type="button" class="btn_cancel">취소</button>
+      </div>
+
+      <div class="form_box">
+        <p class="tb_tit">차량이미지 등록</p>
+
+        <table class="form">
+          <colgroup>
+            <col width="20%;">
+            <col width="80%;">
+          </colgroup>
+          <tbody>
+            <tr>
+              <th scope="row">상품이미지</th>
+              <td>
+                <p class="img"><img src="img/product.jpg"></p>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">이미지등록</th>
+              <td>
+                <form>
+                    <input type="file" class="file_up" id="file" multiple>
+                    <div class="drop-zone">파일을 여기로 드래그하세요.</div>
+                  </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+
+
+        <p class="tb_tit">차량정보 입력</p>
+        <table class="form">
+          <colgroup>
+            <col width="20%;">
+            <col width="80%;">
+          </colgroup>
+          <tbody>
+            <tr>
+              <th scope="row"><em class="required">*</em>제조사</th>
+              <td>
+                <select>
+                  <option>혼다</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><em class="required">*</em>모델명</th>
+              <td>
+                <select>
+                  <option>PCX abs</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><em class="required">*</em>차량번호</th>
+              <td>
+                <input type="text" value="구로 카 9787" required>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row"><em class="required">*</em>운행거리</th>
+              <td>
+                <input type="text" value="13,000km">
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">리스구분</th>
+              <td>
+                <select>
+                  <option>금융리스</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">보험구분</th>
+              <td>
+                <input type="text" value="유상운송종합보험">
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">보험연령</th>
+              <td>
+                <select>
+                  <option>만 21세 이상</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">색상</th>
+              <td>
+                <input type="text" value="블랙">
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">일 리스료</th>
+              <td>
+                <input type="text" value="3,500원">
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">리스종료일</th>
+              <td>
+                <input type="text" id="datepicker" class="datepicker" placeholder="가입일">
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">잔여리스일</th>
+              <td>
+                <input type="text" value="D-321">
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">할인정보</th>
+              <td>
+                <input type="text" value="10%">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="btn_group">
+        <button type="button" class="btn_reset">초기화</button>
+        <button type="button" class="btn_add">등록</button>
+        <button type="button" class="btn_cancel">취소</button>
+      </div>
+
+      <p class="page_info">등록상품 리스트</p>
+    <form>
+      <div class="search_option">
+        <span class="input_group">
+          <select>
+            <option>제조사</option>
+          </select>
+          <select>
+            <option>모델명</option>
+          </select>
+          <select>
+            <option>상세검색</option>
+          </select>
+          <input type="text">
+        </span>
+        <span class="input_group">
+          <em class="check_box">
+            <input type="checkbox" id="check1_1">
+            <label for="check1_1">짧은 km</label>
+          </em>
+          <em class="check_box">
+            <input type="checkbox" id="check1_2">
+            <label for="check1_2">최근등록일</label>
+          </em>
+          <em class="check_box">
+            <input type="checkbox" id="check1_3">
+            <label for="check1_3">할인적용</label>
+          </em>
+        </span>
+        <button type="button" class="search_btn">조회</button>
+        <button type="button" class="add_btn">등록</button>
+      </div>
+    </form>
+      <div class="product_box">
+        <ul class="product_list">
+          <li>
+            <p class="img">
+              <img src="img/product.jpg">
+              <span class="down_price">할인</span>
+            </p>
+            <div class="info">
+              <dl>
+                <dt>모델명</dt>
+                <dd>PCX ABS</dd>
+              </dl>
+              <dl>
+                <dt>보험연령</dt>
+                <dd>만 30세 이상</dd>
+              </dl>
+              <dl>
+                <dt>잔여리스</dt>
+                <dd>D-321</dd>
+              </dl>
+              <dl>
+                <dt>일리스료</dt>
+                <dd>3,500원</dd>
+              </dl>
+              <dl>
+                <dt>운행지역</dt>
+                <dd>서울시 금천구 시흥동</dd>
+              </dl>
+            </div>
+            <button type="button" class="detail_view">상세보기</button>
+          </li>
+          <li>
+            <p class="img"><img src="img/product.jpg"></p>
+            <div class="info">
+              <dl>
+                <dt>모델명</dt>
+                <dd>PCX ABS</dd>
+              </dl>
+              <dl>
+                <dt>보험연령</dt>
+                <dd>만 30세 이상</dd>
+              </dl>
+              <dl>
+                <dt>잔여리스</dt>
+                <dd>D-321</dd>
+              </dl>
+              <dl>
+                <dt>일리스료</dt>
+                <dd>3,500원</dd>
+              </dl>
+              <dl>
+                <dt>운행지역</dt>
+                <dd>서울시 금천구 시흥동</dd>
+              </dl>
+            </div>
+            <button type="button" class="detail_view">상세보기</button>
+          </li>
+          <li>
+            <p class="img"><img src="img/product.jpg"></p>
+            <div class="info">
+              <dl>
+                <dt>모델명</dt>
+                <dd>PCX ABS</dd>
+              </dl>
+              <dl>
+                <dt>보험연령</dt>
+                <dd>만 30세 이상</dd>
+              </dl>
+              <dl>
+                <dt>잔여리스</dt>
+                <dd>D-321</dd>
+              </dl>
+              <dl>
+                <dt>일리스료</dt>
+                <dd>3,500원</dd>
+              </dl>
+              <dl>
+                <dt>운행지역</dt>
+                <dd>서울시 금천구 시흥동</dd>
+              </dl>
+            </div>
+            <button type="button" class="detail_view">상세보기</button>
+          </li>
+          <li>
+            <p class="img">
+              <img src="img/product.jpg">
+              <span class="down_price">할인</span>
+            </p>
+            <div class="info">
+              <dl>
+                <dt>모델명</dt>
+                <dd>PCX ABS</dd>
+              </dl>
+              <dl>
+                <dt>보험연령</dt>
+                <dd>만 30세 이상</dd>
+              </dl>
+              <dl>
+                <dt>잔여리스</dt>
+                <dd>D-321</dd>
+              </dl>
+              <dl>
+                <dt>일리스료</dt>
+                <dd>3,500원</dd>
+              </dl>
+              <dl>
+                <dt>운행지역</dt>
+                <dd>서울시 금천구 시흥동</dd>
+              </dl>
+            </div>
+            <button type="button" class="detail_view">상세보기</button>
+          </li>
+          <li>
+            <p class="img"><img src="img/product.jpg"></p>
+            <div class="info">
+              <dl>
+                <dt>모델명</dt>
+                <dd>PCX ABS</dd>
+              </dl>
+              <dl>
+                <dt>보험연령</dt>
+                <dd>만 30세 이상</dd>
+              </dl>
+              <dl>
+                <dt>잔여리스</dt>
+                <dd>D-321</dd>
+              </dl>
+              <dl>
+                <dt>일리스료</dt>
+                <dd>3,500원</dd>
+              </dl>
+              <dl>
+                <dt>운행지역</dt>
+                <dd>서울시 금천구 시흥동</dd>
+              </dl>
+            </div>
+            <button type="button" class="detail_view">상세보기</button>
+          </li>
+          <li>
+            <p class="img"><img src="img/product.jpg"></p>
+            <div class="info">
+              <dl>
+                <dt>모델명</dt>
+                <dd>PCX ABS</dd>
+              </dl>
+              <dl>
+                <dt>보험연령</dt>
+                <dd>만 30세 이상</dd>
+              </dl>
+              <dl>
+                <dt>잔여리스</dt>
+                <dd>D-321</dd>
+              </dl>
+              <dl>
+                <dt>일리스료</dt>
+                <dd>3,500원</dd>
+              </dl>
+              <dl>
+                <dt>운행지역</dt>
+                <dd>서울시 금천구 시흥동</dd>
+              </dl>
+            </div>
+            <button type="button" class="detail_view">상세보기</button>
+          </li>
+          <li>
+            <p class="img"><img src="img/product.jpg"></p>
+            <div class="info">
+              <dl>
+                <dt>모델명</dt>
+                <dd>PCX ABS</dd>
+              </dl>
+              <dl>
+                <dt>보험연령</dt>
+                <dd>만 30세 이상</dd>
+              </dl>
+              <dl>
+                <dt>잔여리스</dt>
+                <dd>D-321</dd>
+              </dl>
+              <dl>
+                <dt>일리스료</dt>
+                <dd>3,500원</dd>
+              </dl>
+              <dl>
+                <dt>운행지역</dt>
+                <dd>서울시 금천구 시흥동</dd>
+              </dl>
+            </div>
+            <button type="button" class="detail_view">상세보기</button>
+          </li>
+          <li>
+            <p class="img">
+              <img src="img/product.jpg">
+              <span class="down_price">할인</span>
+            </p>
+            <div class="info">
+              <dl>
+                <dt>모델명</dt>
+                <dd>PCX ABS</dd>
+              </dl>
+              <dl>
+                <dt>보험연령</dt>
+                <dd>만 30세 이상</dd>
+              </dl>
+              <dl>
+                <dt>잔여리스</dt>
+                <dd>D-321</dd>
+              </dl>
+              <dl>
+                <dt>일리스료</dt>
+                <dd>3,500원</dd>
+              </dl>
+              <dl>
+                <dt>운행지역</dt>
+                <dd>서울시 금천구 시흥동</dd>
+              </dl>
+            </div>
+            <button type="button" class="detail_view">상세보기</button>
+          </li>
+          <li>
+            <p class="img"><img src="img/product.jpg"></p>
+            <div class="info">
+              <dl>
+                <dt>모델명</dt>
+                <dd>PCX ABS</dd>
+              </dl>
+              <dl>
+                <dt>보험연령</dt>
+                <dd>만 30세 이상</dd>
+              </dl>
+              <dl>
+                <dt>잔여리스</dt>
+                <dd>D-321</dd>
+              </dl>
+              <dl>
+                <dt>일리스료</dt>
+                <dd>3,500원</dd>
+              </dl>
+              <dl>
+                <dt>운행지역</dt>
+                <dd>서울시 금천구 시흥동</dd>
+              </dl>
+            </div>
+            <button type="button" class="detail_view">상세보기</button>
+          </li>
+          <li>
+            <p class="img"><img src="img/product.jpg"></p>
+            <div class="info">
+              <dl>
+                <dt>모델명</dt>
+                <dd>PCX ABS</dd>
+              </dl>
+              <dl>
+                <dt>보험연령</dt>
+                <dd>만 30세 이상</dd>
+              </dl>
+              <dl>
+                <dt>잔여리스</dt>
+                <dd>D-321</dd>
+              </dl>
+              <dl>
+                <dt>일리스료</dt>
+                <dd>3,500원</dd>
+              </dl>
+              <dl>
+                <dt>운행지역</dt>
+                <dd>서울시 금천구 시흥동</dd>
+              </dl>
+            </div>
+            <button type="button" class="detail_view">상세보기</button>
+          </li>
+        </ul>
+      </div>
+
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <li class="page-item">
+            <a class="page-link prev" href="#" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">4</a></li>
+          <li class="page-item"><a class="page-link" href="#">5</a></li>
+          <li class="page-item">
+            <a class="page-link next" href="#" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+
+
+
+
+
+      </div>
+
+
+  </div>
+  <!-- container E -->
+</body>
+<script src="./js/common.js"></script>
+<script>
+$( function() {
+  $( "#datepicker" ).datepicker({
+    dateFormat: "yy-mm-dd",
+    showMonthAfterYear: true ,
+    dayNamesMin: ['월', '화', '수', '목', '금', '토', '일'],
+    monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+    changeMonth: true,
+    changeYear: true,
+    yearSuffix: '년',
+    showButtonPanel: true,
+  });
+} );
+
+  </script>
+  <script>
+
+       (function() {
+
+           var $file = document.getElementById("file")
+           var dropZone = document.querySelector(".drop-zone")
+
+           var toggleClass = function(className) {
+
+               console.log("current event: " + className)
+
+               var list = ["dragenter", "dragleave", "dragover", "drop"]
+
+               for (var i = 0; i < list.length; i++) {
+                   if (className === list[i]) {
+                       dropZone.classList.add("drop-zone-" + list[i])
+                   } else {
+                       dropZone.classList.remove("drop-zone-" + list[i])
+                   }
+               }
+           }
+
+           var showFiles = function(files) {
+               dropZone.innerHTML = ""
+               for(var i = 0, len = files.length; i < len; i++) {
+                   dropZone.innerHTML += "<p>" + files[i].name + "</p>"
+               }
+           }
+
+           var selectFile = function(files) {
+               // input file 영역에 드랍된 파일들로 대체
+               $file.files = files
+               showFiles($file.files)
+
+           }
+
+           $file.addEventListener("change", function(e) {
+               showFiles(e.target.files)
+           })
+
+           // 드래그한 파일이 최초로 진입했을 때
+           dropZone.addEventListener("dragenter", function(e) {
+               e.stopPropagation()
+               e.preventDefault()
+
+               toggleClass("dragenter")
+
+           })
+
+           // 드래그한 파일이 dropZone 영역을 벗어났을 때
+           dropZone.addEventListener("dragleave", function(e) {
+               e.stopPropagation()
+               e.preventDefault()
+
+               toggleClass("dragleave")
+
+           })
+
+           // 드래그한 파일이 dropZone 영역에 머물러 있을 때
+           dropZone.addEventListener("dragover", function(e) {
+               e.stopPropagation()
+               e.preventDefault()
+
+               toggleClass("dragover")
+
+           })
+
+           // 드래그한 파일이 드랍되었을 때
+           dropZone.addEventListener("drop", function(e) {
+               e.preventDefault()
+
+               toggleClass("drop")
+
+               var files = e.dataTransfer && e.dataTransfer.files
+               console.log(files)
+
+               if (files != null) {
+                   if (files.length < 1) {
+                       alert("폴더 업로드 불가")
+                       return
+                   }
+                   selectFile(files)
+               } else {
+                   alert("ERROR")
+               }
+
+           })
+
+       })();
+
+
+   </script>
+</html>

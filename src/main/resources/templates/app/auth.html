@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <div th:replace="/app/appHeader.html :: fragment-app-header"></div>
+</head>
+
+<body>
+
+  <!-- container S -->
+  <div class="container">
+    <!-- content S -->
+    <div class="content login">
+      <div class="login_wrap">
+        <div class="login_box">
+          <h1><img src="/static/img/app/logo.png" alt="KINGS LOUNGE"></h1>
+          <div class="input_box">
+            <span class="focus_box">
+              <input type="number" id="phoneNum" name="phoneNum" placeholder="휴대폰 번호">
+            </span>
+            <button type="button" onclick="javascript:fnAuthCode();" id="authBtn">인증번호</button>
+          </div>
+          <div class="input_box">
+            <span class="focus_box">
+              <input type="number" maxlength="4" id="authCode" name="authCode" placeholder="인증번호" autocomplete="on">
+            </span>
+            <button type="button" onclick="javascript:fnAuthCodeChk();" id="authChkBtn">확인</button>
+            <input type="hidden" id="authChkYn" value="N">
+          </div>
+          <!--<div class="focus_box">
+            <p class="input_text">
+            <span class="focus_box">
+
+              &lt;!&ndash;<em class="time" id="time">00:00</em>&ndash;&gt;
+            </p>
+          </div>-->
+          <span class="focus_box"><input type="password" id="passwordStr" name="passwordStr" placeholder="비밀번호" autocomplete="new-password"></span>
+          <span class="focus_box"><input type="password" id="passwordStrCfm" name="passwordStrCfm" placeholder="비밀번호 확인" autocomplete="new-password"></span>
+          <p class="half">
+            <button type="button" class="btn_login blue" onclick="javascript:fnChkPassword();">확인</button>
+            <button type="button" class="btn_login" onclick="location.href='/app'">취소</button>
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- content E -->
+  </div>
+  <!-- container E -->
+</body>
+<script>
+
+    function fnAuthCode(){
+        var formData = new FormData();
+
+        if($("#phoneNum").val() == ''){
+            alert("휴대폰번호는 필수 입니다.");
+            $("#phoneNum").focus();
+            return;
+        }
+
+        formData.append("phoneNum", $("#phoneNum").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/app/getAuthCodeAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                if(response.resultCode == 0){
+                    $("#authBtn").css("background", "#72E789");
+                    $("#authBtn").attr('disabled', true);
+                }
+
+                alert(response.resultMsg);
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function fnAuthCodeChk(){
+        var formData = new FormData();
+
+        if($("#phoneNum").val() == ''){
+            alert("휴대폰번호는 필수 입니다.");
+            $("#phoneNum").focus();
+            return;
+        }
+
+        if($("#authCode").val() == ''){
+            alert("인증번호는 필수 입니다.");
+            $("#authCode").focus();
+            return;
+        }
+
+        formData.append("phoneNum", $("#phoneNum").val());
+        formData.append("authCode", $("#authCode").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/app/getAuthCodeChkAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                if(response.resultCode == 0){
+                    $("#authChkYn").val("Y");
+                    $("#authChkBtn").css("background", "#72E789");
+                    $("#authChkBtn").attr('disabled', true);
+                }
+
+                alert(response.resultMsg);
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function fnChkPassword(){
+        var formData = new FormData();
+
+        if($("#authChkYn").val() == "Y"){
+            if($("#passwordStr").val() == ''){
+                alert("비밀번호는 필수 입니다.");
+                $("#passwordStr").focus();
+                return;
+            }
+
+            if($("#passwordStrCfm").val() == ''){
+                alert("비밀번호 확인은 필수 입니다.");
+                $("#passwordStrCfm").focus();
+                return;
+            }
+
+            if($("#passwordStr").val() != $("#passwordStrCfm").val()){
+                alert("비밀번호가 같지 않습니다.\n확인 바랍니다.");
+                return;
+            }
+
+            formData.append("phoneNum", $("#phoneNum").val());
+            formData.append("passwordStr", $("#passwordStr").val());
+
+            $.ajax({
+                contentType:false,
+                processData:false,
+                type: "POST",
+                url: "/app/setPasswordAjax",
+                data: formData,
+                success: function(response) {
+                    // 성공 시 동작
+                    alert(response.resultMsg);
+                    if(response.resultCode == 0){
+                        window.location = "/app";
+                    }
+                },
+                error: function(error) {
+                    // 실패 시 동작
+                }
+            });
+        }else {
+            alert("인증번호 확인이 안되었습니다.\n확인 바랍니다.");
+            return;
+        }
+
+    }
+
+</script>
+</html>

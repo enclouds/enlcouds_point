@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+
+html,body,div,ul,li,p,h3,h1,h2,h4,h5{padding:0;margin:0;}
+ul,li{list-style:none}
+a{text-decoration:none;color:#303030;position:relative;}
+textarea,input{font-family: 'Noto Sans KR', sans-serif;}
+optgroup,select,button{cursor:pointer}
+
+input::-ms-clear {display: none;}
+
+input::-webkit-input-placeholder{color:#999;font-weight:400}
+textarea::-webkit-input-placeholder{color:#999;font-weight:400}
+input[type="text"]::-ms-input-placeholder{color:#999 !important;font-weight:400}
+input[type="text"]:-ms-input-placeholder{color:#999 !important;;font-weight:400}
+input[type="number"]::-ms-input-placeholder{color:#999 !important;;font-weight:400}
+input[type="number"]:-ms-input-placeholder{color:#999 !important;;font-weight:400}
+input[type="password"]::-ms-input-placeholder{color:#999 !important;;font-weight:400}
+input[type="password"]:-ms-input-placeholder{color:#999 !important;;font-weight:400}
+textarea:-ms-input-placeholder{color:#999;font-weight:400}
+textarea::-ms-input-placeholder{color:#999;font-weight:400}
+input::-moz-placeholder{color:#999;font-weight:400}
+textarea::-moz-placeholder{color:#999;font-weight:400}
+input:-webkit-autofill{-webkit-box-shadow:0 0 0 1000px #fff inset}
+input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
+input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+select::-ms-expand{display:none}
+select{-moz-appearance:none;-webkit-appearance:none;appearance:none}
+img{vertical-align:top}
+caption{display:none}
+button{border:none;background:none;position:relative;}
+*{margin:0;padding:0;text-decoration:none;-webkit-text-size-adjust:none;outline:0;-webkit-appearance:none;-webkit-tap-highlight-color:transparent;
+    -webkit-font-smoothing:antialiased}
+*{font-family: 'Josefin Sans', 'Noto Sans KR', sans-serif;font-size:10px;line-height:auto;color:#afafaf;font-weight:400;box-sizing: border-box;font-weight: normal;letter-spacing: -0.6px;}
+i,em {font-size:inherit;line-height: inherit;font-style: normal}
+.blind {display: none  !important;}
+.hide {display: none  !important;}
+.np {padding: 0 !important;}
+span,b,i,strong,em {font-size: inherit;font-weight: inherit;line-height: inherit;color: inherit; letter-spacing: inherit;}
+table{width:100%;border:0;border-collapse:collapse;border-spacing:0;empty-cells:show;}
+
+.wrap{width:100%;height:100%;position:relative;}
+.container{position:fixed;width:100%;height:100%;min-width:1440px;min-height:900px;background:url(/static/img/jackpot/bg.jpg) no-repeat top center #0e0e0e;background-size:cover;display:flex;align-items:center;justify-content:center;flex-direction:column;}
+.container .content {position:relative;width:100%;height:100%;max-width:1920px;max-height:1080px;padding-bottom:4rem;}
+
+.inner{}
+h1{display:flex;align-items:center;margin-bottom:60px;}
+h1 img{width:150px;height:auto;margin-right:20px;}
+.tit{height:400px;width:80%:}
+.conbox{display:flex;align-items:center;flex-direction:column;padding:40px 0 20px 0;}
+.name{font-size:8rem;color:#fff;font-weight:bold;text-shadow:0px 0px 10px black;}
+.tit{width:45%;height:190px;background:url(/static/img/jackpot/tit.png) no-repeat center center;background-size:cover;text-indent:-9999px;}
+.number{width:55%;height:340px;background:url(/static/img/jackpot/number.png) no-repeat center center;background-size: 100%;display:flex;align-items:center;justify-content:center;}
+.number span{font-size:11rem;font-weight: bold;
+  background:linear-gradient(to top, #fffde7, #c97c29, #fffde7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    }
+
+.date{font-size:3rem;color:#fff;font-weight:bold;}
+
+.copy{font-size:1.4rem;position:absolute;bottom:50px;right:50px;}
+
+
+@media (max-width: 1800px) {
+  .number span{font-size:9rem;}
+  .date{font-size:3rem;}
+  .tit{width:50%;}
+
+}
+
+@media (max-width: 1600px) {
+  .number{height:260px;}
+  .number span{font-size:8rem !important;}
+  .tit{height:180px;}
+}
+
+@media (max-width: 1400px) {
+  .number span{font-size:7rem !important;}
+}
+
+
+/**/

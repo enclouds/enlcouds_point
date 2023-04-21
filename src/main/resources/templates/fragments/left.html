@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<div id="header" th:fragment="fragment-left(msrc, hrefsrc)">
+    <div class="top">
+        <h1><a href="#" class="logo"><span class="blind">킹스힐포인트</span></a></h1>
+        <button type="button" class="btn_side_menu">사이드메뉴</button>
+    </div>
+    <!-- side menu S -->
+    <div class="side_menu">
+        <div class="inner">
+            <div class="top_info">
+                <p class="name">
+                    <em style="font-size: smaller;" th:text="|${userInfo.agentName}님 ${userInfo.point}P|"></em>
+                    <em style="font-size: smaller;" th:text="|Ticket : ${userInfo.ticket}장|"></em>
+                </p>
+                <span class="btn_group">
+                    <button type="button" class="btn_logout" th:onclick="|location.href='@{/logout}'|">로그아웃</button>
+                    <button type="button" class="menu_close">메뉴닫기</button>
+                </span>
+            </div>
+        </div>
+        <div class="menu" >
+            <div class="menu_box active" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT')">
+                <h2 class="menu1">회원관리</h2>
+                <ul>
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT')">
+                        <button type="button" class="depth2" th:onclick="|location.href='@{/user/list}'|">회원 목록</button>
+                    </li>
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT')">
+                        <button type="button" class="depth2" th:onclick="|location.href='@{/user/point/list}'|">포인트 적립/차감 목록</button>
+                    </li>
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT')">
+                        <button type="button" class="depth2" th:onclick="|location.href='@{/user/rank/list}'|">회원 Ranking</button>
+                    </li>
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT')">
+                        <button type="button" class="depth2" th:onclick="|location.href='@{/user/ticket/rank/list}'|">티켓 Ranking</button>
+                    </li>
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT')">
+                        <button type="button" class="depth2" th:onclick="|location.href='@{/jackpot/history/list}'|">JackPot History</button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="menu_box active" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
+                <h2 class="menu2">가맹점관리</h2>
+                <ul>
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
+                        <button type="button" class="depth2" th:onclick="|location.href='@{/agent/list}'|">가맹점 목록</button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="menu_box active" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_GAME')">
+                <h2 class="menu2">게임 관리</h2>
+                <ul>
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_GAME')">
+                        <button type="button" class="depth2" th:onclick="|location.href='@{/game/list}'|">Game 목록</button>
+                    </li>
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_GAME')">
+                        <button type="button" class="depth2" th:onclick="|location.href='@{/game/blind/list}'|">Blind 목록</button>
+                    </li>
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_GAME')">
+                        <button type="button" class="depth2" th:onclick="|location.href='@{/game/prize/list}'|">Prize 목록</button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="menu_box active" sec:authorize="hasAnyRole('ROLE_JACKPOT')">
+                <h2 class="menu2">JackPot 관리</h2>
+                <ul>
+                    <li sec:authorize="hasAnyRole('ROLE_JACKPOT')">
+                        <button type="button" class="depth2" th:onclick="|location.href='@{/jackpot/list}'|">JackPot 목록</button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="menu_box active" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
+                <h2 class="menu2">게시판 관리</h2>
+                <ul>
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
+                        <button type="button" class="depth2" th:onclick="|location.href='@{/bdd/list}'|">게시물 목록</button>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- side menu E -->
+
+</html>
+

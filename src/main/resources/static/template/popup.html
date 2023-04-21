@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>타바요</title>
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="description" content="타바요" />
+  <meta name="keywords" content="타바요" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="" />
+  <meta property="og:title" content="타바요" />
+  <meta property="og:description" content="타바요" />
+  <link rel="stylesheet" href="./css/common.css">
+  <script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+
+<body>
+
+  <!-- modal S -->
+  <div class="modal fade full" id="table" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title center" id="">출고현황</h1>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <div class="form_box">
+            <table class="form">
+              <colgroup>
+                <col width="20%;">
+                <col width="80%;">
+              </colgroup>
+              <tbody>
+                <tr>
+                  <th scope="row">승인여부</th>
+                  <td>
+                    <select>
+                      <option>승인</option>
+                      <option>보류</option>
+                      <option>거절</option>
+                    </select>
+                </td>
+                </tr>
+                <tr>
+                  <th scope="row">차량번호</th>
+                  <td>구로카 1234</td>
+                </tr>
+                <tr>
+                  <th scope="row">보험가입일</th>
+                  <td><input type="text" id="datepicker" class="datepicker" placeholder="가입일"></td>
+                </tr>
+                <tr>
+                  <th scope="row">보험사</th>
+                  <td>현대해상</td>
+                </tr>
+                <tr>
+                  <th scope="row">총리스금액</th>
+                  <td>1,200,000</td>
+                </tr>
+                <tr>
+                  <th scope="row">리스기간</th>
+                  <td>
+                    <select>
+                      <option>12개월</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row" rowspan="3">사진첨부</th>
+                  <td class="flex">전면<input type="file" class="file_select" id="file" multiple=""></td>
+                </tr>
+                <tr>
+                  <td class="flex">측면<input type="file" class="file_select" id="file" multiple=""></td>
+                </tr>
+                <tr>
+                  <td class="flex">후면<input type="file" class="file_select" id="file" multiple=""></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn blue btn-primary" data-dismiss="modal">등록</button>
+          <button type="button" class="btn blue btn-primary" data-dismiss="modal">수정</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">취소</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modal E -->
+
+  <!-- modal S -->
+  <div class="modal fade small" id="guide" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title center" id="">안내문</h1>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <ul>
+          <li>적립금이 일정 기준 이하로 줄어들 시 자동으로 등록 계좌에서 출금 되어 적립금 충전이 됩니다.</li>
+          <li>자동이체 등록을 해야만 시간제유상운송보험 상품을 이용하실 수 있습니다.</li>
+          <li>충전기준 금액 선택<br>
+              ex) 1만원 선택 시, 적립금이 1만원 이하로 내려가면 자동이체 등록된 계좌에서 출금</li>
+          <li>자동충전액 : 적립금이 1만원 이하로 내려갔을 때 자동으로 적립금으로 충전되는 금액</li>
+        </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn blue btn-primary" data-dismiss="modal">확인</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">취소</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modal E -->
+  <!-- modal S -->
+  <div class="modal fade small" id="memo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title center" id="">메모입력/확인</h1>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <textarea></textarea>
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn blue btn-primary" data-dismiss="modal">확인</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">취소</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- modal E -->
+
+
+  <!-- container S -->
+  <div class="container">
+    <!-- header S -->
+    <div id="header">
+      <div class="top">
+        <h1><a href="#" class="logo"><span class="blind">타바요</span></a></h1>
+        <button type="button" class="btn_side_menu">사이드메뉴</button>
+      </div>
+      <!-- side menu S -->
+      <div class="side_menu">
+        <div class="inner">
+          <div class="top_info">
+            <p class="name"><em>삼천리 방학점</em>님</p>
+            <span class="btn_group">
+              <button type="button" class="btn_logout">로그아웃</button>
+              <button type="button" class="menu_close">메뉴닫기</button>
+            </span>
+          </div>
+          <div class="menu">
+            <p class="home">DASHBOARD</p>
+            <div class="menu_box active">
+              <h2 class="menu1">신청 및 등록</h2>
+              <ul>
+                <li>
+                  <button type="button" class="depth2">빌려타 신청</button>
+                </li>
+                <li>
+                  <button type="button" class="depth2">돌려타 신청</button>
+                </li>
+                <li>
+                  <button type="button" class="depth2">들고타 신청</button>
+                </li>
+              </ul>
+            </div>
+
+            <div class="menu_box active">
+              <h2 class="menu2">타바요 전체 현황</h2>
+              <ul>
+                <li>
+                  <button type="button" class="depth2">빌려타 현황</button>
+                  <ul>
+                    <li><a href="#">본사</a></li>
+                    <li><a href="#">리스사</a></li>
+                    <li><a href="#">회원사</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <button type="button" class="depth2">돌려타 현황</button>
+                  <ul>
+                    <li>미정</li>
+                  </ul>
+                </li>
+                <li>
+                  <button type="button" class="depth2">돌고타 현황</button>
+                  <ul>
+                    <li><a href="#">기사 정보 관리</a></li>
+                    <li><a href="#">보험 내역</a></li>
+                    <li><a href="#">이용 내역</a></li>
+                    <li><a href="#">충전 내역</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <div class="menu_box active">
+              <h2 class="menu3">타바요 회원사 관리</h2>
+              <ul>
+                <li>
+                  <button type="button" class="depth2">회원사 정보관리</button>
+                </li>
+              </ul>
+            </div>
+
+            <div class="menu_box active">
+              <h2 class="menu4">고객센터</h2>
+              <ul>
+                <li>
+                  <button type="button" class="depth2">공지사항</button>
+                </li>
+                <li>
+                  <button type="button" class="depth2">FAQ</button>
+                </li>
+                <li>
+                  <button type="button" class="depth2">보험정보 조회</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- side menu E -->
+    </div>
+    <!-- header E -->
+    <!-- content S -->
+    <div class="content">
+      <div class="con_top">
+        <ul>
+          <li>신청 및 등록</li>
+          <li>빌려타 신청</li>
+        </ul>
+      </div>
+
+      <button type="button" class="tb_btn blue" data-toggle="modal" data-target="#memo">메모 팝업</button>
+      <button type="button" class="tb_btn blue" data-toggle="modal" data-target="#guide">안내문 팝업</button>
+      <button type="button" class="tb_btn blue" data-toggle="modal" data-target="#table">출고현황 팝업</button>
+
+
+      </div>
+
+
+  </div>
+  <!-- container E -->
+</body>
+<script src="./js/common.js"></script>
+<script>
+$( function() {
+  $( "#datepicker" ).datepicker({
+    dateFormat: "yy-mm-dd",
+    showMonthAfterYear: true ,
+    dayNamesMin: ['월', '화', '수', '목', '금', '토', '일'],
+    monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+    changeMonth: true,
+    changeYear: true,
+    yearSuffix: '년',
+    showButtonPanel: true,
+  });
+
+});
+
+</script>
+
+</html>
