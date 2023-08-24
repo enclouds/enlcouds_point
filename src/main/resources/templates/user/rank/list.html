@@ -6,6 +6,116 @@
 
 <body>
 
+<div class="modal fade small" id="loading_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div id='my-spinner'>
+        <div>
+    <span>
+    	<img src='//cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif'>
+    </span>
+        </div>
+    </div>
+</div>
+
+<!-- modal S -->
+<div class="modal fade small" id="add_sum_point_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">누적 승점 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">누적 승점 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">별명</th>
+                            <td>
+                                <input type="text" name="addSumPointNickName" id="addSumPointNickName" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">총 누적 승점</th>
+                            <td>
+                                <input type="text" name="totalSumPoint" id="totalSumPoint" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">적립 누적 승점</th>
+                            <td>
+                                <input type="text" name="addRankSumPoint" id="addRankSumPoint" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:addRankSumPoint();">적립</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('add_sum_point_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="minus_sum_point_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">누적 승점 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">누적 승점 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">별명</th>
+                            <td>
+                                <input type="text" name="minusSumPointNickName" id="minusSumPointNickName" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">총 포인트</th>
+                            <td>
+                                <input type="text" name="totalMinusSumPoint" id="totalMinusSumPoint" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">차감 포인트</th>
+                            <td>
+                                <input type="text" name="minusRankSumPoint" id="minusRankSumPoint" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn red btn-primary" th:onclick="javascript:minusRankSumPoint();">차감</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('minus_sum_point_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
 <!-- container S -->
 <div class="container">
     <!-- header S -->
@@ -47,24 +157,36 @@
                     <th scope="col" rowspan="2">RANKING</th>
                     <th scope="col" rowspan="2">별명</th>
                     <th scope="col" colspan="2">승점</th>
-                    <th scope="col" rowspan="2">전화번호</th>
+                    <th scope="col" colspan="2">누적 승점 처리</th>
+                    <th sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" scope="col" rowspan="2">전화번호</th>
+                    <th sec:authorize="hasRole('ROLE_AGENT')" scope="col" rowspan="2">전화번호</th>
                     <th scope="col" rowspan="2">등록일자</th>
                     <th scope="col" rowspan="2">최근 방문 일자</th>
                 </tr>
                 <tr>
                     <th scope="col">주간 승점</th>
                     <th scope="col">누적 승점</th>
+                    <th scope="col">누적 승점 적립</th>
+                    <th scope="col">누적 승점 차감</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="list:${userRankList}">
-                    <td th:text="${listStat.count}" th:styleappend="${listStat.count} < 11 ? 'font-weight: bold;color: coral;font-size: medium;' : ''"></td>
-                    <td th:text="${list.nickName}" th:styleappend="${listStat.count} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
-                    <td th:text="${list.rankPointStr}" th:styleappend="${listStat.count} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
-                    <td th:text="${list.rankSumPointStr}" th:styleappend="${listStat.count} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
-                    <td th:text="${list.phoneNum}" th:styleappend="${listStat.count} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
-                    <td th:text="${list.regDate}"></td>
-                    <td th:text="${list.maxDate}"></td>
+                    <td th:text="${list.ranking}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: coral;font-size: medium;' : ''"></td>
+                    <td th:text="${list.nickName}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
+                    <td th:text="${list.rankPointStr}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
+                    <td th:text="${list.rankSumPointStr}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
+                    <td>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddRankSumPoint([[${list.phoneNum}]], [[${list.nickName}]], [[${list.rankSumPointStr}]])">적립(누적승점)</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn red" th:onclick="javascript:fnMinusRankSumPoint([[${list.phoneNum}]], [[${list.nickName}]], [[${list.rankSumPointStr}]])">차감(누적승점)</button>
+                    </td>
+
+                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" th:text="${list.phoneNum}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
+                    <td sec:authorize="hasRole('ROLE_AGENT')" th:text="${list.phoneNumMasking}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
+                    <td th:text="${list.regDate}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
+                    <td th:text="${list.maxDate}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
                 </tr>
                 </tbody>
             </table>
@@ -86,6 +208,10 @@
 
     function fnSearch(){
         $("#schFrm").submit();
+    }
+
+    function fnModalClose(id){
+        $("#"+id).hide();
     }
 
     function fnWeekRankMove(){
@@ -146,6 +272,93 @@
                 }
             });
         }
+    }
+
+    function fnAddRankSumPoint(phoneNum, nickName, point){
+        selectTrSeq = phoneNum;
+
+        $("#addSumPointNickName").val(nickName);
+        $("#totalSumPoint").val(point);
+        $("#add_sum_point_modal").show();
+
+        $("#addRankSumPoint").focus();
+    }
+
+    function fnMinusRankSumPoint(phoneNum, nickName, point){
+        if(point < 1){
+            alert("차감할 승점이 없습니다.");
+            return;
+        }
+
+        selectTrSeq = phoneNum;
+
+        $("#minusSumPointNickName").val(nickName);
+        $("#totalMinusSumPoint").val(point);
+        $("#minus_sum_point_modal").show();
+
+        $("#minusRankSumPoint").focus();
+    }
+
+    function addRankSumPoint(){
+        var formData = new FormData();
+
+        formData.append("phoneNum", selectTrSeq);
+        formData.append("addRankSumPoint", $("#addRankSumPoint").val());
+
+        $("#add_sum_point_modal").hide();
+        $("#loading_modal").show();
+        $("#my-spinner").show();
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/user/rank/updateUserAddSumRankPointAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                $("#loading_modal").hide();
+                $("#my-spinner").hide();
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+                $("#loading_modal").hide();
+                $("#my-spinner").hide();
+            }
+        });
+    }
+
+    function minusRankSumPoint(){
+        var formData = new FormData();
+
+        formData.append("phoneNum", selectTrSeq);
+        formData.append("minusRankSumPoint", $("#minusRankSumPoint").val());
+
+        $("#minus_sum_point_modal").hide();
+        $("#loading_modal").show();
+        $("#my-spinner").show();
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/user/rank/updateUserMinusSumRankAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                $("#loading_modal").hide();
+                $("#my-spinner").hide();
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+                $("#loading_modal").hide();
+                $("#my-spinner").hide();
+            }
+        });
     }
 
 </script>

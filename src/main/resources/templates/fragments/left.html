@@ -11,8 +11,9 @@
         <div class="inner">
             <div class="top_info">
                 <p class="name">
-                    <em style="font-size: smaller;" th:text="|${userInfo.agentName}님 ${userInfo.point}P|"></em>
-                    <em style="font-size: smaller;" th:text="|Ticket : ${userInfo.ticket}장|"></em>
+                    <em style="font-size: smaller;" th:text="|${userInfo.agentName}님 ${userInfo.point}P|"></em></br>
+                    <em style="font-size: smaller;" th:text="|Ticket 1 : ${userInfo.ticket}장|"></em></br>
+                    <em style="font-size: smaller;" th:text="|Ticket 2 : ${userInfo.ticket2}장|"></em>
                 </p>
                 <span class="btn_group">
                     <button type="button" class="btn_logout" th:onclick="|location.href='@{/logout}'|">로그아웃</button>
@@ -21,22 +22,22 @@
             </div>
         </div>
         <div class="menu" >
-            <div class="menu_box active" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT')">
+            <div class="menu_box active" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_ADMIN_SUB', 'ROLE_VIEW')">
                 <h2 class="menu1">회원관리</h2>
                 <ul>
-                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT')">
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_VIEW')">
                         <button type="button" class="depth2" th:onclick="|location.href='@{/user/list}'|">회원 목록</button>
                     </li>
                     <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT')">
                         <button type="button" class="depth2" th:onclick="|location.href='@{/user/point/list}'|">포인트 적립/차감 목록</button>
                     </li>
-                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT')">
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_ADMIN_SUB')">
                         <button type="button" class="depth2" th:onclick="|location.href='@{/user/rank/list}'|">회원 Ranking</button>
                     </li>
-                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT')">
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_ADMIN_SUB')">
                         <button type="button" class="depth2" th:onclick="|location.href='@{/user/ticket/rank/list}'|">티켓 Ranking</button>
                     </li>
-                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT')">
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_ADMIN_SUB')">
                         <button type="button" class="depth2" th:onclick="|location.href='@{/jackpot/history/list}'|">JackPot History</button>
                     </li>
                 </ul>
@@ -47,6 +48,9 @@
                 <ul>
                     <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
                         <button type="button" class="depth2" th:onclick="|location.href='@{/agent/list}'|">가맹점 목록</button>
+                    </li>
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
+                        <button type="button" class="depth2" th:onclick="|location.href='@{/agent/point/list}'|">가맹점 적립/차감 목록</button>
                     </li>
                 </ul>
             </div>

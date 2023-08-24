@@ -2,6 +2,8 @@ package com.enclouds.enpoint.agent.controller;
 
 import com.enclouds.enpoint.agent.dto.AgentDto;
 import com.enclouds.enpoint.agent.service.AgentService;
+import com.enclouds.enpoint.cmm.util.DateUtils;
+import com.enclouds.enpoint.cmm.util.StringUtils;
 import com.enclouds.enpoint.user.dto.PointDto;
 import com.enclouds.enpoint.user.dto.UserDto;
 import com.enclouds.enpoint.user.service.UserService;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -189,6 +193,7 @@ public class AgentController {
                 userId = userDetails.getUsername();
                 userInfo = userService.getUserInfo(userId);
 
+                agentDto.setAgentUpCode(userInfo.getAgentCode());
                 resultCode = agentService.updateAgentAddPoint(agentDto);
 
                 if (resultCode > 0) {
@@ -241,6 +246,39 @@ public class AgentController {
         return result;
     }
 
+    @PostMapping("/updateAgentAddTicket2Ajax")
+    public @ResponseBody Map<String, Object> updateAgentAddTicket2Ajax(@ModelAttribute("agentDto") AgentDto agentDto) throws Exception{
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDto userInfo = null;
+        String userId = "";
+        int resultCode;
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            if (principal != "anonymousUser") {
+                UserDetails userDetails = (UserDetails) principal;
+                userId = userDetails.getUsername();
+                userInfo = userService.getUserInfo(userId);
+
+                resultCode = agentService.updateAgentAddTicket2(agentDto);
+
+                if (resultCode > 0) {
+                    result.put("resultCode", 0);
+                    result.put("resultMsg", "정상적으로 적립 되었습니다.");
+                } else {
+                    result.put("resultCode", -1);
+                    result.put("resultMsg", "적립에 실패 하였습니다.");
+                }
+            }
+        } catch (ClassCastException cce){
+            DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+            userId = auth2User.getName();
+            userInfo = userService.getUserInfo(userId);
+        }
+
+        return result;
+    }
+
     @PostMapping("/updateAgentMinusPointAjax")
     public @ResponseBody Map<String, Object> updateAgentMinusPointAjax(@ModelAttribute("agentDto") AgentDto agentDto) throws Exception{
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -255,6 +293,7 @@ public class AgentController {
                 userId = userDetails.getUsername();
                 userInfo = userService.getUserInfo(userId);
 
+                agentDto.setAgentUpCode(userInfo.getAgentCode());
                 resultCode = agentService.updateAgentMinusPoint(agentDto);
 
                 if (resultCode > 0) {
@@ -289,6 +328,39 @@ public class AgentController {
                 userInfo = userService.getUserInfo(userId);
 
                 resultCode = agentService.updateAgentMinusTicket(agentDto);
+
+                if (resultCode > 0) {
+                    result.put("resultCode", 0);
+                    result.put("resultMsg", "정상적으로 차감 되었습니다.");
+                } else {
+                    result.put("resultCode", -1);
+                    result.put("resultMsg", "차감에 실패 하였습니다.");
+                }
+            }
+        } catch (ClassCastException cce){
+            DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+            userId = auth2User.getName();
+            userInfo = userService.getUserInfo(userId);
+        }
+
+        return result;
+    }
+
+    @PostMapping("/updateAgentMinusTicket2Ajax")
+    public @ResponseBody Map<String, Object> updateAgentMinusTicket2Ajax(@ModelAttribute("agentDto") AgentDto agentDto) throws Exception{
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDto userInfo = null;
+        String userId = "";
+        int resultCode;
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            if (principal != "anonymousUser") {
+                UserDetails userDetails = (UserDetails) principal;
+                userId = userDetails.getUsername();
+                userInfo = userService.getUserInfo(userId);
+
+                resultCode = agentService.updateAgentMinusTicket2(agentDto);
 
                 if (resultCode > 0) {
                     result.put("resultCode", 0);
@@ -359,6 +431,94 @@ public class AgentController {
         }
 
         return result;
+    }
+
+    @PostMapping("/selectAgentTicketHistory2Ajax")
+    public @ResponseBody Map<String, Object> selectAgentTicketHistory2Ajax(@ModelAttribute("agentDto") AgentDto agentDto) throws Exception{
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDto userInfo = null;
+        String userId = "";
+
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            if (principal != "anonymousUser") {
+                UserDetails userDetails = (UserDetails) principal;
+                userId = userDetails.getUsername();
+                userInfo = userService.getUserInfo(userId);
+
+                List<PointDto> historyTicketList = agentService.selectAgentTicketHistory2(agentDto);
+
+                result.put("historyTicketList", historyTicketList);
+            }
+        } catch (ClassCastException cce){
+            DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+            userId = auth2User.getName();
+            userInfo = userService.getUserInfo(userId);
+        }
+
+        return result;
+    }
+
+    @RequestMapping(value = "/point/list", method = RequestMethod.GET)
+    public ModelAndView userPointList(HttpServletResponse response, @ModelAttribute AgentDto agentDto) throws Exception{
+        ModelAndView mv = new ModelAndView("agent/point/list");
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDto userInfo = null;
+        String userId = "";
+
+        try {
+            if(principal != "anonymousUser") {
+                UserDetails userDetails = (UserDetails) principal;
+                userId = userDetails.getUsername();
+                userInfo = userService.getUserInfo(userId);
+
+                mv.addObject("agentTotalList", agentService.selectAgentTotalListAsAG());
+
+                agentDto.setAgentCode(userInfo.getAgentCode());
+
+                String startDateStr = DateUtils.addDay(DateUtils.getToday(), -7);
+                SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+                Date startDateDte = format.parse(startDateStr);
+                SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+                String startDate = format2.format(startDateDte);
+
+                if(StringUtils.isEmpty(agentDto.getSchStartDte())){
+                    agentDto.setSchStartDte(startDate);
+                }
+
+                Date todayDate = format.parse(DateUtils.getToday());
+                String today = format2.format(todayDate);
+
+                if(StringUtils.isEmpty(agentDto.getSchEndDte())){
+                    agentDto.setSchEndDte(today);
+                }
+
+                if(StringUtils.isEmpty(agentDto.getSchCond1())){
+                    agentDto.setSchCond1("");
+                }
+
+                if(StringUtils.isEmpty(agentDto.getSchCond2())){
+                    agentDto.setSchCond2("");
+                }
+
+                List<AgentDto> agentPointList = agentService.selectAgentPointList(agentDto);
+                mv.addObject("agentPointList", agentPointList);
+
+            }else {
+                return new ModelAndView("redirect:/");
+            }
+        } catch (ClassCastException cce){
+            DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+            userId = auth2User.getName();
+            userInfo = userService.getUserInfo(userId);
+        }
+
+        mv.addObject("userInfo", userInfo);
+        mv.addObject("params", agentDto);
+
+        return mv;
     }
 
 }

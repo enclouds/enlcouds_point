@@ -78,6 +78,60 @@ public class KakaoExampleController {
             HashMap<String, String> variables = new HashMap<>();
             variables.put("#{인증번호}", kakaoDto.getAuthCode());
             kakaoOption.setVariables(variables);
+            //New 적립
+        }else if(kakaoDto.getTemplateId().equals("KA01TP230727025205254EyRZK4vF8Qi")){
+            HashMap<String, String> variables = new HashMap<>();
+            variables.put("#{상점명}", kakaoDto.getStoreNm());
+            variables.put("#{적립포인트}", kakaoDto.getAddPoint());
+            variables.put("#{누적포인트}", kakaoDto.getTotalPoint());
+            variables.put("#{지점1}", "창원 상남점");
+            variables.put("#{담당자 전화번호1}", "010-4383-4561");
+            variables.put("#{지점2}", "창원 봉곡점");
+            variables.put("#{담당자 전화번호2}", "010-4215-9876");
+            variables.put("#{지점3}", "김해 내외점");
+            variables.put("#{담당자 전화번호3}", "010-8390-7466");
+            variables.put("#{지점4}", "부산 서면점");
+            variables.put("#{담당자 전화번호4}", "010-3974-9279");
+            variables.put("#{지점5}", "대구 동성로");
+            variables.put("#{담당자 전화번호5}", "010-5895-0167");
+            variables.put("#{지점6}", "대구 광장코아");
+            variables.put("#{담당자 전화번호6}", "010-6301-0569");
+            variables.put("#{지점7}", "");
+            variables.put("#{담당자 전화번호7}", "");
+            variables.put("#{지점8}", "");
+            variables.put("#{담당자 전화번호8}", "");
+            variables.put("#{지점9}", "");
+            variables.put("#{담당자 전화번호9}", "");
+            variables.put("#{지점10}", "");
+            variables.put("#{담당자 전화번호10}", "");
+            kakaoOption.setVariables(variables);
+            //New 차감
+        }else if(kakaoDto.getTemplateId().equals("KA01TP230727025242092bgsDIX9xp9W")){
+            HashMap<String, String> variables = new HashMap<>();
+            variables.put("#{상점명}", kakaoDto.getStoreNm());
+            variables.put("#{사용포인트}", kakaoDto.getMinusPoint());
+            variables.put("#{누적포인트}", kakaoDto.getTotalPoint());
+            variables.put("#{지점1}", "창원 상남점");
+            variables.put("#{담당자 전화번호1}", "010-4383-4561");
+            variables.put("#{지점2}", "창원 봉곡점");
+            variables.put("#{담당자 전화번호2}", "010-4215-9876");
+            variables.put("#{지점3}", "김해 내외점");
+            variables.put("#{담당자 전화번호3}", "010-8390-7466");
+            variables.put("#{지점4}", "부산 서면점");
+            variables.put("#{담당자 전화번호4}", "010-3974-9279");
+            variables.put("#{지점5}", "대구 동성로");
+            variables.put("#{담당자 전화번호5}", "010-5895-0167");
+            variables.put("#{지점6}", "대구 광장코아");
+            variables.put("#{담당자 전화번호6}", "010-6301-0569");
+            variables.put("#{지점7}", "");
+            variables.put("#{담당자 전화번호7}", "");
+            variables.put("#{지점8}", "");
+            variables.put("#{담당자 전화번호8}", "");
+            variables.put("#{지점9}", "");
+            variables.put("#{담당자 전화번호9}", "");
+            variables.put("#{지점10}", "");
+            variables.put("#{담당자 전화번호10}", "");
+            kakaoOption.setVariables(variables);
         }
 
         Message message = new Message();

@@ -71,6 +71,7 @@
 
 	<select id="selectJackPotInfoTotal" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto" resultType="com.enclouds.enpoint.jackpot.dto.JackpotDto">
 		SELECT *
+		, CURDATE() as today
 		FROM p_jackpot
 		WHERE 1=1
 		AND seq = #{jackpotSeq}
@@ -188,9 +189,15 @@
 		LEFT JOIN p_jackpot pj on pj.seq = pja.jackpot_seq
 		LEFT JOIN p_agent pa on pa.agent_code = pja.reg_agent_code
 		WHERE 1=1
-		<if test="regAgentCode != 1">
+		<if test="regAgentCode != 1 and regAgentCode != 12">
 			AND reg_agent_code = #{regAgentCode}
 		</if>
+		<if test="schCond1 != ''">
+			AND reg_agent_code = #{schCond1}
+		</if>
+		<![CDATA[
+			and pja.reg_date BETWEEN DATE_FORMAT(#{schStartDte}, '%Y-%m-%d') and DATE_ADD(DATE_FORMAT(#{schEndDte}, '%Y-%m-%d'), INTERVAL 1 day)
+		]]>
 		ORDER BY pja.reg_date DESC
 
 		LIMIT
@@ -203,9 +210,15 @@
 		LEFT JOIN p_jackpot pj on pj.seq = pja.jackpot_seq
 		LEFT JOIN p_agent pa on pa.agent_code = pja.reg_agent_code
 		WHERE 1=1
-		<if test="regAgentCode != 1">
+		<if test="regAgentCode != 1 and regAgentCode != 12">
 			AND reg_agent_code = #{regAgentCode}
 		</if>
+		<if test="schCond1 != ''">
+			AND reg_agent_code = #{schCond1}
+		</if>
+		<![CDATA[
+			and pja.reg_date BETWEEN DATE_FORMAT(#{schStartDte}, '%Y-%m-%d') and DATE_ADD(DATE_FORMAT(#{schEndDte}, '%Y-%m-%d'), INTERVAL 1 day)
+		]]>
 	</select>
 
 </mapper>

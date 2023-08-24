@@ -25,4 +25,6 @@ public class JackpotDto extends CommonDto {
     private int orderNo;
     private String content;
 
+    private String today;
+
 }

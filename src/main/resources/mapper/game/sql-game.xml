@@ -99,7 +99,7 @@
 		from g_blind gb
 		where 1=1
 		AND gb.game_seq = #{gameSeq}
-		order by gb.lvl, break_yn desc
+		order by gb.lvl, break_yn asc
 	</select>
 
 	<insert id="insertGame" parameterType="com.enclouds.enpoint.game.dto.GameDto">

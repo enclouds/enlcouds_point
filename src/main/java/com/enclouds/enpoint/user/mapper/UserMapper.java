@@ -63,9 +63,15 @@ public interface UserMapper {
 
     int insertAddTicket(UserDto userDto) throws Exception;
 
+    int insertAddTicket2(UserDto userDto) throws Exception;
+
     int insertMinusTicket(UserDto userDto) throws Exception;
 
+    int insertMinusTicket2(UserDto userDto) throws Exception;
+
     int useTicket(UserDto userDto) throws Exception;
+
+    int useTicket2(UserDto userDto) throws Exception;
 
     int updateUserMinusPoint(UserDto userDto) throws Exception;
 
@@ -77,9 +83,15 @@ public interface UserMapper {
 
     List<PointDto> selectPointHistory(UserDto userDto) throws Exception;
 
+    List<PointDto> selectTicketHistory(UserDto userDto) throws Exception;
+
+    List<PointDto> selectTicketHistory2(UserDto userDto) throws Exception;
+
     PointDto getTotalPoint(UserDto userDto) throws Exception;
 
     PointDto getTotalTicket(UserDto userDto) throws Exception;
+
+    PointDto getTotalTicket2(UserDto userDto) throws Exception;
 
     PointDto getTotalCouponPoint(UserDto userDto) throws Exception;
 
@@ -104,5 +116,19 @@ public interface UserMapper {
     int updateAllUserRankDefAjax() throws Exception;
 
     int updateUserAddTicket(UserDto userDto) throws Exception;
+
+    int updateUserAddTicket2(UserDto userDto) throws Exception;
+
+    int updateUserAddSumRankPoint(UserDto userDto) throws Exception;
+
+    int updateUserMinusSumRank(UserDto userDto) throws Exception;
+
+    int insertMinusTicketAsCnt(UserDto userDto) throws Exception;
+
+    int useTicketAsCnt(UserDto userDto) throws Exception;
+
+    int insertMinusTicketAsCnt2(UserDto userDto) throws Exception;
+
+    int useTicketAsCnt2(UserDto userDto) throws Exception;
 
 }

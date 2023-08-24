@@ -21,9 +21,14 @@ public class AgentDto extends CommonDto {
     private String minusPoint;
     private Integer pointInt;
     private Integer ticketInt;
+    private Integer ticketInt2;
     private Integer ticket;
+    private Integer ticket2;
     private String ticketStr;
+    private String ticketStr2;
     private String addTicket;
     private String minusTicket;
+
+    private Integer defPoint;
 
 }

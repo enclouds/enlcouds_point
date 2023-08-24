@@ -29,6 +29,8 @@
 		, date_format(reg_date, '%Y-%m-%d') as regDate
 		, ticket
 		, format(ticket, 0) as ticketStr
+		, ticket2
+		, format(ticket2, 0) as ticketStr2
 		from p_agent pa
 		where 1=1
 		and agent_up_code = #{schAgentCode}
@@ -56,6 +58,21 @@
 		, date_format(reg_date, '%Y-%m-%d') as regDate
 		from p_agent pa
 		where 1=1
+	</select>
+
+	<select id="selectAgentTotalListAsAG" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="com.enclouds.enpoint.agent.dto.AgentDto">
+		select agent_code
+		, agent_up_code
+		, id
+		, password
+		, password_str
+		, agent_name
+		, memo
+		, format(point, 0) as point
+		, date_format(reg_date, '%Y-%m-%d') as regDate
+		from p_agent pa
+		where 1=1
+		AND agent_gbn = 'AG'
 	</select>
 
 	<select id="selectDuplAgent" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="int">
@@ -120,6 +137,13 @@
 		AND agent_code = #{agentCode}
 	</update>
 
+	<update id="updateAgentAddTicket2" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+		UPDATE p_agent
+		SET ticket2 = ticket2 + #{addTicket}
+		WHERE 1=1
+		AND agent_code = #{agentCode}
+	</update>
+
 	<insert id="insertAddAgentPoint" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
 		INSERT INTO p_agent_point
 		( point_gbn
@@ -133,8 +157,34 @@
 		, NOW() )
 	</insert>
 
+	<insert id="insertAddTopAgentPoint" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+		INSERT INTO p_top_agent_point
+		( gbn
+		, point
+		, agent_code
+		, reg_date)
+		VALUES
+		( 'ADD'
+		, #{addPoint}
+		, #{agentCode}
+		, NOW() )
+	</insert>
+
 	<insert id="insertAddAgentTicket" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
 		INSERT INTO p_agent_ticket
+		( ticket_gbn
+		, ticket
+		, agent_code
+		, reg_date)
+		VALUES
+		( 'ADD'
+		, #{addTicket}
+		, #{agentCode}
+		, NOW() )
+	</insert>
+
+	<insert id="insertAddAgentTicket2" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+		INSERT INTO p_agent_ticket2
 		( ticket_gbn
 		, ticket
 		, agent_code
@@ -166,6 +216,19 @@
 		, NOW() )
 	</insert>
 
+	<insert id="insertMinusTopAgentPoint" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+		INSERT INTO p_top_agent_point
+		( gbn
+		, point
+		, agent_code
+		, reg_date)
+		VALUES
+		( 'MINUS'
+		, #{minusPoint}
+		, #{agentCode}
+		, NOW() )
+	</insert>
+
 	<update id="updateAgentMinusTicket" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
 		UPDATE p_agent
 		SET ticket = ticket - #{minusTicket}
@@ -173,8 +236,28 @@
 		AND agent_code = #{agentCode}
 	</update>
 
+	<update id="updateAgentMinusTicket2" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+		UPDATE p_agent
+		SET ticket2 = ticket2 - #{minusTicket}
+		WHERE 1=1
+		AND agent_code = #{agentCode}
+	</update>
+
 	<insert id="insertMinusAgentTicket" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
 		INSERT INTO p_agent_ticket
+		( ticket_gbn
+		, ticket
+		, agent_code
+		, reg_date)
+		VALUES
+		( 'MINUS'
+		, #{minusTicket}
+		, #{agentCode}
+		, NOW() )
+	</insert>
+
+	<insert id="insertMinusAgentTicket2" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+		INSERT INTO p_agent_ticket2
 		( ticket_gbn
 		, ticket
 		, agent_code
@@ -216,13 +299,105 @@
 		order by pat.reg_date desc
 	</select>
 
+	<select id="selectAgentTicketHistory2" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
+		SELECT seq
+		, ticket_gbn
+		, case when ticket_gbn = 'ADD' then '적립' else '차감' end as ticketGbnNm
+		, case when ticket_gbn = 'ADD' then format(pat.ticket, 0) else format(pat.ticket * -1, 0) end as ticket
+		, date_format(pat.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		, pat.agent_code
+		, pa.agent_name
+		FROM p_agent_ticket2 pat
+		left join p_agent pa on pat.agent_code = pa.agent_code
+		WHERE 1=1
+		AND pat.agent_code = #{agentCode}
+		order by pat.reg_date desc
+	</select>
+
 	<select id="selectAgentInfo" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="com.enclouds.enpoint.agent.dto.AgentDto">
 		SELECT *
 		, point as pointInt
 		, ticket as ticketInt
+		, ticket2 as ticketInt2
 		FROM p_agent
 		WHERE 1=1
 		AND agent_code = #{agentCode}
+	</select>
+
+	<select id="selectAgentPointListTotalCount" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="int">
+		SELECT count(*)
+		FROM p_top_agent_point
+		WHERE 1=1
+
+		<choose>
+			<when test='agentCode == 1'>
+				<if test="schCond1 != ''">
+					AND agent_code = #{schCond1}
+				</if>
+			</when>
+			<otherwise>
+				AND agent_code = #{agentCode}
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test="schCond2 == 'minus'">
+				AND gbn = 'MINUS'
+				AND point = #{schText}
+			</when>
+			<when test="schCond2 == 'add'">
+				AND gbn = 'ADD'
+				AND point = #{schText}
+			</when>
+		</choose>
+
+		<![CDATA[
+			and reg_date >= concat(#{schStartDte}, ' 00:00:00')
+			and reg_date <= concat(#{schEndDte}, ' 23:59:59')
+		]]>
+
+	</select>
+
+	<select id="selectAgentPointList" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="com.enclouds.enpoint.agent.dto.AgentDto">
+		select pa.agent_name
+		, case when ptap.gbn = 'ADD' then ptap.point else 0 end as addPoint
+		, case when ptap.gbn = 'MINUS' then ptap.point * -1 else 0 end as minusPoint
+		, date_format(ptap.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		from p_top_agent_point ptap
+		LEFT JOIN p_agent pa on pa.agent_code = ptap.agent_code
+		where 1=1
+
+		<choose>
+			<when test='agentCode == 1'>
+				<if test="schCond1 != ''">
+					AND ptap.agent_code = #{schCond1}
+				</if>
+			</when>
+			<otherwise>
+				AND ptap.agent_code = #{agentCode}
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test="schCond2 == 'minus'">
+				AND ptap.gbn = 'MINUS'
+				AND ptap.point = #{schText}
+			</when>
+			<when test="schCond2 == 'add'">
+				AND ptap.gbn = 'ADD'
+				AND ptap.point = #{schText}
+			</when>
+		</choose>
+
+		<![CDATA[
+			and ptap.reg_date >= concat(#{schStartDte}, ' 00:00:00')
+			and ptap.reg_date <= concat(#{schEndDte}, ' 23:59:59')
+		]]>
+
+		order by ptap.reg_date desc
+
+		LIMIT
+		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
 	</select>
 
 </mapper>

@@ -57,7 +57,7 @@
                 contentType : false,
                 processData : false,
                 success: function(response) {
-                    $("#today").val(response.today);
+                    $("#today").text(response.today.toString());
                     $("#jackpotPrize").text(addComma(response.prize.toString()));
                     $('.counter').counterUp({
                         delay: 15,

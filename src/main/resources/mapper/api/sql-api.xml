@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.enclouds.enpoint.api.mapper.ApiMapper">
+
+	<select id="selectUserInfo" parameterType="com.enclouds.enpoint.api.dto.ApiDto" resultType="com.enclouds.enpoint.api.dto.ApiUserRtnDto">
+		select *
+		from (
+		select *
+		, @vRank := @vRank + 1 AS rank
+		, (select count(*) from p_user) as totalRankCnt
+		from p_user pu, (select @vRank := 0) as r
+		order by pu.rank_sum_point desc
+		) as cnt
+		where phone_num = #{phoneNum}
+	</select>
+
+	<select id="getPointHistory" parameterType="com.enclouds.enpoint.api.dto.ApiDto" resultType="com.enclouds.enpoint.api.dto.ApiPointHistoryDto">
+		SELECT seq
+		, point_gbn
+		, case when point_gbn = 'ADD' then '적립' when 'HUMAN' then '휴먼' else '차감' end as pointGbnNm
+		, case when point_gbn = 'ADD' then format(pp.point, 0) else format(pp.point * -1, 0) end as point
+		, date_format(pp.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		, phone_num
+		, pp.agent_code
+		, pa.agent_name
+		, format(pp.private_def_point, 0) as privateDefPointStr
+		FROM p_point pp
+		left join p_agent pa on pp.agent_code = pa.agent_code
+		WHERE 1=1
+		AND phone_num = #{phoneNum}
+		order by pp.reg_date desc
+	</select>
+
+	<select id="getTicketHistory1" parameterType="com.enclouds.enpoint.api.dto.ApiDto" resultType="com.enclouds.enpoint.api.dto.ApiTicketHistoryDto">
+		select ticket_gbn
+		, case when ticket_gbn = 'ADD' then '적립' else '차감' end as ticketGbnNm
+		, case when ticket_gbn = 'ADD' then format(pt.ticket, 0) else format(pt.ticket * -1, 0) end as ticket
+		, pt.phone_num
+		, pa.agent_name
+		, date_format(pt.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		from p_ticket pt
+		left join p_agent pa on pa.agent_code = pt.agent_code
+		WHERE 1=1
+		AND phone_num = #{phoneNum}
+		order by pt.reg_date desc
+	</select>
+
+	<select id="getTicketHistory2" parameterType="com.enclouds.enpoint.api.dto.ApiDto" resultType="com.enclouds.enpoint.api.dto.ApiTicketHistoryDto">
+		select ticket_gbn
+		, case when ticket_gbn = 'ADD' then '적립' else '차감' end as ticketGbnNm
+		, case when ticket_gbn = 'ADD' then format(pt.ticket, 0) else format(pt.ticket * -1, 0) end as ticket
+		, pt.phone_num
+		, pa.agent_name
+		, date_format(pt.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		from p_ticket2 pt
+		left join p_agent pa on pa.agent_code = pt.agent_code
+		WHERE 1=1
+		AND phone_num = #{phoneNum}
+		order by pt.reg_date desc
+	</select>
+
+	<select id="getRankList" parameterType="com.enclouds.enpoint.api.dto.ApiDto" resultType="com.enclouds.enpoint.api.dto.ApiRankDto">
+		SELECT @rownum:=@rownum+1 as ranking, TAB.*
+		from (
+		SELECT nick_name
+		, phone_num
+		, case when length(phone_num) = 10 then concat(concat(SUBSTR(phone_num, 1 ,3), '***'), SUBSTR(phone_num, 7 ,10))
+		when length(phone_num) = 11 then concat(concat(SUBSTR(phone_num, 1 ,4), '***'), SUBSTR(phone_num, 8 ,11))
+		end as phone_num_masking
+		, rank_point
+		, format(rank_point, 0) as rank_point_str
+		, rank_sum_point
+		, format(rank_sum_point, 0) as rank_sum_point_str
+		, date_format(reg_date, '%Y-%m-%d') as regDate
+		, date_format((select max(reg_date) from p_point pp where pp.phone_num = pu.phone_num), '%Y-%m-%d') as maxDate
+		, CAST(rank_point AS signed integer) as intRankPoint
+		, CAST(rank_sum_point AS signed integer) as intRankSumPoint
+		FROM p_user pu, (SELECT @rownum:=0) TMP
+		WHERE 1=1
+		AND (rank_point > 0 or rank_sum_point > 0)
+		) TAB
+		<if test="schCond1 == 'week'">
+			ORDER BY TAB.intRankPoint desc
+		</if>
+		<if test="schCond1 == 'sum'">
+			ORDER BY TAB.intRankSumPoint desc
+		</if>
+	</select>
+
+	<select id="getTicketRankList" parameterType="com.enclouds.enpoint.api.dto.ApiDto" resultType="com.enclouds.enpoint.api.dto.ApiTicketRankDto">
+		SELECT @rownum:=@rownum+1 as ranking, TAB.*
+		from (
+		SELECT nick_name
+		, phone_num
+		, case when length(phone_num) = 10 then concat(concat(SUBSTR(phone_num, 1 ,3), '***'), SUBSTR(phone_num, 7 ,10))
+		when length(phone_num) = 11 then concat(concat(SUBSTR(phone_num, 1 ,4), '***'), SUBSTR(phone_num, 8 ,11))
+		end as phone_num_masking
+		, date_format(reg_date, '%Y-%m-%d') as regDate
+		, date_format((select max(reg_date) from p_point pp where pp.phone_num = pu.phone_num), '%Y-%m-%d') as maxDate
+		, CAST(ticket AS signed integer) as intRankTicket
+		, CAST(ticket2 AS signed integer) as intRankTicket2
+		, pu.ticket
+		, pu.ticket2
+		, format(ticket, 0) as ticket_str
+		, format(ticket2, 0) as ticket_str2
+		FROM p_user pu,  (SELECT @rownum:=0) TMP
+		WHERE 1=1
+		AND (pu.ticket > 0 or pu.ticket2 > 0)
+		ORDER BY ticket desc
+		) TAB
+		<if test="schCond1 == 'ticket1'">
+			ORDER BY TAB.intRankTicket desc
+		</if>
+		<if test="schCond1 == 'ticket2'">
+			ORDER BY TAB.intRankTicket2 desc
+		</if>
+	</select>
+
+</mapper>
+
+

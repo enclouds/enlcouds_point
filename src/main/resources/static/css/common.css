@@ -141,7 +141,7 @@ select + input{margin-left:0.5rem;}
 .side_menu *{color:#fff;}
 
 .side_menu .top_info{height:8rem;display:flex;align-items:center;padding:0 1rem 0 1.1rem;background:#0050a5;}
-.side_menu .top_info .name{font-size:1.4rem;line-height:3rem;color:#fff;font-weight:700;background:url(../img/icon_name.svg) no-repeat left center;background-size:2rem;padding-left:2.6rem;}
+.side_menu .top_info .name{font-size:1.4rem;line-height:1.5rem;color:#fff;font-weight:700;background:url(../img/icon_name.svg) no-repeat left center;background-size:2rem;padding-left:2.6rem;}
 
 .side_menu .menu{position:absolute;top:8rem;left:0;width:100%;height:calc(100% - 12rem);overflow-y:scroll;}
 .side_menu .menu .home{background:rgba(0,0,0,0.2) url(../img/home.svg) no-repeat left 1.3rem center;background-size:1.6rem;color:#fff;font-size:1.5rem;padding:1.2rem 0 1.4rem 3.5rem;font-weight:700;border-bottom:1px solid rgba(255,255,255,0.1);margin:0;}

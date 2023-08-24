@@ -49,6 +49,9 @@ public class UserController {
    @Autowired
    private JackpotService jackpotService;
 
+   @Autowired
+   private AgentService agentService;
+
    /**
     * 로그인 페이지 이동
     *
@@ -96,6 +99,10 @@ public class UserController {
 
             if(userId.equals("raise")){
                return new ModelAndView("redirect:/game/list");
+            }
+
+            if(userId.equals("kingslounge")){
+               return new ModelAndView("redirect:/user/rank/list");
             }
 
             userDto.setAgentCode(userInfo.getAgentCode());
@@ -310,6 +317,41 @@ public class UserController {
       return result;
    }
 
+   @PostMapping("/user/useTicket2Ajax")
+   public @ResponseBody Map<String, Object> useTicket2Ajax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+      int resultCode;
+      Map<String, Object> result = new HashMap<String, Object>();
+
+      try {
+         if (principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            userDto.setAgentCode(userInfo.getAgentCode());
+
+            resultCode = customUserService.useTicket2(userDto);
+
+            if (resultCode > 0) {
+               result.put("resultCode", 0);
+               result.put("resultMsg", "정상적으로 사용 되었습니다.");
+            } else {
+               result.put("resultCode", -1);
+               result.put("resultMsg", "사용에 실패 하였습니다.");
+            }
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      return result;
+   }
+
    @PostMapping("/user/updateUserAddCouponPointAjax")
    public @ResponseBody Map<String, Object> updateUserAddCouponPointAjax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
       Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -362,6 +404,46 @@ public class UserController {
             userDto.setAgentCode(userInfo.getAgentCode());
 
             resultCode = customUserService.updateUserAddTicket(userDto);
+
+            if (resultCode > 0) {
+               result.put("resultCode", 0);
+               result.put("resultMsg", "정상적으로 적립 되었습니다.");
+            } else {
+               if(resultCode == -2){
+                  result.put("resultCode", -2);
+                  result.put("resultMsg", "적립할 티켓이 보유티켓보다 작습니다. 확인 바랍니다.");
+               }else {
+                  result.put("resultCode", -1);
+                  result.put("resultMsg", "적립에 실패 하였습니다.");
+               }
+            }
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      return result;
+   }
+
+   @PostMapping("/user/updateUserAddTicket2Ajax")
+   public @ResponseBody Map<String, Object> updateUserAddTicket2Ajax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+      int resultCode;
+      Map<String, Object> result = new HashMap<String, Object>();
+
+      try {
+         if (principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            userDto.setAgentCode(userInfo.getAgentCode());
+
+            resultCode = customUserService.updateUserAddTicket2(userDto);
 
             if (resultCode > 0) {
                result.put("resultCode", 0);
@@ -629,6 +711,76 @@ public class UserController {
       return result;
    }
 
+   @PostMapping("/user/updateUserMinusTicketAjax")
+   public @ResponseBody Map<String, Object> updateUserMinusTicketAjax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+      int resultCode;
+      Map<String, Object> result = new HashMap<String, Object>();
+
+      try {
+         if (principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            userDto.setAgentCode(userInfo.getAgentCode());
+
+            resultCode = customUserService.updateUserMinusTicket(userDto);
+
+            if (resultCode > 0) {
+               result.put("resultCode", 0);
+               result.put("resultMsg", "정상적으로 차감 되었습니다.");
+            } else {
+               result.put("resultCode", -1);
+               result.put("resultMsg", "차감에 실패 하였습니다.");
+            }
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      return result;
+   }
+
+   @PostMapping("/user/updateUserMinusTicket2Ajax")
+   public @ResponseBody Map<String, Object> updateUserMinusTicket2Ajax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+      int resultCode;
+      Map<String, Object> result = new HashMap<String, Object>();
+
+      try {
+         if (principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            userDto.setAgentCode(userInfo.getAgentCode());
+
+            resultCode = customUserService.updateUserMinusTicket2(userDto);
+
+            if (resultCode > 0) {
+               result.put("resultCode", 0);
+               result.put("resultMsg", "정상적으로 차감 되었습니다.");
+            } else {
+               result.put("resultCode", -1);
+               result.put("resultMsg", "차감에 실패 하였습니다.");
+            }
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      return result;
+   }
+
    @PostMapping("/user/updateUserMinusCouponPointAjax")
    public @ResponseBody Map<String, Object> updateUserMinusCouponPointAjax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
       Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -745,15 +897,33 @@ public class UserController {
             userId = userDetails.getUsername();
             userInfo = userService.getUserInfo(userId);
 
+            mv.addObject("agentTotalList", agentService.selectAgentTotalListAsAG());
+
             pointDto.setAgentCode(String.valueOf(userInfo.getAgentCode()));
 
+            String startDateStr = DateUtils.addDay(DateUtils.getToday(), -7);
             SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-            Date todayDate = format.parse(DateUtils.getToday());
+            Date startDateDte = format.parse(startDateStr);
             SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+            String startDate = format2.format(startDateDte);
+
+            if(StringUtils.isEmpty(pointDto.getSchStartDte())){
+               pointDto.setSchStartDte(startDate);
+            }
+
+            Date todayDate = format.parse(DateUtils.getToday());
             String today = format2.format(todayDate);
 
-            if(StringUtils.isEmpty(pointDto.getSchDate())){
-               pointDto.setSchDate(today);
+            if(StringUtils.isEmpty(pointDto.getSchEndDte())){
+               pointDto.setSchEndDte(today);
+            }
+
+            if(StringUtils.isEmpty(pointDto.getSchCond1())){
+               pointDto.setSchCond1("");
+            }
+
+            if(StringUtils.isEmpty(pointDto.getSchCond2())){
+               pointDto.setSchCond2("");
             }
 
             List<PointDto> userPointList = customUserService.selectUserPointList(pointDto);
@@ -825,6 +995,10 @@ public class UserController {
             userId = userDetails.getUsername();
             userInfo = userService.getUserInfo(userId);
 
+            if(userDto.getSchCond1() == null){
+               userDto.setSchCond1("ticket1");
+            }
+
             List<UserDto> userTicketRankList = customUserService.selectUserTicketRankList(userDto);
             mv.addObject("userTicketRankList", userTicketRankList);
          }else {
@@ -842,11 +1016,135 @@ public class UserController {
       return mv;
    }
 
+   @PostMapping("/user/ticket/selectTicketHistoryAjax")
+   public @ResponseBody Map<String, Object> selectTicketHistoryAjax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+
+      Map<String, Object> result = new HashMap<String, Object>();
+
+      try {
+         if (principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            List<PointDto> historyTicketList = customUserService.selectTicketHistory(userDto);
+
+            result.put("historyTicketList", historyTicketList);
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      return result;
+   }
+
+   @PostMapping("/user/ticket/selectTicketHistory2Ajax")
+   public @ResponseBody Map<String, Object> selectTicketHistory2Ajax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+
+      Map<String, Object> result = new HashMap<String, Object>();
+
+      try {
+         if (principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            List<PointDto> historyTicketList = customUserService.selectTicketHistory2(userDto);
+
+            result.put("historyTicketList", historyTicketList);
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      return result;
+   }
+
    @RequestMapping(value = "/user/privacy", method = RequestMethod.GET)
    public ModelAndView userPrivacy(HttpServletResponse response, @ModelAttribute UserDto userDto) throws Exception{
       ModelAndView mv = new ModelAndView("user/privacy");
 
       return mv;
+   }
+
+   @PostMapping("/user/rank/updateUserAddSumRankPointAjax")
+   public @ResponseBody Map<String, Object> updateUserAddSumRankPointAjax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+      int resultCode;
+      Map<String, Object> result = new HashMap<String, Object>();
+
+      try {
+         if (principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            userDto.setAgentCode(userInfo.getAgentCode());
+
+            resultCode = customUserService.updateUserAddSumRankPoint(userDto);
+
+            if (resultCode > 0) {
+               result.put("resultCode", 0);
+               result.put("resultMsg", "정상적으로 적립 되었습니다.");
+            } else {
+               result.put("resultCode", -1);
+               result.put("resultMsg", "적립에 실패 하였습니다.");
+            }
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      return result;
+   }
+
+   @PostMapping("/user/rank/updateUserMinusSumRankAjax")
+   public @ResponseBody Map<String, Object> updateUserMinusSumRankAjax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+      int resultCode;
+      Map<String, Object> result = new HashMap<String, Object>();
+
+      try {
+         if (principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            userDto.setAgentCode(userInfo.getAgentCode());
+
+            resultCode = customUserService.updateUserMinusSumRank(userDto);
+
+            if (resultCode > 0) {
+               result.put("resultCode", 0);
+               result.put("resultMsg", "정상적으로 차감 되었습니다.");
+            } else {
+               result.put("resultCode", -1);
+               result.put("resultMsg", "차감에 실패 하였습니다.");
+            }
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      return result;
    }
 
 }

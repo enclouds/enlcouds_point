@@ -1,6 +1,7 @@
 package com.enclouds.enpoint.jackpot.controller;
 
 import com.enclouds.enpoint.agent.dto.AgentDto;
+import com.enclouds.enpoint.agent.service.AgentService;
 import com.enclouds.enpoint.cmm.util.DateUtils;
 import com.enclouds.enpoint.cmm.util.StringUtils;
 import com.enclouds.enpoint.game.dto.BlindDto;
@@ -37,6 +38,9 @@ public class JackpotController {
 
     @Autowired
     private JackpotService jackpotService;
+
+    @Autowired
+    private AgentService agentService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ModelAndView jackpotList(HttpServletResponse response, @ModelAttribute JackpotDto jackpotDto) throws Exception{
@@ -370,7 +374,7 @@ public class JackpotController {
         List<JackpotDto> notiList = jackpotService.selectJackpotNotiListTotal(jackpotDto);
         mv.addObject("notiList", notiList);
 
-        mv.addObject("today", DateUtils.formatDate(DateUtils.getToday(), "-"));
+        mv.addObject("today", jackPotInfo.getToday());
 
         return mv;
     }
@@ -468,8 +472,11 @@ public class JackpotController {
                 userInfo = userService.getUserInfo(userId);
                 jackpotDto.setRegAgentCode(userInfo.getAgentCode());
 
-                List<JackpotDto> jackpotHistoryList = jackpotService.selectJackpotHistoryList(jackpotDto);
-                mv.addObject("jackpotHistoryList", jackpotHistoryList);
+                mv.addObject("agentTotalList", agentService.selectAgentTotalListAsAG());
+
+                if(StringUtils.isEmpty(jackpotDto.getSchCond1())){
+                    jackpotDto.setSchCond1("");
+                }
 
                 String startDateStr = DateUtils.addDay(DateUtils.getToday(), -7);
                 SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
@@ -486,6 +493,9 @@ public class JackpotController {
                 if(StringUtils.isEmpty(jackpotDto.getSchEndDte())){
                     jackpotDto.setSchEndDte(today);
                 }
+
+                List<JackpotDto> jackpotHistoryList = jackpotService.selectJackpotHistoryList(jackpotDto);
+                mv.addObject("jackpotHistoryList", jackpotHistoryList);
 
             }else {
                 return new ModelAndView("redirect:/");

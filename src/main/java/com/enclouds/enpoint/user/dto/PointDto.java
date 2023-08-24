@@ -17,6 +17,7 @@ public class PointDto extends CommonDto {
     private String ticket;
     private String regDate;
     private String phoneNum;
+    private String phoneNumMasking;
     private String nickName;
 
     private int minusPoint;

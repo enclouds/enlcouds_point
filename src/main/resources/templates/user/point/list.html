@@ -24,9 +24,25 @@
 
         <form id="schFrm">
             <div class="search_option">
+                <select id="schCond1" name="schCond1" style="width:150px;" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_ADMIN_SUB')">
+                    <option value="">전체</option>
+                    <option th:each="list:${agentTotalList}" th:value="${list.agentCode}" th:text="${list.agentName}" th:selected="${list.agentCode} == ${params.schCond1}"></option>
+                </select>
+
                 <span class="datepicker_group">
-                   <input type="text" id="schDate" name="schDate" class="datepicker" placeholder="검색일" th:value="${params.schDate}" autocomplete="off">
+                      <input type="text" id="schStartDte" name="schStartDte" class="datepicker" placeholder="시작일" th:value="${params.schStartDte}">
+                      <em>~</em>
+                      <input type="text" id="schEndDte" name="schEndDte" class="datepicker" placeholder="종료일" th:value="${params.schEndDte}">
                 </span>
+
+                <select id="schCond2" name="schCond2" style="width:150px;">
+                    <option value="" th:selected="${params.schCond2} == ''">전체</option>
+                    <option value="add" th:selected="${params.schCond2} == 'add'">적립</option>
+                    <option value="minus" th:selected="${params.schCond2} == 'minus'">차감</option>
+                </select>
+
+                <input type="text" style="width:1000px;" id="schText" name="schText" placeholder="포인트 검색" th:value="${params.schText}" onkeyup="if(window.event.keyCode==13){fnSearch()}">
+
                 <button type="button" class="search_btn" th:onclick="javascript:fnSearch();">조회</button>
             </div>
         </form>
@@ -38,7 +54,8 @@
                 <thead>
                 <tr>
                     <th scope="col">별명</th>
-                    <th scope="col">전화번호</th>
+                    <th sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" scope="col">전화번호</th>
+                    <th sec:authorize="hasRole('ROLE_AGENT')" scope="col">전화번호</th>
                     <th scope="col">적립</th>
                     <th scope="col">차감</th>
                     <th scope="col">이전 포인트</th>
@@ -48,19 +65,20 @@
                 <tbody>
                 <tr th:each="list:${userPointList}">
                     <td th:text="${list.nickName}"></td>
-                    <td th:text="${list.phoneNum}"></td>
+                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" th:text="${list.phoneNum}"></td>
+                    <td sec:authorize="hasRole('ROLE_AGENT')" th:text="${list.phoneNumMasking}"></td>
                     <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatInteger(list.addPoint, 0, 'COMMA')}"></td>
                     <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatInteger(list.minusPoint, 0, 'COMMA')}"></td>
                     <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatInteger(list.defPoint, 0, 'COMMA')}"></td>
                     <td th:text="${list.regDate}"></td>
                 </tr>
                 </tbody>
-                <tfoot>
+                <!--<tfoot>
                 <th colspan="2">합계</th>
                 <th style="min-width:1px; white-space:nowrap; text-align:right;color:;"><b th:text="${#numbers.formatInteger(totalPoint.totalAddPoint, 0, 'COMMA')}" /></th>
                 <th style="min-width:1px; white-space:nowrap; text-align:right;color:;"><b th:text="${#numbers.formatInteger(totalPoint.totalMinusPoint, 0, 'COMMA')}" /></th>
-                <th colspan="2"></th>
-                </tfoot>
+                <th colspan="3"></th>
+                </tfoot>-->
             </table>
         </div>
 

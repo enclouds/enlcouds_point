@@ -9,18 +9,18 @@
 <!-- container S -->
 <div class="container">
     <!-- header S -->
-    <div th:replace="/fragments/left.html :: fragment-left('m2', '/jackpot/history/list')"></div>
+    <div th:replace="/fragments/left.html :: fragment-left('m2', '/agent/point/list')"></div>
     <!-- header E -->
 
     <!-- content S -->
     <div class="content">
         <div class="con_top">
             <ul>
-                <li>JackPot 관리</li>
-                <li>JackPot History</li>
+                <li>회원관리</li>
+                <li>가맹점 적립/차감 목록</li>
             </ul>
         </div>
-        <p class="page_info">JackPot History</p>
+        <p class="page_info">가맹점 적립/차감 목록</p>
 
         <form id="schFrm">
             <div class="search_option">
@@ -35,6 +35,14 @@
                       <input type="text" id="schEndDte" name="schEndDte" class="datepicker" placeholder="종료일" th:value="${params.schEndDte}">
                 </span>
 
+                <select id="schCond2" name="schCond2" style="width:150px;">
+                    <option value="" th:selected="${params.schCond2} == ''">전체</option>
+                    <option value="add" th:selected="${params.schCond2} == 'add'">적립</option>
+                    <option value="minus" th:selected="${params.schCond2} == 'minus'">차감</option>
+                </select>
+
+                <input type="text" style="width:1000px;" id="schText" name="schText" placeholder="포인트 검색" th:value="${params.schText}" onkeyup="if(window.event.keyCode==13){fnSearch()}">
+
                 <button type="button" class="search_btn" th:onclick="javascript:fnSearch();">조회</button>
             </div>
         </form>
@@ -45,22 +53,26 @@
                 </colgroup>
                 <thead>
                 <tr>
-                    <th scope="col">Jackpot 명</th>
-                    <th scope="col">적립 내용</th>
-                    <th scope="col">적립 금액</th>
-                    <th scope="col">적립 일시</th>
-                    <th scope="col">적립 상점</th>
+                    <th scope="col">가맹점</th>
+                    <th scope="col">적립</th>
+                    <th scope="col">차감</th>
+                    <th scope="col">등록일자</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="list:${jackpotHistoryList}">
-                    <td th:text="${list.jackpotTitle}"></td>
-                    <td th:text="${list.alertContent}"></td>
-                    <td th:text="${#numbers.formatInteger(list.jackpotPrize, 0, 'COMMA')}"></td>
-                    <td th:text="${list.regDate}"></td>
+                <tr th:each="list:${agentPointList}">
                     <td th:text="${list.agentName}"></td>
+                    <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatInteger(list.addPoint, 0, 'COMMA')}"></td>
+                    <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatInteger(list.minusPoint, 0, 'COMMA')}"></td>
+                    <td th:text="${list.regDate}"></td>
                 </tr>
                 </tbody>
+                <!--<tfoot>
+                <th colspan="2">합계</th>
+                <th style="min-width:1px; white-space:nowrap; text-align:right;color:;"><b th:text="${#numbers.formatInteger(totalPoint.totalAddPoint, 0, 'COMMA')}" /></th>
+                <th style="min-width:1px; white-space:nowrap; text-align:right;color:;"><b th:text="${#numbers.formatInteger(totalPoint.totalMinusPoint, 0, 'COMMA')}" /></th>
+                <th colspan="3"></th>
+                </tfoot>-->
             </table>
         </div>
 
@@ -94,8 +106,6 @@
 </body>
 <script th:src="@{/static/js/common.js}"></script>
 <script th:inline="javascript">
-
-    var selectTrSeq;
 
     $( function() {
     });

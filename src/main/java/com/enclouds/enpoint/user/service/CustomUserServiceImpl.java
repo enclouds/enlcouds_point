@@ -136,7 +136,7 @@ public class CustomUserServiceImpl implements CustomUserService{
                     PointDto pointDto = userMapper.getTotalPoint(userDto);
 
                     KakaoDto kakaoDto = new KakaoDto();
-                    kakaoDto.setTemplateId("KA01TP221011062400156k4kpTZGoW5f");
+                    kakaoDto.setTemplateId("KA01TP230727025205254EyRZK4vF8Qi");
                     kakaoDto.setRcvNum(userDto.getPhoneNum());
                     kakaoDto.setAddPoint(userDto.getAddPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
                     kakaoDto.setTotalPoint(pointDto.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
@@ -222,6 +222,61 @@ public class CustomUserServiceImpl implements CustomUserService{
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateUserAddTicket2(UserDto userDto) throws Exception {
+        try {
+            int result = -1;
+
+            PointDto preTicketDto = userMapper.getTotalTicket2(userDto);
+            AgentDto agentDto = new AgentDto();
+            agentDto.setAgentCode(userDto.getAgentCode());
+            AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
+
+            if(agentInfo.getTicketInt2() < Integer.parseInt(userDto.getAddTicket())){
+                result = -2;
+                return  result;
+            }
+
+            //총 티켓 증가
+            result = userMapper.updateUserAddTicket2(userDto);
+
+            //티켓 내역 생성
+            if(result > 0){
+                userDto.setDefTicket(agentInfo.getTicketInt2());
+                userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
+                result = userMapper.insertAddTicket2(userDto);
+
+                /*if(result > 0){
+                    //카카오톡 전송
+                    PointDto pointDto = userMapper.getTotalPoint(userDto);
+
+                    KakaoDto kakaoDto = new KakaoDto();
+                    kakaoDto.setTemplateId("KA01TP221011062400156k4kpTZGoW5f");
+                    kakaoDto.setRcvNum(userDto.getPhoneNum());
+                    kakaoDto.setAddPoint(userDto.getAddPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
+                    kakaoDto.setTotalPoint(pointDto.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
+                    kakaoDto.setStoreNm(pointDto.getAgentName());
+
+                    KakaoExampleController kakaoExampleController = new KakaoExampleController();
+                    kakaoExampleController.sendOneAta(kakaoDto);
+                }*/
+
+                //해당 가맹점 티켓 차감
+                if(result > 0){
+                    AgentDto agentDto1 = new AgentDto();
+                    agentDto1.setAgentCode(userDto.getAgentCode());
+                    agentDto1.setMinusTicket(userDto.getAddTicket());
+
+                    agentService.updateAgentMinusTicket2(agentDto1);
+                }
+            }
+            return result;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public int updateUserAddRankPoint(UserDto userDto) throws Exception {
         return userMapper.updateUserAddRankPoint(userDto);
     }
@@ -239,6 +294,21 @@ public class CustomUserServiceImpl implements CustomUserService{
         userMapper.insertMinusTicket(userDto);
 
         return userMapper.useTicket(userDto);
+    }
+
+    @Override
+    public int useTicket2(UserDto userDto) throws Exception {
+        AgentDto agentDto = new AgentDto();
+        agentDto.setAgentCode(userDto.getAgentCode());
+        AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
+
+        PointDto preTicketDto = userMapper.getTotalTicket2(userDto);
+
+        userDto.setDefTicket(agentInfo.getTicketInt());
+        userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
+        userMapper.insertMinusTicket2(userDto);
+
+        return userMapper.useTicket2(userDto);
     }
 
     @Override
@@ -272,7 +342,7 @@ public class CustomUserServiceImpl implements CustomUserService{
                     PointDto pointDto2 = userMapper.getTotalPoint(userDto);
 
                     KakaoDto kakaoDto = new KakaoDto();
-                    kakaoDto.setTemplateId("KA01TP2210110625131785Wo8nGYwQLh");
+                    kakaoDto.setTemplateId("KA01TP230727025242092bgsDIX9xp9W");
                     kakaoDto.setRcvNum(userDto.getPhoneNum());
                     kakaoDto.setMinusPoint(userDto.getMinusPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
                     kakaoDto.setTotalPoint(pointDto2.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
@@ -296,6 +366,36 @@ public class CustomUserServiceImpl implements CustomUserService{
         }catch(Exception e){
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public int updateUserMinusTicket(UserDto userDto) throws Exception {
+        AgentDto agentDto = new AgentDto();
+        agentDto.setAgentCode(userDto.getAgentCode());
+        AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
+
+        PointDto preTicketDto = userMapper.getTotalTicket(userDto);
+
+        userDto.setDefTicket(agentInfo.getTicketInt());
+        userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
+        userMapper.insertMinusTicketAsCnt(userDto);
+
+        return userMapper.useTicketAsCnt(userDto);
+    }
+
+    @Override
+    public int updateUserMinusTicket2(UserDto userDto) throws Exception {
+        AgentDto agentDto = new AgentDto();
+        agentDto.setAgentCode(userDto.getAgentCode());
+        AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
+
+        PointDto preTicketDto = userMapper.getTotalTicket2(userDto);
+
+        userDto.setDefTicket(agentInfo.getTicketInt());
+        userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
+        userMapper.insertMinusTicketAsCnt2(userDto);
+
+        return userMapper.useTicketAsCnt2(userDto);
     }
 
     @Override
@@ -417,4 +517,23 @@ public class CustomUserServiceImpl implements CustomUserService{
         return userMapper.selectUserTicketRankList(userDto);
     }
 
+    @Override
+    public List<PointDto> selectTicketHistory(UserDto userDto) throws Exception {
+        return userMapper.selectTicketHistory(userDto);
+    }
+
+    @Override
+    public List<PointDto> selectTicketHistory2(UserDto userDto) throws Exception {
+        return userMapper.selectTicketHistory2(userDto);
+    }
+
+    @Override
+    public int updateUserAddSumRankPoint(UserDto userDto) throws Exception {
+        return userMapper.updateUserAddSumRankPoint(userDto);
+    }
+
+    @Override
+    public int updateUserMinusSumRank(UserDto userDto) throws Exception {
+        return userMapper.updateUserMinusSumRank(userDto);
+    }
 }

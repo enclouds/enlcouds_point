@@ -28,13 +28,21 @@ public interface CustomUserService {
 
     int updateUserAddTicket(UserDto userDto) throws Exception;
 
+    int updateUserAddTicket2(UserDto userDto) throws Exception;
+
     int useTicket(UserDto userDto) throws Exception;
+
+    int useTicket2(UserDto userDto) throws Exception;
 
     int updateUserAddRankPoint(UserDto userDto) throws Exception;
 
     int updateUserMinusRankPoint(UserDto userDto) throws Exception;
 
     int updateUserMinusPoint(UserDto userDto) throws Exception;
+
+    int updateUserMinusTicket(UserDto userDto) throws Exception;
+
+    int updateUserMinusTicket2(UserDto userDto) throws Exception;
 
     int updateUserHumanAjax(UserDto userDto) throws Exception;
 
@@ -45,6 +53,10 @@ public interface CustomUserService {
     List<UserDto> selectUserRankList(UserDto userDto) throws Exception;
 
     List<UserDto> selectUserTicketRankList(UserDto userDto) throws Exception;
+
+    List<PointDto> selectTicketHistory(UserDto userDto) throws Exception;
+
+    List<PointDto> selectTicketHistory2(UserDto userDto) throws Exception;
 
     int updateUserAddCouponPoint(UserDto userDto) throws Exception;
 
@@ -57,5 +69,9 @@ public interface CustomUserService {
     int updateAllUserWeekRankDefAjax() throws Exception;
 
     int updateAllUserRankDefAjax() throws Exception;
+
+    int updateUserAddSumRankPoint(UserDto userDto) throws Exception;
+
+    int updateUserMinusSumRank(UserDto userDto) throws Exception;
 
 }

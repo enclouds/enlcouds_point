@@ -11,6 +11,7 @@
 		, memo
 		, format(point, 0) as point
 		, format(ticket, 0) as ticket
+		, format(ticket2, 0) as ticket2
 		, point as pointInt
 		, agent_gbn
 		, agent_up_code
@@ -47,12 +48,17 @@
 
 	<select id="selectCustomUserList" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.UserDto">
 		select phone_num
+		, case when length(phone_num) = 10 then concat(concat(SUBSTR(phone_num, 1 ,3), '***'), SUBSTR(phone_num, 7 ,10))
+		when length(phone_num) = 11 then concat(concat(SUBSTR(phone_num, 1 ,4), '***'), SUBSTR(phone_num, 8 ,11))
+		end as phone_num_masking
 		, nick_name
 		, user_gbn
 		, format(point, 0) as point
 		, point as org_point
 		, format(ticket, 0) as ticket
+		, format(ticket2, 0) as ticket2
 		, ticket as org_ticket
+		, ticket2 as org_ticket2
 		, date_format(reg_date, '%Y-%m-%d') as regDate
 		, memo
 		, date_format((select max(reg_date) from p_point pp where pp.phone_num = pu.phone_num), '%Y-%m-%d %H:%m:%s') as maxDate
@@ -159,6 +165,25 @@
 		, #{privateDefTicket})
 	</insert>
 
+	<insert id="insertAddTicket2" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+		INSERT INTO p_ticket2
+		( ticket_gbn
+		, ticket
+		, phone_num
+		, agent_code
+		, reg_date
+		, def_ticket
+		, private_def_ticket)
+		VALUES
+		( 'ADD'
+		, #{addTicket}
+		, #{phoneNum}
+		, #{agentCode}
+		, NOW()
+		, #{defTicket}
+		, #{privateDefTicket})
+	</insert>
+
 	<update id="updateUserMinusPoint" parameterType="com.enclouds.enpoint.user.dto.UserDto">
 		UPDATE p_user
 		SET point = point - #{minusPoint}
@@ -187,6 +212,63 @@
 
 	<insert id="insertMinusTicket" parameterType="com.enclouds.enpoint.user.dto.UserDto">
 		INSERT INTO p_ticket
+		( ticket_gbn
+		, ticket
+		, phone_num
+		, agent_code
+		, reg_date
+		, def_ticket
+		, private_def_ticket)
+		VALUES
+		( 'MINUS'
+		, -1
+		, #{phoneNum}
+		, #{agentCode}
+		, NOW()
+		, #{defTicket}
+		, #{privateDefTicket})
+	</insert>
+
+	<insert id="insertMinusTicketAsCnt" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+		INSERT INTO p_ticket
+		( ticket_gbn
+		, ticket
+		, phone_num
+		, agent_code
+		, reg_date
+		, def_ticket
+		, private_def_ticket)
+		VALUES
+		( 'MINUS'
+		, #{minusTicket} * -1
+		, #{phoneNum}
+		, #{agentCode}
+		, NOW()
+		, #{defTicket}
+		, #{privateDefTicket})
+	</insert>
+
+	<insert id="insertMinusTicketAsCnt2" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+		INSERT INTO p_ticket2
+		( ticket_gbn
+		, ticket
+		, phone_num
+		, agent_code
+		, reg_date
+		, def_ticket
+		, private_def_ticket)
+		VALUES
+		( 'MINUS'
+		, #{minusTicket} * -1
+		, #{phoneNum}
+		, #{agentCode}
+		, NOW()
+		, #{defTicket}
+		, #{privateDefTicket})
+	</insert>
+
+	<insert id="insertMinusTicket2" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+		INSERT INTO p_ticket2
 		( ticket_gbn
 		, ticket
 		, phone_num
@@ -240,6 +322,32 @@
 		order by pp.reg_date desc
 	</select>
 
+	<select id="selectTicketHistory" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
+		select case when ticket_gbn = 'ADD' then '적립' else '차감' end as ticketGbnNm
+		, case when ticket_gbn = 'ADD' then format(pt.ticket, 0) else format(pt.ticket * -1, 0) end as ticket
+		, pt.phone_num
+		, pa.agent_name
+		, date_format(pt.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		from p_ticket pt
+		left join p_agent pa on pa.agent_code = pt.agent_code
+		WHERE 1=1
+		AND phone_num = #{phoneNum}
+		order by pt.reg_date desc
+	</select>
+
+	<select id="selectTicketHistory2" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
+		select case when ticket_gbn = 'ADD' then '적립' else '차감' end as ticketGbnNm
+		, case when ticket_gbn = 'ADD' then format(pt.ticket, 0) else format(pt.ticket * -1, 0) end as ticket
+		, pt.phone_num
+		, pa.agent_name
+		, date_format(pt.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		from p_ticket2 pt
+		left join p_agent pa on pa.agent_code = pt.agent_code
+		WHERE 1=1
+		AND phone_num = #{phoneNum}
+		order by pt.reg_date desc
+	</select>
+
 	<select id="getTotalCouponPoint" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
 		select format(coupon_point, 0) as point
 		, coupon_point as pointInt
@@ -266,14 +374,44 @@
 		and phone_num = #{phoneNum}
 	</select>
 
+	<select id="getTotalTicket2" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
+		select format(ticket2, 0) as ticket
+		, ticket2 as ticketInt
+		, (select agent_name from p_agent pa where pa.agent_code = #{agentCode}) as agent_name
+		from p_user pu
+		where 1=1
+		and phone_num = #{phoneNum}
+	</select>
+
 	<select id="selectUserPointListTotalCount" parameterType="com.enclouds.enpoint.user.dto.PointDto" resultType="int">
 		SELECT count(*)
 		FROM p_point
 		WHERE 1=1
-		AND agent_code = #{agentCode}
+		<choose>
+			<when test='agentCode == 1'>
+				<if test="schCond1 != ''">
+					AND agent_code = #{schCond1}
+				</if>
+			</when>
+			<otherwise>
+				AND agent_code = #{agentCode}
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test="schCond2 == 'minus'">
+				AND point_gbn = 'MINUS'
+				AND pp.point = #{schText}
+			</when>
+			<when test="schCond2 == 'add'">
+				AND point_gbn = 'ADD'
+				AND pp.point = #{schText}
+			</when>
+		</choose>
+
 		<![CDATA[
-			and reg_date >= concat(#{schDate}, ' 16:00:00')
-			and reg_date <= concat(date_add(#{schDate}, interval 1 day), ' 10:59:59')
+			and reg_date >= concat(#{schStartDte}, ' 16:00:00')
+			and reg_date <= concat(date_add(#{schEndDte}, interval 1 day), ' 10:59:59')
 		]]>
 	</select>
 
@@ -286,16 +424,41 @@
 		, case when point_gbn = 'MINUS' then pp.point * -1 else 0 end as minusPoint
 		, date_format(pp.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
 		, pp.phone_num
+		, case when length(pp.phone_num) = 10 then concat(concat(SUBSTR(pp.phone_num, 1 ,3), '***'), SUBSTR(pp.phone_num, 7 ,10))
+		when length(pp.phone_num) = 11 then concat(concat(SUBSTR(pp.phone_num, 1 ,4), '***'), SUBSTR(pp.phone_num, 8 ,11))
+		end as phone_num_masking
 		, pu.nick_name
 		, pp.def_point
 		FROM p_point pp
 		LEFT JOIN p_agent pa on pa.agent_code = pp.agent_code
 		LEFT JOIN p_user pu on pu.phone_num = pp.phone_num
 		WHERE 1=1
-		AND pp.agent_code = #{agentCode}
+
+		<choose>
+			<when test='agentCode == 1'>
+				<if test="schCond1 != ''">
+					AND pp.agent_code = #{schCond1}
+				</if>
+			</when>
+			<otherwise>
+				AND pp.agent_code = #{agentCode}
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test="schCond2 == 'minus'">
+				AND point_gbn = 'MINUS'
+				AND pp.point = #{schText}
+			</when>
+			<when test="schCond2 == 'add'">
+				AND point_gbn = 'ADD'
+				AND pp.point = #{schText}
+			</when>
+		</choose>
+
 		<![CDATA[
-			and pp.reg_date >= concat(#{schDate}, ' 16:00:00')
-			and pp.reg_date <= concat(date_add(#{schDate}, interval 1 day), ' 15:59:59')
+			and pp.reg_date >= concat(#{schStartDte}, ' 16:00:00')
+			and pp.reg_date <= concat(date_add(#{schEndDte}, interval 1 day), ' 15:59:59')
 		]]>
 
 		order by pp.reg_date desc
@@ -309,7 +472,28 @@
 		, ifnull(sum(case when point_gbn = 'MINUS' then pp.point else 0 end) * -1, 0) as totalMinusPoint
 		FROM p_point pp
 		WHERE 1=1
-		AND pp.agent_code = #{agentCode}
+		<choose>
+			<when test='agentCode == 1'>
+				<if test="schCond1 != ''">
+					AND pp.agent_code = #{schCond1}
+				</if>
+			</when>
+			<otherwise>
+				AND pp.agent_code = #{agentCode}
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test="schCond2 == 'minus'">
+				AND point_gbn = 'MINUS'
+				AND pp.point = #{schText}
+			</when>
+			<when test="schCond2 == 'add'">
+				AND point_gbn = 'ADD'
+				AND pp.point = #{schText}
+			</when>
+		</choose>
+
 		<![CDATA[
 			and reg_date >= concat(#{schDate}, ' 16:00:00')
 			and reg_date <= concat(date_add(#{schDate}, interval 1 day), ' 15:59:59')
@@ -340,18 +524,24 @@
 	</update>
 
 	<select id="selectUserRankList" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.UserDto">
-		SELECT *
+		SELECT @rownum:=@rownum+1 as ranking, TAB.*
 		from (
 		SELECT nick_name
 		, phone_num
+		, case when length(phone_num) = 10 then concat(concat(SUBSTR(phone_num, 1 ,3), '***'), SUBSTR(phone_num, 7 ,10))
+		when length(phone_num) = 11 then concat(concat(SUBSTR(phone_num, 1 ,4), '***'), SUBSTR(phone_num, 8 ,11))
+		end as phone_num_masking
+		, rank_point
 		, format(rank_point, 0) as rank_point_str
+		, rank_sum_point
 		, format(rank_sum_point, 0) as rank_sum_point_str
 		, date_format(reg_date, '%Y-%m-%d') as regDate
 		, date_format((select max(reg_date) from p_point pp where pp.phone_num = pu.phone_num), '%Y-%m-%d') as maxDate
 		, CAST(rank_point AS signed integer) as intRankPoint
 		, CAST(rank_sum_point AS signed integer) as intRankSumPoint
-		FROM p_user pu
+		FROM p_user pu, (SELECT @rownum:=0) TMP
 		WHERE 1=1
+		AND (rank_point > 0 or rank_sum_point > 0)
 		AND pu.nick_name like '%${schText}%'
 		) TAB
 		<if test="schCond1 == 'week'">
@@ -417,6 +607,13 @@
 		AND phone_num = #{phoneNum}
 	</update>
 
+	<update id="updateUserAddTicket2" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+		UPDATE p_user
+		SET ticket2 = ticket2 + #{addTicket}
+		WHERE 1=1
+		AND phone_num = #{phoneNum}
+	</update>
+
 	<update id="useTicket" parameterType="com.enclouds.enpoint.user.dto.UserDto">
 		UPDATE p_user
 		SET ticket = ticket - 1
@@ -424,24 +621,68 @@
 		AND phone_num = #{phoneNum}
 	</update>
 
+	<update id="useTicketAsCnt" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+		UPDATE p_user
+		SET ticket = ticket - #{minusTicket}
+		WHERE 1=1
+		AND phone_num = #{phoneNum}
+	</update>
+
+	<update id="useTicketAsCnt2" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+		UPDATE p_user
+		SET ticket2 = ticket2 - #{minusTicket}
+		WHERE 1=1
+		AND phone_num = #{phoneNum}
+	</update>
+
+	<update id="useTicket2" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+		UPDATE p_user
+		SET ticket2 = ticket2 - 1
+		WHERE 1=1
+		AND phone_num = #{phoneNum}
+	</update>
+
 	<select id="selectUserTicketRankList" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.UserDto">
-		SELECT *
+		SELECT @rownum:=@rownum+1 as ranking, TAB.*
 		from (
 		SELECT nick_name
 		, phone_num
+		, case when length(phone_num) = 10 then concat(concat(SUBSTR(phone_num, 1 ,3), '***'), SUBSTR(phone_num, 7 ,10))
+		when length(phone_num) = 11 then concat(concat(SUBSTR(phone_num, 1 ,4), '***'), SUBSTR(phone_num, 8 ,11))
+		end as phone_num_masking
 		, date_format(reg_date, '%Y-%m-%d') as regDate
 		, date_format((select max(reg_date) from p_point pp where pp.phone_num = pu.phone_num), '%Y-%m-%d') as maxDate
 		, CAST(ticket AS signed integer) as intRankTicket
+		, CAST(ticket2 AS signed integer) as intRankTicket2
 		, pu.ticket
+		, pu.ticket2
 		, format(ticket, 0) as ticket_str
-		FROM p_user pu
+		, format(ticket2, 0) as ticket_str2
+		FROM p_user pu,  (SELECT @rownum:=0) TMP
 		WHERE 1=1
 		AND pu.nick_name like '%${schText}%'
-		AND pu.ticket > 0
+		AND (pu.ticket > 0 or pu.ticket2 > 0)
 		ORDER BY ticket desc
 		) TAB
-		ORDER BY TAB.intRankTicket desc
+		<if test="schCond1 == 'ticket1'">
+			ORDER BY TAB.intRankTicket desc
+		</if>
+		<if test="schCond1 == 'ticket2'">
+			ORDER BY TAB.intRankTicket2 desc
+		</if>
 	</select>
+
+	<update id="updateUserAddSumRankPoint" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+		UPDATE p_user
+		SET rank_sum_point = rank_sum_point + #{addRankSumPoint}
+		WHERE phone_num = #{phoneNum}
+	</update>
+
+	<update id="updateUserMinusSumRank" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+		UPDATE p_user
+		SET rank_sum_point = rank_sum_point - #{minusRankSumPoint}
+		WHERE phone_num = #{phoneNum}
+	</update>
 
 </mapper>
 
