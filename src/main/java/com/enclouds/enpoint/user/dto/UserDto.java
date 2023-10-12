@@ -21,6 +21,7 @@ public class UserDto extends CommonDto {
     private String point;
     private String ticket;
     private String ticket2;
+    private String ticket3;
     private String loginIp;
     private Integer pointInt;
     private Integer ticketInt;
@@ -42,6 +43,8 @@ public class UserDto extends CommonDto {
 
     private String addCouponPoint;
     private String minusCouponPoint;
+    private String historyCouponCnt;
+    private String totalCouponPoint;
 
     private String memo;
 
@@ -51,6 +54,7 @@ public class UserDto extends CommonDto {
 
     private Integer orgTicket;
     private Integer orgTicket2;
+    private Integer orgTicket3;
     private Integer defTicket;
     private Integer privateDefTicket;
 
@@ -63,6 +67,7 @@ public class UserDto extends CommonDto {
     private String minusRankPoint;
     private String ticketStr;
     private String ticketStr2;
+    private String ticketStr3;
 
     private String couponPoint;
     private Integer orgCouponPoint;
@@ -71,5 +76,7 @@ public class UserDto extends CommonDto {
     private Integer totalRankCnt;
 
     private Integer ranking;
+
+    private String couponGbn;
 
 }

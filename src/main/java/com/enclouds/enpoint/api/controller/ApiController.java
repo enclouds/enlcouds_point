@@ -29,8 +29,11 @@ public class ApiController {
             apiUserRtnDto.setResultCode("0000");
             apiUserRtnDto.setResultMsg("정상");
         }else {
-            apiUserRtnDto.setResultCode("E001");
-            apiUserRtnDto.setResultMsg("조회된 사용자 정보가 없습니다.");
+            ApiUserRtnDto apiUserRtnDto2 = new ApiUserRtnDto();
+            apiUserRtnDto2.setResultCode("E001");
+            apiUserRtnDto2.setResultMsg("조회된 사용자 정보가 없습니다.");
+
+            return apiUserRtnDto2;
         }
 
         return apiUserRtnDto;
@@ -83,6 +86,9 @@ public class ApiController {
         if(result > 0){
             apiRtnDto.setResultCode("0000");
             apiRtnDto.setResultMsg("정상");
+        }else if(result == -1){
+            apiRtnDto.setResultCode("E099");
+            apiRtnDto.setResultMsg("보유 포인트가 차감될 포인트보다 작습니다.");
         }else {
             apiRtnDto.setResultCode("E003");
             apiRtnDto.setResultMsg("차감에 실패 하였습니다.");
@@ -138,6 +144,9 @@ public class ApiController {
         if(result > 0){
             apiRtnDto.setResultCode("0000");
             apiRtnDto.setResultMsg("정상");
+        }else if(result == -1){
+            apiRtnDto.setResultCode("E099");
+            apiRtnDto.setResultMsg("보유 티켓수량이 차감될 티켓 수량 보다 작습니다.");
         }else {
             apiRtnDto.setResultCode("E005");
             apiRtnDto.setResultMsg("티켓 사용에 실패 하였습니다.");
@@ -218,6 +227,24 @@ public class ApiController {
         }
 
         return apiTicketRankListDto;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "/addJackpot")
+    @ResponseBody
+    public ApiRtnDto addJackpot(@RequestBody ApiDto apiDto) throws Exception{
+
+        int result = apiService.addJackpot(apiDto);
+
+        ApiRtnDto apiRtnDto = new ApiRtnDto();
+        if(result > 0){
+            apiRtnDto.setResultCode("0000");
+            apiRtnDto.setResultMsg("정상");
+        }else {
+            apiRtnDto.setResultCode("E005");
+            apiRtnDto.setResultMsg("잭팟 적립에 실패 하였습니다.");
+        }
+
+        return apiRtnDto;
     }
 
 }

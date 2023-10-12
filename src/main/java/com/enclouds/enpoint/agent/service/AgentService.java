@@ -25,17 +25,23 @@ public interface AgentService {
 
     int updateAgentAddTicket2(AgentDto agentDto) throws Exception;
 
+    int updateAgentAddTicket3(AgentDto agentDto) throws Exception;
+
     int updateAgentMinusPoint(AgentDto agentDto) throws Exception;
 
     int updateAgentMinusTicket(AgentDto agentDto) throws Exception;
 
     int updateAgentMinusTicket2(AgentDto agentDto) throws Exception;
 
+    int updateAgentMinusTicket3(AgentDto agentDto) throws Exception;
+
     List<PointDto> selectAgentPointHistory(AgentDto agentDto) throws Exception;
 
     List<PointDto> selectAgentTicketHistory(AgentDto agentDto) throws Exception;
 
     List<PointDto> selectAgentTicketHistory2(AgentDto agentDto) throws Exception;
+
+    List<PointDto> selectAgentTicketHistory3(AgentDto agentDto) throws Exception;
 
     AgentDto selectAgentInfo(AgentDto agentDto) throws Exception;
 

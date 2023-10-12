@@ -16,6 +16,7 @@ public interface ApiMapper {
 
     List<ApiTicketHistoryDto> getTicketHistory1(ApiDto apiDto) throws Exception;
     List<ApiTicketHistoryDto> getTicketHistory2(ApiDto apiDto) throws Exception;
+    List<ApiTicketHistoryDto> getTicketHistory3(ApiDto apiDto) throws Exception;
 
     int addTicket(ApiDto apiDto) throws Exception;
 
@@ -24,5 +25,8 @@ public interface ApiMapper {
     List<ApiRankDto> getRankList(ApiDto apiDto) throws Exception;
 
     List<ApiTicketRankDto> getTicketRankList(ApiDto apiDto) throws Exception;
+
+    int addJackpot(ApiDto apiDto) throws Exception;
+    int insertAddJackpot(ApiDto apiDto) throws Exception;
 
 }

@@ -28,4 +28,6 @@ public interface ApiService {
 
     List<ApiTicketRankDto> getTicketRankList(ApiDto apiDto) throws Exception;
 
+    int addJackpot(ApiDto apiDto) throws Exception;
+
 }

@@ -65,15 +65,19 @@ public class ApiServiceImpl implements ApiService{
 
         PointDto pointDto = userMapper.getTotalPoint(userDto);
 
-        int result = userMapper.updateUserMinusPoint(userDto);
-        if(result > 0){
-            userDto.setPrivateDefPoint(pointDto.getPointInt());
-            userDto.setDefPoint(0);
-            userDto.setAgentCode(16);
-            result = userMapper.insertMinusPoint(userDto);
-        }
+        if(pointDto.getPointInt() < Integer.parseInt(apiDto.getMinusPoint())){
+            return -1;
+        }else {
+            int result = userMapper.updateUserMinusPoint(userDto);
+            if (result > 0) {
+                userDto.setPrivateDefPoint(pointDto.getPointInt());
+                userDto.setDefPoint(0);
+                userDto.setAgentCode(16);
+                result = userMapper.insertMinusPoint(userDto);
+            }
 
-        return result;
+            return result;
+        }
     }
 
     @Override
@@ -84,6 +88,8 @@ public class ApiServiceImpl implements ApiService{
             ticketHistoryDtoList = apiMapper.getTicketHistory1(apiDto);
         }else if(apiDto.getTicketGbn().equals("2")) {
             ticketHistoryDtoList = apiMapper.getTicketHistory2(apiDto);
+        }else if(apiDto.getTicketGbn().equals("3")) {
+            ticketHistoryDtoList = apiMapper.getTicketHistory3(apiDto);
         }
 
         return ticketHistoryDtoList;
@@ -119,6 +125,12 @@ public class ApiServiceImpl implements ApiService{
             if(result > 0){
                 result = userMapper.updateUserAddTicket2(userDto);
             }
+        }else if(apiDto.getTicketGbn().equals("3")){
+            result = userMapper.insertAddTicket3(userDto);
+
+            if(result > 0){
+                result = userMapper.updateUserAddTicket3(userDto);
+            }
         }
 
         return result;
@@ -136,17 +148,41 @@ public class ApiServiceImpl implements ApiService{
         agentDto.setAgentCode(16);
         AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
 
-        PointDto preTicketDto = userMapper.getTotalTicket(userDto);
-        userDto.setDefTicket(agentInfo.getTicketInt());
-        userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
-
         int result = 0;
         if(apiDto.getTicketGbn().equals("1")){
-            userMapper.insertMinusTicketAsCnt(userDto);
-            result = userMapper.useTicketAsCnt(userDto);
+            PointDto preTicketDto = userMapper.getTotalTicket(userDto);
+            userDto.setDefTicket(agentInfo.getTicketInt());
+            userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
+
+            if(preTicketDto.getTicketInt() < Integer.parseInt(apiDto.getMinusTicket())){
+                return -1;
+            }else {
+                userMapper.insertMinusTicketAsCnt(userDto);
+                result = userMapper.useTicketAsCnt(userDto);
+            }
         }else if(apiDto.getTicketGbn().equals("2")){
-            userMapper.insertMinusTicketAsCnt2(userDto);
-            result = userMapper.useTicketAsCnt2(userDto);
+
+            PointDto preTicketDto = userMapper.getTotalTicket2(userDto);
+            userDto.setDefTicket(agentInfo.getTicketInt());
+            userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
+
+            if(preTicketDto.getTicketInt() < Integer.parseInt(apiDto.getMinusTicket())){
+                return -1;
+            }else {
+                userMapper.insertMinusTicketAsCnt2(userDto);
+                result = userMapper.useTicketAsCnt2(userDto);
+            }
+        }else if(apiDto.getTicketGbn().equals("3")){
+            PointDto preTicketDto = userMapper.getTotalTicket3(userDto);
+            userDto.setDefTicket(agentInfo.getTicketInt());
+            userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
+
+            if(preTicketDto.getTicketInt() < Integer.parseInt(apiDto.getMinusTicket())){
+                return -1;
+            }else {
+                userMapper.insertMinusTicketAsCnt3(userDto);
+                result = userMapper.useTicketAsCnt3(userDto);
+            }
         }
 
         return result;
@@ -182,6 +218,18 @@ public class ApiServiceImpl implements ApiService{
         List<ApiTicketRankDto> apiTicketRankDto = apiMapper.getTicketRankList(apiDto);
 
         return apiTicketRankDto;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int addJackpot(ApiDto apiDto) throws Exception {
+
+        int result = apiMapper.addJackpot(apiDto);
+        if(result > 0){
+            result = apiMapper.insertAddJackpot(apiDto);
+        }
+
+        return result;
     }
 
 }

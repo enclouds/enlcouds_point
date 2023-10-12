@@ -128,6 +128,25 @@ public class AgentServiceImpl implements AgentService{
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    public int updateAgentAddTicket3(AgentDto agentDto) throws Exception {
+        try {
+            int result = -1;
+
+            //총 티켓 증가
+            result = agentMapper.updateAgentAddTicket3(agentDto);
+
+            //포인트 내역 생성
+            if(result > 0){
+                agentMapper.insertAddAgentTicket3(agentDto);
+            }
+            return result;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public int updateAgentMinusPoint(AgentDto agentDto) throws Exception {
         try {
             int result = -1;
@@ -193,6 +212,26 @@ public class AgentServiceImpl implements AgentService{
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateAgentMinusTicket3(AgentDto agentDto) throws Exception {
+        try {
+            int result = -1;
+
+            //총 티켓 차감
+            result = agentMapper.updateAgentMinusTicket3(agentDto);
+
+            //티켓 차감 내역 생성
+            if(result > 0){
+                agentMapper.insertMinusAgentTicket3(agentDto);
+            }
+
+            return result;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public List<PointDto> selectAgentPointHistory(AgentDto agentDto) throws Exception {
         return agentMapper.selectAgentPointHistory(agentDto);
     }
@@ -205,6 +244,11 @@ public class AgentServiceImpl implements AgentService{
     @Override
     public List<PointDto> selectAgentTicketHistory2(AgentDto agentDto) throws Exception {
         return agentMapper.selectAgentTicketHistory2(agentDto);
+    }
+
+    @Override
+    public List<PointDto> selectAgentTicketHistory3(AgentDto agentDto) throws Exception {
+        return agentMapper.selectAgentTicketHistory3(agentDto);
     }
 
     @Override

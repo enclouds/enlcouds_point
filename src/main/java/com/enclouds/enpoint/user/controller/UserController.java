@@ -7,6 +7,7 @@ import com.enclouds.enpoint.cmm.util.DateUtils;
 import com.enclouds.enpoint.cmm.util.StringUtils;
 import com.enclouds.enpoint.jackpot.dto.JackpotDto;
 import com.enclouds.enpoint.jackpot.service.JackpotService;
+import com.enclouds.enpoint.user.dto.CouponDto;
 import com.enclouds.enpoint.user.dto.LoginDto;
 import com.enclouds.enpoint.user.dto.PointDto;
 import com.enclouds.enpoint.user.dto.UserDto;
@@ -352,6 +353,41 @@ public class UserController {
       return result;
    }
 
+   @PostMapping("/user/useTicket3Ajax")
+   public @ResponseBody Map<String, Object> useTicket3Ajax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+      int resultCode;
+      Map<String, Object> result = new HashMap<String, Object>();
+
+      try {
+         if (principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            userDto.setAgentCode(userInfo.getAgentCode());
+
+            resultCode = customUserService.useTicket3(userDto);
+
+            if (resultCode > 0) {
+               result.put("resultCode", 0);
+               result.put("resultMsg", "정상적으로 사용 되었습니다.");
+            } else {
+               result.put("resultCode", -1);
+               result.put("resultMsg", "사용에 실패 하였습니다.");
+            }
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      return result;
+   }
+
    @PostMapping("/user/updateUserAddCouponPointAjax")
    public @ResponseBody Map<String, Object> updateUserAddCouponPointAjax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
       Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -444,6 +480,46 @@ public class UserController {
             userDto.setAgentCode(userInfo.getAgentCode());
 
             resultCode = customUserService.updateUserAddTicket2(userDto);
+
+            if (resultCode > 0) {
+               result.put("resultCode", 0);
+               result.put("resultMsg", "정상적으로 적립 되었습니다.");
+            } else {
+               if(resultCode == -2){
+                  result.put("resultCode", -2);
+                  result.put("resultMsg", "적립할 티켓이 보유티켓보다 작습니다. 확인 바랍니다.");
+               }else {
+                  result.put("resultCode", -1);
+                  result.put("resultMsg", "적립에 실패 하였습니다.");
+               }
+            }
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      return result;
+   }
+
+   @PostMapping("/user/updateUserAddTicket3Ajax")
+   public @ResponseBody Map<String, Object> updateUserAddTicket3Ajax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+      int resultCode;
+      Map<String, Object> result = new HashMap<String, Object>();
+
+      try {
+         if (principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            userDto.setAgentCode(userInfo.getAgentCode());
+
+            resultCode = customUserService.updateUserAddTicket3(userDto);
 
             if (resultCode > 0) {
                result.put("resultCode", 0);
@@ -781,6 +857,41 @@ public class UserController {
       return result;
    }
 
+   @PostMapping("/user/updateUserMinusTicket3Ajax")
+   public @ResponseBody Map<String, Object> updateUserMinusTicket3Ajax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+      int resultCode;
+      Map<String, Object> result = new HashMap<String, Object>();
+
+      try {
+         if (principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            userDto.setAgentCode(userInfo.getAgentCode());
+
+            resultCode = customUserService.updateUserMinusTicket3(userDto);
+
+            if (resultCode > 0) {
+               result.put("resultCode", 0);
+               result.put("resultMsg", "정상적으로 차감 되었습니다.");
+            } else {
+               result.put("resultCode", -1);
+               result.put("resultMsg", "차감에 실패 하였습니다.");
+            }
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      return result;
+   }
+
    @PostMapping("/user/updateUserMinusCouponPointAjax")
    public @ResponseBody Map<String, Object> updateUserMinusCouponPointAjax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
       Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -873,6 +984,33 @@ public class UserController {
             List<PointDto> historyPointList = customUserService.selectPointHistory(userDto);
 
             result.put("historyPointList", historyPointList);
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      return result;
+   }
+
+   @PostMapping("/user/selectCouponHistoryAjax")
+   public @ResponseBody Map<String, Object> selectCouponHistoryAjax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+
+      Map<String, Object> result = new HashMap<String, Object>();
+
+      try {
+         if (principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            List<CouponDto> historyCouponList = customUserService.selectCouponHistory(userDto);
+
+            result.put("historyCouponList", historyCouponList);
          }
       } catch (ClassCastException cce){
          DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;

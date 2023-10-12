@@ -96,8 +96,8 @@ public class KakaoExampleController {
             variables.put("#{담당자 전화번호5}", "010-5895-0167");
             variables.put("#{지점6}", "대구 광장코아");
             variables.put("#{담당자 전화번호6}", "010-6301-0569");
-            variables.put("#{지점7}", "");
-            variables.put("#{담당자 전화번호7}", "");
+            variables.put("#{지점7}", "부산 동래점");
+            variables.put("#{담당자 전화번호7}", "010-2732-1268");
             variables.put("#{지점8}", "");
             variables.put("#{담당자 전화번호8}", "");
             variables.put("#{지점9}", "");
@@ -123,8 +123,8 @@ public class KakaoExampleController {
             variables.put("#{담당자 전화번호5}", "010-5895-0167");
             variables.put("#{지점6}", "대구 광장코아");
             variables.put("#{담당자 전화번호6}", "010-6301-0569");
-            variables.put("#{지점7}", "");
-            variables.put("#{담당자 전화번호7}", "");
+            variables.put("#{지점7}", "부산 동래점");
+            variables.put("#{담당자 전화번호7}", "010-2732-1268");
             variables.put("#{지점8}", "");
             variables.put("#{담당자 전화번호8}", "");
             variables.put("#{지점9}", "");

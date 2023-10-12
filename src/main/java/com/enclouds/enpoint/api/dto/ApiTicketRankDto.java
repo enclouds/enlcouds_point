@@ -9,5 +9,6 @@ public class ApiTicketRankDto {
     private String nickName;
     private String ticketStr;
     private String ticketStr2;
+    private String ticketStr3;
 
 }

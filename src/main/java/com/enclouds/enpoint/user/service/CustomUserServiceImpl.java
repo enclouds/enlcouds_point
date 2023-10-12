@@ -4,6 +4,7 @@ import com.enclouds.enpoint.agent.dto.AgentDto;
 import com.enclouds.enpoint.agent.service.AgentService;
 import com.enclouds.enpoint.cmm.paging.PaginationInfo;
 import com.enclouds.enpoint.nurigo.KakaoDto;
+import com.enclouds.enpoint.user.dto.CouponDto;
 import com.enclouds.enpoint.user.dto.PointDto;
 import com.enclouds.enpoint.user.dto.UserDto;
 import com.enclouds.enpoint.user.mapper.UserMapper;
@@ -162,8 +163,24 @@ public class CustomUserServiceImpl implements CustomUserService{
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int updateUserAddCouponPoint(UserDto userDto) throws Exception {
-        return userMapper.updateUserAddCouponPoint(userDto);
+        try {
+            int result = userMapper.updateUserAddCouponPoint(userDto);
+
+            /**
+             * 쿠폰 적립 후 히스토리 생성
+             */
+            if (result > 0) {
+                userDto.setCouponGbn("ADD");
+                userDto.setHistoryCouponCnt(userDto.getAddCouponPoint());
+                result = userMapper.insertCouponHistory(userDto);
+            }
+
+            return result;
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -277,6 +294,61 @@ public class CustomUserServiceImpl implements CustomUserService{
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateUserAddTicket3(UserDto userDto) throws Exception {
+        try {
+            int result = -1;
+
+            PointDto preTicketDto = userMapper.getTotalTicket3(userDto);
+            AgentDto agentDto = new AgentDto();
+            agentDto.setAgentCode(userDto.getAgentCode());
+            AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
+
+            if(agentInfo.getTicketInt3() < Integer.parseInt(userDto.getAddTicket())){
+                result = -2;
+                return  result;
+            }
+
+            //총 티켓 증가
+            result = userMapper.updateUserAddTicket3(userDto);
+
+            //티켓 내역 생성
+            if(result > 0){
+                userDto.setDefTicket(agentInfo.getTicketInt3());
+                userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
+                result = userMapper.insertAddTicket3(userDto);
+
+                /*if(result > 0){
+                    //카카오톡 전송
+                    PointDto pointDto = userMapper.getTotalPoint(userDto);
+
+                    KakaoDto kakaoDto = new KakaoDto();
+                    kakaoDto.setTemplateId("KA01TP221011062400156k4kpTZGoW5f");
+                    kakaoDto.setRcvNum(userDto.getPhoneNum());
+                    kakaoDto.setAddPoint(userDto.getAddPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
+                    kakaoDto.setTotalPoint(pointDto.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
+                    kakaoDto.setStoreNm(pointDto.getAgentName());
+
+                    KakaoExampleController kakaoExampleController = new KakaoExampleController();
+                    kakaoExampleController.sendOneAta(kakaoDto);
+                }*/
+
+                //해당 가맹점 티켓 차감
+                if(result > 0){
+                    AgentDto agentDto1 = new AgentDto();
+                    agentDto1.setAgentCode(userDto.getAgentCode());
+                    agentDto1.setMinusTicket(userDto.getAddTicket());
+
+                    agentService.updateAgentMinusTicket3(agentDto1);
+                }
+            }
+            return result;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public int updateUserAddRankPoint(UserDto userDto) throws Exception {
         return userMapper.updateUserAddRankPoint(userDto);
     }
@@ -309,6 +381,21 @@ public class CustomUserServiceImpl implements CustomUserService{
         userMapper.insertMinusTicket2(userDto);
 
         return userMapper.useTicket2(userDto);
+    }
+
+    @Override
+    public int useTicket3(UserDto userDto) throws Exception {
+        AgentDto agentDto = new AgentDto();
+        agentDto.setAgentCode(userDto.getAgentCode());
+        AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
+
+        PointDto preTicketDto = userMapper.getTotalTicket3(userDto);
+
+        userDto.setDefTicket(agentInfo.getTicketInt());
+        userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
+        userMapper.insertMinusTicket3(userDto);
+
+        return userMapper.useTicket3(userDto);
     }
 
     @Override
@@ -399,6 +486,21 @@ public class CustomUserServiceImpl implements CustomUserService{
     }
 
     @Override
+    public int updateUserMinusTicket3(UserDto userDto) throws Exception {
+        AgentDto agentDto = new AgentDto();
+        agentDto.setAgentCode(userDto.getAgentCode());
+        AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
+
+        PointDto preTicketDto = userMapper.getTotalTicket3(userDto);
+
+        userDto.setDefTicket(agentInfo.getTicketInt());
+        userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
+        userMapper.insertMinusTicketAsCnt3(userDto);
+
+        return userMapper.useTicketAsCnt3(userDto);
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public int updateUserMinusCouponPoint(UserDto userDto) throws Exception {
         try {
@@ -413,6 +515,12 @@ public class CustomUserServiceImpl implements CustomUserService{
 
             //총 포인트 차감
             result = userMapper.updateUserMinusCouponPoint(userDto);
+
+            if(result > 0){
+                userDto.setCouponGbn("MINUS");
+                userDto.setHistoryCouponCnt(userDto.getMinusCouponPoint());
+                result = userMapper.insertCouponHistory(userDto);
+            }
 
             return result;
         }catch(Exception e){
@@ -525,6 +633,11 @@ public class CustomUserServiceImpl implements CustomUserService{
     @Override
     public List<PointDto> selectTicketHistory2(UserDto userDto) throws Exception {
         return userMapper.selectTicketHistory2(userDto);
+    }
+
+    @Override
+    public List<CouponDto> selectCouponHistory(UserDto userDto) throws Exception {
+        return userMapper.selectCouponHistory(userDto);
     }
 
     @Override

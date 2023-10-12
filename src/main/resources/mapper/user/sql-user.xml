@@ -12,6 +12,7 @@
 		, format(point, 0) as point
 		, format(ticket, 0) as ticket
 		, format(ticket2, 0) as ticket2
+		, format(ticket3, 0) as ticket3
 		, point as pointInt
 		, agent_gbn
 		, agent_up_code
@@ -57,8 +58,10 @@
 		, point as org_point
 		, format(ticket, 0) as ticket
 		, format(ticket2, 0) as ticket2
+		, format(ticket3, 0) as ticket3
 		, ticket as org_ticket
 		, ticket2 as org_ticket2
+		, ticket3 as org_ticket3
 		, date_format(reg_date, '%Y-%m-%d') as regDate
 		, memo
 		, date_format((select max(reg_date) from p_point pp where pp.phone_num = pu.phone_num), '%Y-%m-%d %H:%m:%s') as maxDate
@@ -184,6 +187,25 @@
 		, #{privateDefTicket})
 	</insert>
 
+	<insert id="insertAddTicket3" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+		INSERT INTO p_ticket3
+		( ticket_gbn
+		, ticket
+		, phone_num
+		, agent_code
+		, reg_date
+		, def_ticket
+		, private_def_ticket)
+		VALUES
+		( 'ADD'
+		, #{addTicket}
+		, #{phoneNum}
+		, #{agentCode}
+		, NOW()
+		, #{defTicket}
+		, #{privateDefTicket})
+	</insert>
+
 	<update id="updateUserMinusPoint" parameterType="com.enclouds.enpoint.user.dto.UserDto">
 		UPDATE p_user
 		SET point = point - #{minusPoint}
@@ -267,8 +289,46 @@
 		, #{privateDefTicket})
 	</insert>
 
+	<insert id="insertMinusTicketAsCnt3" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+		INSERT INTO p_ticket3
+		( ticket_gbn
+		, ticket
+		, phone_num
+		, agent_code
+		, reg_date
+		, def_ticket
+		, private_def_ticket)
+		VALUES
+		( 'MINUS'
+		, #{minusTicket} * -1
+		, #{phoneNum}
+		, #{agentCode}
+		, NOW()
+		, #{defTicket}
+		, #{privateDefTicket})
+	</insert>
+
 	<insert id="insertMinusTicket2" parameterType="com.enclouds.enpoint.user.dto.UserDto">
 		INSERT INTO p_ticket2
+		( ticket_gbn
+		, ticket
+		, phone_num
+		, agent_code
+		, reg_date
+		, def_ticket
+		, private_def_ticket)
+		VALUES
+		( 'MINUS'
+		, -1
+		, #{phoneNum}
+		, #{agentCode}
+		, NOW()
+		, #{defTicket}
+		, #{privateDefTicket})
+	</insert>
+
+	<insert id="insertMinusTicket3" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+		INSERT INTO p_ticket3
 		( ticket_gbn
 		, ticket
 		, phone_num
@@ -377,6 +437,15 @@
 	<select id="getTotalTicket2" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
 		select format(ticket2, 0) as ticket
 		, ticket2 as ticketInt
+		, (select agent_name from p_agent pa where pa.agent_code = #{agentCode}) as agent_name
+		from p_user pu
+		where 1=1
+		and phone_num = #{phoneNum}
+	</select>
+
+	<select id="getTotalTicket3" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
+		select format(ticket3, 0) as ticket
+		, ticket3 as ticketInt
 		, (select agent_name from p_agent pa where pa.agent_code = #{agentCode}) as agent_name
 		from p_user pu
 		where 1=1
@@ -559,6 +628,32 @@
 		AND phone_num = #{phoneNum}
 	</update>
 
+	<insert id="insertCouponHistory" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+		INSERT INTO p_coupon_history
+		( phone_num
+		, coupon_gbn
+		, coupon_cnt
+		, reg_date
+		, pre_coupon_cnt )
+		VALUES
+		( #{phoneNum}
+		, #{couponGbn}
+		, #{historyCouponCnt}
+		, NOW()
+		, #{totalCouponPoint})
+	</insert>
+
+	<select id="selectCouponHistory" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.CouponDto">
+		SELECT coupon_gbn
+		, coupon_cnt
+		, pre_coupon_cnt
+		, date_format(reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		FROM p_coupon_history
+		WHERE 1=1
+		AND phone_num = #{phoneNum}
+		ORDER BY reg_date DESC
+	</select>
+
 	<update id="updateUserMinusCouponPoint" parameterType="com.enclouds.enpoint.user.dto.UserDto">
 		UPDATE p_user
 		SET coupon_point = coupon_point - #{minusCouponPoint}
@@ -614,6 +709,13 @@
 		AND phone_num = #{phoneNum}
 	</update>
 
+	<update id="updateUserAddTicket3" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+		UPDATE p_user
+		SET ticket3 = ticket3 + #{addTicket}
+		WHERE 1=1
+		AND phone_num = #{phoneNum}
+	</update>
+
 	<update id="useTicket" parameterType="com.enclouds.enpoint.user.dto.UserDto">
 		UPDATE p_user
 		SET ticket = ticket - 1
@@ -635,9 +737,23 @@
 		AND phone_num = #{phoneNum}
 	</update>
 
+	<update id="useTicketAsCnt3" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+		UPDATE p_user
+		SET ticket3 = ticket3 - #{minusTicket}
+		WHERE 1=1
+		AND phone_num = #{phoneNum}
+	</update>
+
 	<update id="useTicket2" parameterType="com.enclouds.enpoint.user.dto.UserDto">
 		UPDATE p_user
 		SET ticket2 = ticket2 - 1
+		WHERE 1=1
+		AND phone_num = #{phoneNum}
+	</update>
+
+	<update id="useTicket3" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+		UPDATE p_user
+		SET ticket3 = ticket3 - 1
 		WHERE 1=1
 		AND phone_num = #{phoneNum}
 	</update>
@@ -654,14 +770,17 @@
 		, date_format((select max(reg_date) from p_point pp where pp.phone_num = pu.phone_num), '%Y-%m-%d') as maxDate
 		, CAST(ticket AS signed integer) as intRankTicket
 		, CAST(ticket2 AS signed integer) as intRankTicket2
+		, CAST(ticket3 AS signed integer) as intRankTicket3
 		, pu.ticket
 		, pu.ticket2
+		, pu.ticket3
 		, format(ticket, 0) as ticket_str
 		, format(ticket2, 0) as ticket_str2
+		, format(ticket3, 0) as ticket_str3
 		FROM p_user pu,  (SELECT @rownum:=0) TMP
 		WHERE 1=1
 		AND pu.nick_name like '%${schText}%'
-		AND (pu.ticket > 0 or pu.ticket2 > 0)
+		AND (pu.ticket > 0 or pu.ticket2 > 0 or pu.ticket3 > 0)
 		ORDER BY ticket desc
 		) TAB
 		<if test="schCond1 == 'ticket1'">
@@ -669,6 +788,9 @@
 		</if>
 		<if test="schCond1 == 'ticket2'">
 			ORDER BY TAB.intRankTicket2 desc
+		</if>
+		<if test="schCond1 == 'ticket3'">
+			ORDER BY TAB.intRankTicket3 desc
 		</if>
 	</select>
 

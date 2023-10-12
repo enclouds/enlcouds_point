@@ -61,6 +61,20 @@
 		order by pt.reg_date desc
 	</select>
 
+	<select id="getTicketHistory3" parameterType="com.enclouds.enpoint.api.dto.ApiDto" resultType="com.enclouds.enpoint.api.dto.ApiTicketHistoryDto">
+		select ticket_gbn
+		, case when ticket_gbn = 'ADD' then '적립' else '차감' end as ticketGbnNm
+		, case when ticket_gbn = 'ADD' then format(pt.ticket, 0) else format(pt.ticket * -1, 0) end as ticket
+		, pt.phone_num
+		, pa.agent_name
+		, date_format(pt.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		from p_ticket3 pt
+		left join p_agent pa on pa.agent_code = pt.agent_code
+		WHERE 1=1
+		AND phone_num = #{phoneNum}
+		order by pt.reg_date desc
+	</select>
+
 	<select id="getRankList" parameterType="com.enclouds.enpoint.api.dto.ApiDto" resultType="com.enclouds.enpoint.api.dto.ApiRankDto">
 		SELECT @rownum:=@rownum+1 as ranking, TAB.*
 		from (
@@ -101,13 +115,16 @@
 		, date_format((select max(reg_date) from p_point pp where pp.phone_num = pu.phone_num), '%Y-%m-%d') as maxDate
 		, CAST(ticket AS signed integer) as intRankTicket
 		, CAST(ticket2 AS signed integer) as intRankTicket2
+		, CAST(ticket3 AS signed integer) as intRankTicket3
 		, pu.ticket
 		, pu.ticket2
+		, pu.ticket3
 		, format(ticket, 0) as ticket_str
 		, format(ticket2, 0) as ticket_str2
+		, format(ticket3, 0) as ticket_str3
 		FROM p_user pu,  (SELECT @rownum:=0) TMP
 		WHERE 1=1
-		AND (pu.ticket > 0 or pu.ticket2 > 0)
+		AND (pu.ticket > 0 or pu.ticket2 > 0 or pu.ticket3 > 0)
 		ORDER BY ticket desc
 		) TAB
 		<if test="schCond1 == 'ticket1'">
@@ -116,7 +133,34 @@
 		<if test="schCond1 == 'ticket2'">
 			ORDER BY TAB.intRankTicket2 desc
 		</if>
+		<if test="schCond1 == 'ticket3'">
+			ORDER BY TAB.intRankTicket3 desc
+		</if>
 	</select>
+
+	<update id="addJackpot" parameterType="com.enclouds.enpoint.api.dto.ApiDto">
+		UPDATE p_jackpot
+		SET jackpot_prize = jackpot_prize + 10000
+		WHERE 1=1
+		AND seq = 3
+	</update>
+
+	<insert id="insertAddJackpot" parameterType="com.enclouds.enpoint.jackpot.dto.JackpotDto">
+		INSERT INTO p_jackpot_alert
+		(jackpot_seq
+		,alert_content
+		,reg_date
+		,reg_agent_code
+		,jackpot_prize
+		,jackpot_gbn)
+		VALUES
+		(3
+		,'[킹스라운지 온라인점]에서 JackPot 추가 10,000 적립 되었습니다.'
+		,NOW()
+		,16
+		,10000
+		,'A')
+	</insert>
 
 </mapper>
 

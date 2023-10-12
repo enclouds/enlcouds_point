@@ -13,6 +13,7 @@ public class ApiUserRtnDto extends ApiRtnDto{
     private Integer rankSumPoint;
     private Integer ticket;
     private Integer ticket2;
+    private Integer ticket3;
     private Integer rank;
     private Integer totalRankCnt;
 

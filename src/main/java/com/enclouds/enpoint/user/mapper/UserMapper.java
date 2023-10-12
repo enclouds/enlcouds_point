@@ -1,5 +1,6 @@
 package com.enclouds.enpoint.user.mapper;
 
+import com.enclouds.enpoint.user.dto.CouponDto;
 import com.enclouds.enpoint.user.dto.PointDto;
 import com.enclouds.enpoint.user.dto.UserDto;
 import org.apache.ibatis.annotations.Mapper;
@@ -65,13 +66,19 @@ public interface UserMapper {
 
     int insertAddTicket2(UserDto userDto) throws Exception;
 
+    int insertAddTicket3(UserDto userDto) throws Exception;
+
     int insertMinusTicket(UserDto userDto) throws Exception;
 
     int insertMinusTicket2(UserDto userDto) throws Exception;
 
+    int insertMinusTicket3(UserDto userDto) throws Exception;
+
     int useTicket(UserDto userDto) throws Exception;
 
     int useTicket2(UserDto userDto) throws Exception;
+
+    int useTicket3(UserDto userDto) throws Exception;
 
     int updateUserMinusPoint(UserDto userDto) throws Exception;
 
@@ -87,11 +94,15 @@ public interface UserMapper {
 
     List<PointDto> selectTicketHistory2(UserDto userDto) throws Exception;
 
+    List<CouponDto> selectCouponHistory(UserDto userDto) throws Exception;
+
     PointDto getTotalPoint(UserDto userDto) throws Exception;
 
     PointDto getTotalTicket(UserDto userDto) throws Exception;
 
     PointDto getTotalTicket2(UserDto userDto) throws Exception;
+
+    PointDto getTotalTicket3(UserDto userDto) throws Exception;
 
     PointDto getTotalCouponPoint(UserDto userDto) throws Exception;
 
@@ -119,6 +130,8 @@ public interface UserMapper {
 
     int updateUserAddTicket2(UserDto userDto) throws Exception;
 
+    int updateUserAddTicket3(UserDto userDto) throws Exception;
+
     int updateUserAddSumRankPoint(UserDto userDto) throws Exception;
 
     int updateUserMinusSumRank(UserDto userDto) throws Exception;
@@ -130,5 +143,11 @@ public interface UserMapper {
     int insertMinusTicketAsCnt2(UserDto userDto) throws Exception;
 
     int useTicketAsCnt2(UserDto userDto) throws Exception;
+
+    int insertMinusTicketAsCnt3(UserDto userDto) throws Exception;
+
+    int useTicketAsCnt3(UserDto userDto) throws Exception;
+
+    int insertCouponHistory(UserDto userDto) throws Exception;
 
 }

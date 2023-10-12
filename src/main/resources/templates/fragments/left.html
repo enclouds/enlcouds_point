@@ -13,7 +13,8 @@
                 <p class="name">
                     <em style="font-size: smaller;" th:text="|${userInfo.agentName}님 ${userInfo.point}P|"></em></br>
                     <em style="font-size: smaller;" th:text="|Ticket 1 : ${userInfo.ticket}장|"></em></br>
-                    <em style="font-size: smaller;" th:text="|Ticket 2 : ${userInfo.ticket2}장|"></em>
+                    <em style="font-size: smaller;" th:text="|Ticket 2 : ${userInfo.ticket2}장|"></em></br>
+                    <em style="font-size: smaller;" th:text="|Ticket 3 : ${userInfo.ticket3}장|"></em>
                 </p>
                 <span class="btn_group">
                     <button type="button" class="btn_logout" th:onclick="|location.href='@{/logout}'|">로그아웃</button>

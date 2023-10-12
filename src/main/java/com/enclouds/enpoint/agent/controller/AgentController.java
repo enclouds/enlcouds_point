@@ -279,6 +279,39 @@ public class AgentController {
         return result;
     }
 
+    @PostMapping("/updateAgentAddTicket3Ajax")
+    public @ResponseBody Map<String, Object> updateAgentAddTicket3Ajax(@ModelAttribute("agentDto") AgentDto agentDto) throws Exception{
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDto userInfo = null;
+        String userId = "";
+        int resultCode;
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            if (principal != "anonymousUser") {
+                UserDetails userDetails = (UserDetails) principal;
+                userId = userDetails.getUsername();
+                userInfo = userService.getUserInfo(userId);
+
+                resultCode = agentService.updateAgentAddTicket3(agentDto);
+
+                if (resultCode > 0) {
+                    result.put("resultCode", 0);
+                    result.put("resultMsg", "정상적으로 적립 되었습니다.");
+                } else {
+                    result.put("resultCode", -1);
+                    result.put("resultMsg", "적립에 실패 하였습니다.");
+                }
+            }
+        } catch (ClassCastException cce){
+            DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+            userId = auth2User.getName();
+            userInfo = userService.getUserInfo(userId);
+        }
+
+        return result;
+    }
+
     @PostMapping("/updateAgentMinusPointAjax")
     public @ResponseBody Map<String, Object> updateAgentMinusPointAjax(@ModelAttribute("agentDto") AgentDto agentDto) throws Exception{
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -379,6 +412,39 @@ public class AgentController {
         return result;
     }
 
+    @PostMapping("/updateAgentMinusTicket3Ajax")
+    public @ResponseBody Map<String, Object> updateAgentMinusTicket3Ajax(@ModelAttribute("agentDto") AgentDto agentDto) throws Exception{
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDto userInfo = null;
+        String userId = "";
+        int resultCode;
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            if (principal != "anonymousUser") {
+                UserDetails userDetails = (UserDetails) principal;
+                userId = userDetails.getUsername();
+                userInfo = userService.getUserInfo(userId);
+
+                resultCode = agentService.updateAgentMinusTicket3(agentDto);
+
+                if (resultCode > 0) {
+                    result.put("resultCode", 0);
+                    result.put("resultMsg", "정상적으로 차감 되었습니다.");
+                } else {
+                    result.put("resultCode", -1);
+                    result.put("resultMsg", "차감에 실패 하였습니다.");
+                }
+            }
+        } catch (ClassCastException cce){
+            DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+            userId = auth2User.getName();
+            userInfo = userService.getUserInfo(userId);
+        }
+
+        return result;
+    }
+
     @PostMapping("/selectAgentPointHistoryAjax")
     public @ResponseBody Map<String, Object> selectAgentPointHistoryAjax(@ModelAttribute("agentDto") AgentDto agentDto) throws Exception{
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -448,6 +514,33 @@ public class AgentController {
                 userInfo = userService.getUserInfo(userId);
 
                 List<PointDto> historyTicketList = agentService.selectAgentTicketHistory2(agentDto);
+
+                result.put("historyTicketList", historyTicketList);
+            }
+        } catch (ClassCastException cce){
+            DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+            userId = auth2User.getName();
+            userInfo = userService.getUserInfo(userId);
+        }
+
+        return result;
+    }
+
+    @PostMapping("/selectAgentTicketHistory3Ajax")
+    public @ResponseBody Map<String, Object> selectAgentTicketHistory3Ajax(@ModelAttribute("agentDto") AgentDto agentDto) throws Exception{
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDto userInfo = null;
+        String userId = "";
+
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            if (principal != "anonymousUser") {
+                UserDetails userDetails = (UserDetails) principal;
+                userId = userDetails.getUsername();
+                userInfo = userService.getUserInfo(userId);
+
+                List<PointDto> historyTicketList = agentService.selectAgentTicketHistory3(agentDto);
 
                 result.put("historyTicketList", historyTicketList);
             }
