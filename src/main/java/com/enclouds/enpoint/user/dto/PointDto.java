@@ -25,6 +25,8 @@ public class PointDto extends CommonDto {
 
     private int pointInt;
     private int ticketInt;
+    private String couponPoint;
+    private String ticket2;
 
     private int totalMinusPoint;
     private int totalAddPoint;

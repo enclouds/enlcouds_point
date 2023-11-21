@@ -52,6 +52,22 @@ public class CustomUserServiceImpl implements CustomUserService{
     }
 
     @Override
+    public List<CouponDto> selectUserCouponList(CouponDto couponDto) throws Exception {
+        int userCouponTotalCount = userMapper.selectUserCouponListTotalCount(couponDto);
+
+        PaginationInfo paginationInfo = new PaginationInfo(couponDto);
+        paginationInfo.setTotalRecordCount(userCouponTotalCount);
+        couponDto.setPaginationInfo(paginationInfo);
+
+        return userMapper.selectUserCouponList(couponDto);
+    }
+
+    @Override
+    public CouponDto selectUserCouponTotal(CouponDto couponDto) throws Exception {
+        return userMapper.selectUserCouponTotal(couponDto);
+    }
+
+    @Override
     public int selectDuplUser(UserDto userDto) throws Exception {
         return userMapper.selectDuplUser(userDto);
     }
@@ -137,8 +153,11 @@ public class CustomUserServiceImpl implements CustomUserService{
                     PointDto pointDto = userMapper.getTotalPoint(userDto);
 
                     KakaoDto kakaoDto = new KakaoDto();
-                    kakaoDto.setTemplateId("KA01TP230727025205254EyRZK4vF8Qi");
+                    kakaoDto.setTemplateId("KA01TP231109023623527IQaBnvMp51G");
+                    kakaoDto.setNickName(pointDto.getNickName());
                     kakaoDto.setRcvNum(userDto.getPhoneNum());
+                    kakaoDto.setCouponPoint(pointDto.getCouponPoint());
+                    kakaoDto.setTicket2(pointDto.getTicket2());
                     kakaoDto.setAddPoint(userDto.getAddPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
                     kakaoDto.setTotalPoint(pointDto.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
                     kakaoDto.setStoreNm(pointDto.getAgentName());
@@ -429,8 +448,11 @@ public class CustomUserServiceImpl implements CustomUserService{
                     PointDto pointDto2 = userMapper.getTotalPoint(userDto);
 
                     KakaoDto kakaoDto = new KakaoDto();
-                    kakaoDto.setTemplateId("KA01TP230727025242092bgsDIX9xp9W");
+                    kakaoDto.setTemplateId("KA01TP231106074813097cHJ4QneyYUg");
+                    kakaoDto.setNickName(pointDto2.getNickName());
                     kakaoDto.setRcvNum(userDto.getPhoneNum());
+                    kakaoDto.setCouponPoint(pointDto2.getCouponPoint());
+                    kakaoDto.setTicket2(pointDto2.getTicket2());
                     kakaoDto.setMinusPoint(userDto.getMinusPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
                     kakaoDto.setTotalPoint(pointDto2.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
                     kakaoDto.setStoreNm(pointDto2.getAgentName());

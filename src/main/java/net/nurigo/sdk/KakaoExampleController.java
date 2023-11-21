@@ -79,11 +79,14 @@ public class KakaoExampleController {
             variables.put("#{인증번호}", kakaoDto.getAuthCode());
             kakaoOption.setVariables(variables);
             //New 적립
-        }else if(kakaoDto.getTemplateId().equals("KA01TP230727025205254EyRZK4vF8Qi")){
+        }else if(kakaoDto.getTemplateId().equals("KA01TP231109023623527IQaBnvMp51G")){
             HashMap<String, String> variables = new HashMap<>();
+            variables.put("#{닉네임}", kakaoDto.getNickName());
             variables.put("#{상점명}", kakaoDto.getStoreNm());
             variables.put("#{적립포인트}", kakaoDto.getAddPoint());
             variables.put("#{누적포인트}", kakaoDto.getTotalPoint());
+            variables.put("#{시드티켓}", kakaoDto.getTicket2());
+            variables.put("#{외식쿠폰}", kakaoDto.getCouponPoint());
             variables.put("#{지점1}", "창원 상남점");
             variables.put("#{담당자 전화번호1}", "010-4383-4561");
             variables.put("#{지점2}", "창원 봉곡점");
@@ -98,19 +101,22 @@ public class KakaoExampleController {
             variables.put("#{담당자 전화번호6}", "010-6301-0569");
             variables.put("#{지점7}", "부산 동래점");
             variables.put("#{담당자 전화번호7}", "010-2732-1268");
-            variables.put("#{지점8}", "");
-            variables.put("#{담당자 전화번호8}", "");
-            variables.put("#{지점9}", "");
-            variables.put("#{담당자 전화번호9}", "");
+            variables.put("#{지점8}", "부산 덕천점");
+            variables.put("#{담당자 전화번호8}", "010-7591-4963");
+            variables.put("#{지점9}", "마산 합성점");
+            variables.put("#{담당자 전화번호9}", "010-3919-6360");
             variables.put("#{지점10}", "");
             variables.put("#{담당자 전화번호10}", "");
             kakaoOption.setVariables(variables);
             //New 차감
-        }else if(kakaoDto.getTemplateId().equals("KA01TP230727025242092bgsDIX9xp9W")){
+        }else if(kakaoDto.getTemplateId().equals("KA01TP231106074813097cHJ4QneyYUg")){
             HashMap<String, String> variables = new HashMap<>();
+            variables.put("#{닉네임}", kakaoDto.getNickName());
             variables.put("#{상점명}", kakaoDto.getStoreNm());
             variables.put("#{사용포인트}", kakaoDto.getMinusPoint());
             variables.put("#{누적포인트}", kakaoDto.getTotalPoint());
+            variables.put("#{시드티켓}", kakaoDto.getTicket2());
+            variables.put("#{외식쿠폰}", kakaoDto.getCouponPoint());
             variables.put("#{지점1}", "창원 상남점");
             variables.put("#{담당자 전화번호1}", "010-4383-4561");
             variables.put("#{지점2}", "창원 봉곡점");
@@ -125,10 +131,10 @@ public class KakaoExampleController {
             variables.put("#{담당자 전화번호6}", "010-6301-0569");
             variables.put("#{지점7}", "부산 동래점");
             variables.put("#{담당자 전화번호7}", "010-2732-1268");
-            variables.put("#{지점8}", "");
-            variables.put("#{담당자 전화번호8}", "");
-            variables.put("#{지점9}", "");
-            variables.put("#{담당자 전화번호9}", "");
+            variables.put("#{지점8}", "부산 덕천점");
+            variables.put("#{담당자 전화번호8}", "010-7591-4963");
+            variables.put("#{지점9}", "마산 합성점");
+            variables.put("#{담당자 전화번호9}", "010-3919-6360");
             variables.put("#{지점10}", "");
             variables.put("#{담당자 전화번호10}", "");
             kakaoOption.setVariables(variables);

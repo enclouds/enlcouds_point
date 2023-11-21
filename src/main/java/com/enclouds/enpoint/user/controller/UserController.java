@@ -112,6 +112,8 @@ public class UserController {
                userDto.setSchCond1("nick");
             }
 
+            userDto.setId(userId);
+
             List<UserDto> userList = customUserService.selectCustomUserList(userDto);
             mv.addObject("userList", userList);
 
@@ -1080,6 +1082,69 @@ public class UserController {
 
       mv.addObject("userInfo", userInfo);
       mv.addObject("params", pointDto);
+
+      return mv;
+   }
+
+   @RequestMapping(value = "/user/coupon/list", method = RequestMethod.GET)
+   public ModelAndView userCouponList(HttpServletResponse response, @ModelAttribute CouponDto couponDto) throws Exception{
+      ModelAndView mv = new ModelAndView("user/coupon/list");
+
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+
+      try {
+         if(principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            mv.addObject("agentTotalList", agentService.selectAgentTotalListAsAG());
+
+            couponDto.setAgentCode(String.valueOf(userInfo.getAgentCode()));
+
+            String startDateStr = DateUtils.addDay(DateUtils.getToday(), -7);
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+            Date startDateDte = format.parse(startDateStr);
+            SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+            String startDate = format2.format(startDateDte);
+
+            if(StringUtils.isEmpty(couponDto.getSchStartDte())){
+               couponDto.setSchStartDte(startDate);
+            }
+
+            Date todayDate = format.parse(DateUtils.getToday());
+            String today = format2.format(todayDate);
+
+            if(StringUtils.isEmpty(couponDto.getSchEndDte())){
+               couponDto.setSchEndDte(today);
+            }
+
+            if(StringUtils.isEmpty(couponDto.getSchCond1())){
+               couponDto.setSchCond1("");
+            }
+
+            if(StringUtils.isEmpty(couponDto.getSchCond2())){
+               couponDto.setSchCond2("");
+            }
+
+            List<CouponDto> userCouponList = customUserService.selectUserCouponList(couponDto);
+            mv.addObject("userCouponList", userCouponList);
+
+            CouponDto totalCoupon = customUserService.selectUserCouponTotal(couponDto);
+            mv.addObject("totalCoupon", totalCoupon);
+         }else {
+            return new ModelAndView("redirect:/");
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      mv.addObject("userInfo", userInfo);
+      mv.addObject("params", couponDto);
 
       return mv;
    }

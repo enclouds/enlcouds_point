@@ -11,5 +11,19 @@ public class CouponDto extends CommonDto {
     private String couponCnt;
     private String preCouponCnt;
     private String regDate;
+    private String agentName;
+
+    private String agentCode;
+    private String couponGbnNm;
+
+    private int minusCoupon;
+    private int addCoupon;
+
+    private String phoneNum;
+    private String phoneNumMasking;
+    private String nickName;
+
+    private int totalMinusCoupon;
+    private int totalAddCoupon;
 
 }

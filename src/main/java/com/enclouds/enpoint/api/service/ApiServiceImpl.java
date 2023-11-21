@@ -232,4 +232,9 @@ public class ApiServiceImpl implements ApiService{
         return result;
     }
 
+    @Override
+    public List<ApiBannerDto> getBannerList() throws Exception {
+        return apiMapper.getBannerList();
+    }
+
 }

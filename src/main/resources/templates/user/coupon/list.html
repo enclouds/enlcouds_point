@@ -9,7 +9,7 @@
 <!-- container S -->
 <div class="container">
     <!-- header S -->
-    <div th:replace="/fragments/left.html :: fragment-left('m2', '/user/point/list')"></div>
+    <div th:replace="/fragments/left.html :: fragment-left('m2', '/user/coupon/list')"></div>
     <!-- header E -->
 
     <!-- content S -->
@@ -17,10 +17,10 @@
         <div class="con_top">
             <ul>
                 <li>회원관리</li>
-                <li>포인트 적립/차감 목록</li>
+                <li>외식쿠폰 적립/차감 목록</li>
             </ul>
         </div>
-        <p class="page_info">포인트 적립/차감 목록</p>
+        <p class="page_info">외식쿠폰 적립/차감 목록</p>
 
         <form id="schFrm">
             <div class="search_option">
@@ -58,18 +58,18 @@
                     <th sec:authorize="hasRole('ROLE_AGENT')" scope="col">전화번호</th>
                     <th scope="col">적립</th>
                     <th scope="col">차감</th>
-                    <th scope="col">이전 포인트</th>
+                    <th scope="col">이전 쿠폰장수</th>
                     <th scope="col">등록일자</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="list:${userPointList}">
+                <tr th:each="list:${userCouponList}">
                     <td th:text="${list.nickName}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" th:text="${list.phoneNum}"></td>
                     <td sec:authorize="hasRole('ROLE_AGENT')" th:text="${list.phoneNumMasking}"></td>
-                    <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatInteger(list.addPoint, 0, 'COMMA')}"></td>
-                    <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatInteger(list.minusPoint, 0, 'COMMA')}"></td>
-                    <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatInteger(list.defPoint, 0, 'COMMA')}"></td>
+                    <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatInteger(list.addCoupon, 0, 'COMMA')}"></td>
+                    <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatInteger(list.minusCoupon, 0, 'COMMA')}"></td>
+                    <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatInteger(list.preCouponCnt, 0, 'COMMA')}"></td>
                     <td th:text="${list.regDate}"></td>
                 </tr>
                 </tbody>

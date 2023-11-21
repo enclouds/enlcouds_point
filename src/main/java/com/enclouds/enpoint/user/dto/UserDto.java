@@ -25,6 +25,7 @@ public class UserDto extends CommonDto {
     private String loginIp;
     private Integer pointInt;
     private Integer ticketInt;
+    private String couponPoint;
     private String phoneNumMasking;
 
     private String phoneNum;
@@ -69,7 +70,6 @@ public class UserDto extends CommonDto {
     private String ticketStr2;
     private String ticketStr3;
 
-    private String couponPoint;
     private Integer orgCouponPoint;
 
     private Integer rank;

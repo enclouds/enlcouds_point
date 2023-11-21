@@ -27,6 +27,11 @@
         $("#loginFrm").submit();
     }
 
+    function fnGameDownload(){
+        $("#loginFrm").attr("action", "/download/game");
+        $("#loginFrm").submit();
+    }
+
   </script>
 
 </head>
@@ -62,10 +67,14 @@
           </div>
           <P class="bt_link">
             <a href="javascript:fnAppDownload();">APP 다운로드</a>
+            <a href="javascript:fnGameDownload();">킹스포커 다운로드</a>
           </p>
 
         </div>
-        <p class="copy" style="margin-top: 10px;text-align: right;">Copyright 2023 Enclouds_Nal'K', All Right Reserved.</p>
+        <p style="margin-top: 10px;text-align: right;font-weight:bold;font-size:12px;">상호 (주)킹스라운지 | 대표 이정원 | 사업자등록번호 620-88-02625<br><br>
+          주소 경남 창원시 성산구 중앙대로 85 리제스타워 213호 | 대표전화 1811-7595<br><br>
+          통신 판매 업자 신고번호 제 2023-창원의창-0513 호 | 게임물 등급허가번호 제 CC-OM-230921-005 호<br><br></p>
+        <p class="copy" style="margin-top: 10px;text-align: right;">Copyright 2022 (주)Kings Lounge, All Right Reserved.</p>
       </div>
     </div>
     <!-- content E -->

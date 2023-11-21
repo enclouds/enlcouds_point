@@ -17,6 +17,10 @@ public interface CustomUserService {
 
     PointDto selectUserPointTotal(PointDto pointDto) throws Exception;
 
+    List<CouponDto> selectUserCouponList(CouponDto couponDto) throws Exception;
+
+    CouponDto selectUserCouponTotal(CouponDto couponDto) throws Exception;
+
     int selectDuplUser(UserDto userDto) throws Exception;
 
     int insertUser(UserDto userDto) throws Exception;

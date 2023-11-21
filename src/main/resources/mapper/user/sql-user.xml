@@ -39,6 +39,9 @@
 		select count(*)
 		from p_user pu
 		where 1=1
+		<if test="id != 'hunters'">
+			and phone_num not in ('01099077879', '01022306360')
+		</if>
 		<if test="schCond1 == 'nick'">
 			AND pu.nick_name like '%${schText}%'
 		</if>
@@ -71,6 +74,10 @@
 		, rank_sum_point
 		from p_user pu
 		where 1=1
+
+		<if test="id != 'hunters'">
+			and phone_num not in ('01099077879', '01022306360')
+		</if>
 
 		<if test="schCond1 == 'nick'">
 			AND pu.nick_name like '%${schText}%'
@@ -379,6 +386,7 @@
 		left join p_agent pa on pp.agent_code = pa.agent_code
 		WHERE 1=1
 		AND phone_num = #{phoneNum}
+		AND pp.reg_date BETWEEN DATE_ADD(NOW(), INTERVAL -3 MONTH) AND NOW()
 		order by pp.reg_date desc
 	</select>
 
@@ -392,6 +400,7 @@
 		left join p_agent pa on pa.agent_code = pt.agent_code
 		WHERE 1=1
 		AND phone_num = #{phoneNum}
+		AND pp.reg_date BETWEEN DATE_ADD(NOW(), INTERVAL -3 MONTH) AND NOW()
 		order by pt.reg_date desc
 	</select>
 
@@ -405,6 +414,7 @@
 		left join p_agent pa on pa.agent_code = pt.agent_code
 		WHERE 1=1
 		AND phone_num = #{phoneNum}
+		AND pp.reg_date BETWEEN DATE_ADD(NOW(), INTERVAL -3 MONTH) AND NOW()
 		order by pt.reg_date desc
 	</select>
 
@@ -420,6 +430,9 @@
 		select format(point, 0) as point
 		, point as pointInt
 		, (select agent_name from p_agent pa where pa.agent_code = #{agentCode}) as agent_name
+		, format(coupon_point, 0) as coupon_point
+		, format(ticket2, 0) as ticket2
+		, nick_name
 		from p_user pu
 		where 1=1
 		and phone_num = #{phoneNum}
@@ -484,6 +497,38 @@
 		]]>
 	</select>
 
+	<select id="selectUserCouponListTotalCount" parameterType="com.enclouds.enpoint.user.dto.CouponDto" resultType="int">
+		SELECT count(*)
+		FROM p_coupon_history
+		WHERE 1=1
+		<choose>
+			<when test='agentCode == 1'>
+				<if test="schCond1 != ''">
+					AND agent_code = #{schCond1}
+				</if>
+			</when>
+			<otherwise>
+				AND agent_code = #{agentCode}
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test="schCond2 == 'minus'">
+				AND coupon_gbn = 'MINUS'
+				AND coupon_cnt = #{schText}
+			</when>
+			<when test="schCond2 == 'add'">
+				AND coupon_gbn = 'ADD'
+				AND coupon_cnt = #{schText}
+			</when>
+		</choose>
+
+		<![CDATA[
+			and reg_date >= concat(#{schStartDte}, ' 16:00:00')
+			and reg_date <= concat(date_add(#{schEndDte}, interval 1 day), ' 10:59:59')
+		]]>
+	</select>
+
 	<select id="selectUserPointList" parameterType="com.enclouds.enpoint.user.dto.PointDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
 		SELECT pp.seq
 		, pa.agent_name
@@ -536,6 +581,60 @@
 		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
 	</select>
 
+	<select id="selectUserCouponList" parameterType="com.enclouds.enpoint.user.dto.CouponDto" resultType="com.enclouds.enpoint.user.dto.CouponDto">
+		select seq
+		, pa.agent_name
+		, pch .agent_code
+		, case when coupon_gbn = 'ADD' then '적립' when 'HUMAN' then '휴먼' else '차감' end as couponGbnNm
+		, case when coupon_gbn = 'ADD' then pch.coupon_cnt  else 0 end as addCoupon
+		, case when coupon_gbn = 'MINUS' then pch.coupon_cnt * -1 else 0 end as minusCoupon
+		, date_format(pch.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		, pch.phone_num
+		, case when length(pch.phone_num ) = 10 then concat(concat(SUBSTR(pch.phone_num , 1 ,3), '***'), SUBSTR(pch.phone_num , 7 ,10))
+		when length(pch.phone_num ) = 11 then concat(concat(SUBSTR(pch.phone_num , 1 ,4), '***'), SUBSTR(pch.phone_num , 8 ,11))
+		end as phone_num_masking
+		, pu.nick_name
+		, pch.pre_coupon_cnt
+		from p_coupon_history pch
+		LEFT JOIN p_agent pa on pa.agent_code = pch.agent_code
+		LEFT JOIN p_user pu on pu.phone_num = pch.phone_num
+		where 1=1
+		and pch.agent_code is not null
+		and pch.agent_code != ''
+
+		<choose>
+			<when test='agentCode == 1'>
+				<if test="schCond1 != ''">
+					AND pch.agent_code = #{schCond1}
+				</if>
+			</when>
+			<otherwise>
+				AND pch.agent_code = #{agentCode}
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test="schCond2 == 'minus'">
+				AND coupon_gbn = 'MINUS'
+				AND pch.coupon_cnt = #{schText}
+			</when>
+			<when test="schCond2 == 'add'">
+				AND coupon_gbn = 'ADD'
+				AND pch.coupon_cnt = #{schText}
+			</when>
+		</choose>
+
+		<![CDATA[
+			and pch.reg_date >= concat(#{schStartDte}, ' 16:00:00')
+			and pch.reg_date <= concat(date_add(#{schEndDte}, interval 1 day), ' 15:59:59')
+		]]>
+
+		order by pch.reg_date desc
+
+		LIMIT
+		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
+	</select>
+
 	<select id="selectUserPointTotal" parameterType="com.enclouds.enpoint.user.dto.PointDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
 		SELECT ifnull(sum(case when point_gbn = 'ADD' then pp.point else 0 end), 0) as totalAddPoint
 		, ifnull(sum(case when point_gbn = 'MINUS' then pp.point else 0 end) * -1, 0) as totalMinusPoint
@@ -560,6 +659,39 @@
 			<when test="schCond2 == 'add'">
 				AND point_gbn = 'ADD'
 				AND pp.point = #{schText}
+			</when>
+		</choose>
+
+		<![CDATA[
+			and reg_date >= concat(#{schDate}, ' 16:00:00')
+			and reg_date <= concat(date_add(#{schDate}, interval 1 day), ' 15:59:59')
+		]]>
+	</select>
+
+	<select id="selectUserCouponTotal" parameterType="com.enclouds.enpoint.user.dto.CouponDto" resultType="com.enclouds.enpoint.user.dto.CouponDto">
+		SELECT ifnull(sum(case when coupon_gbn = 'ADD' then coupon_cnt else 0 end), 0) as totalAddCoupon
+		, ifnull(sum(case when coupon_gbn = 'MINUS' then coupon_cnt else 0 end) * -1, 0) as totalMinusCoupon
+		FROM p_coupon_history
+		WHERE 1=1
+		<choose>
+			<when test='agentCode == 1'>
+				<if test="schCond1 != ''">
+					AND agent_code = #{schCond1}
+				</if>
+			</when>
+			<otherwise>
+				AND agent_code = #{agentCode}
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test="schCond2 == 'minus'">
+				AND coupon_gbn = 'MINUS'
+				AND coupon_cnt = #{schText}
+			</when>
+			<when test="schCond2 == 'add'">
+				AND coupon_gbn = 'ADD'
+				AND coupon_cnt = #{schText}
 			</when>
 		</choose>
 
@@ -634,24 +766,29 @@
 		, coupon_gbn
 		, coupon_cnt
 		, reg_date
-		, pre_coupon_cnt )
+		, pre_coupon_cnt
+		, agent_code)
 		VALUES
 		( #{phoneNum}
 		, #{couponGbn}
 		, #{historyCouponCnt}
 		, NOW()
-		, #{totalCouponPoint})
+		, replace(#{totalCouponPoint}, ',', '')
+		, #{agentCode})
 	</insert>
 
 	<select id="selectCouponHistory" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.CouponDto">
-		SELECT coupon_gbn
-		, coupon_cnt
-		, pre_coupon_cnt
-		, date_format(reg_date, '%Y-%m-%d %H:%i:%s') as regDate
-		FROM p_coupon_history
+		SELECT pch.coupon_gbn
+		, pch.coupon_cnt
+		, pch.pre_coupon_cnt
+		, date_format(pch.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		, ifnull(pa.agent_name, '') as agentName
+		FROM p_coupon_history pch
+		left join p_agent pa on pa.agent_code = pch.agent_code
 		WHERE 1=1
-		AND phone_num = #{phoneNum}
-		ORDER BY reg_date DESC
+		AND pch.phone_num = #{phoneNum}
+		AND pch.reg_date BETWEEN DATE_ADD(NOW(), INTERVAL -3 MONTH) AND NOW()
+		ORDER BY pch.reg_date DESC
 	</select>
 
 	<update id="updateUserMinusCouponPoint" parameterType="com.enclouds.enpoint.user.dto.UserDto">

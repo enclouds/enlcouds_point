@@ -82,7 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.csrf().disable();
 
         httpSecurity.sessionManagement()
-                .maximumSessions(10)
+                .maximumSessions(100)
                 .maxSessionsPreventsLogin(true)
                 .expiredUrl("/duplicated-login")
                 .sessionRegistry(sessionRegistry());

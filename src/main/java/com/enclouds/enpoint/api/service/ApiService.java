@@ -30,4 +30,6 @@ public interface ApiService {
 
     int addJackpot(ApiDto apiDto) throws Exception;
 
+    List<ApiBannerDto> getBannerList() throws Exception;
+
 }

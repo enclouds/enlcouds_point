@@ -6,6 +6,7 @@ import com.enclouds.enpoint.user.dto.UserDto;
 import com.enclouds.enpoint.user.service.CustomUserService;
 import com.enclouds.enpoint.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -245,6 +246,30 @@ public class ApiController {
         }
 
         return apiRtnDto;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "/getBannerList")
+    @ResponseBody
+    public ApiBannerListDto getBannerList() throws Exception{
+
+        List<ApiBannerDto> bannerDtoList = apiService.getBannerList();
+
+        ApiBannerListDto apiBannerListDto = new ApiBannerListDto();
+        if(bannerDtoList != null){
+            if(bannerDtoList.isEmpty()) {
+                apiBannerListDto.setResultCode("E001");
+                apiBannerListDto.setResultMsg("조회된 정보가 없습니다.");
+            }else {
+                apiBannerListDto.setBannerList(bannerDtoList);
+                apiBannerListDto.setResultCode("0000");
+                apiBannerListDto.setResultMsg("정상");
+            }
+        }else {
+            apiBannerListDto.setResultCode("E001");
+            apiBannerListDto.setResultMsg("조회된 정보가 없습니다.");
+        }
+
+        return apiBannerListDto;
     }
 
 }

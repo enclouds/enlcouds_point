@@ -29,4 +29,6 @@ public interface ApiMapper {
     int addJackpot(ApiDto apiDto) throws Exception;
     int insertAddJackpot(ApiDto apiDto) throws Exception;
 
+    List<ApiBannerDto> getBannerList() throws Exception;
+
 }

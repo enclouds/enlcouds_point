@@ -162,6 +162,13 @@
 		,'A')
 	</insert>
 
+	<select id="getBannerList" resultType="com.enclouds.enpoint.api.dto.ApiBannerDto">
+		select url
+		from p_img
+		where 1=1
+		and use_yn = 'Y'
+	</select>
+
 </mapper>
 
 
