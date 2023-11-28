@@ -69,6 +69,8 @@ public interface CustomUserService {
 
     List<PointDto> selectTicketHistory2(UserDto userDto) throws Exception;
 
+    List<PointDto> selectTicketHistory3(UserDto userDto) throws Exception;
+
     List<CouponDto> selectCouponHistory(UserDto userDto) throws Exception;
 
     int updateUserAddCouponPoint(UserDto userDto) throws Exception;

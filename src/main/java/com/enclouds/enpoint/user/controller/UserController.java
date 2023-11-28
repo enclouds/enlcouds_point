@@ -1273,6 +1273,33 @@ public class UserController {
       return result;
    }
 
+   @PostMapping("/user/ticket/selectTicketHistory3Ajax")
+   public @ResponseBody Map<String, Object> selectTicketHistory3Ajax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+
+      Map<String, Object> result = new HashMap<String, Object>();
+
+      try {
+         if (principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            List<PointDto> historyTicketList = customUserService.selectTicketHistory3(userDto);
+
+            result.put("historyTicketList", historyTicketList);
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      return result;
+   }
+
    @RequestMapping(value = "/user/privacy", method = RequestMethod.GET)
    public ModelAndView userPrivacy(HttpServletResponse response, @ModelAttribute UserDto userDto) throws Exception{
       ModelAndView mv = new ModelAndView("user/privacy");

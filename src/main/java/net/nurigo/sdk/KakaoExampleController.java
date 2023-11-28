@@ -79,13 +79,15 @@ public class KakaoExampleController {
             variables.put("#{인증번호}", kakaoDto.getAuthCode());
             kakaoOption.setVariables(variables);
             //New 적립
-        }else if(kakaoDto.getTemplateId().equals("KA01TP231109023623527IQaBnvMp51G")){
+        }else if(kakaoDto.getTemplateId().equals("KA01TP231127074830060CQH0Bq6e7I5")){
             HashMap<String, String> variables = new HashMap<>();
             variables.put("#{닉네임}", kakaoDto.getNickName());
             variables.put("#{상점명}", kakaoDto.getStoreNm());
             variables.put("#{적립포인트}", kakaoDto.getAddPoint());
             variables.put("#{누적포인트}", kakaoDto.getTotalPoint());
-            variables.put("#{시드티켓}", kakaoDto.getTicket2());
+            variables.put("#{주간티켓}", kakaoDto.getTicket1());
+            variables.put("#{프리티켓}", kakaoDto.getTicket2());
+            variables.put("#{씨티티켓}", kakaoDto.getTicket3());
             variables.put("#{외식쿠폰}", kakaoDto.getCouponPoint());
             variables.put("#{지점1}", "창원 상남점");
             variables.put("#{담당자 전화번호1}", "010-4383-4561");
@@ -109,13 +111,15 @@ public class KakaoExampleController {
             variables.put("#{담당자 전화번호10}", "");
             kakaoOption.setVariables(variables);
             //New 차감
-        }else if(kakaoDto.getTemplateId().equals("KA01TP231106074813097cHJ4QneyYUg")){
+        }else if(kakaoDto.getTemplateId().equals("KA01TP231127074911495jJtEBsek5Wq")){
             HashMap<String, String> variables = new HashMap<>();
             variables.put("#{닉네임}", kakaoDto.getNickName());
             variables.put("#{상점명}", kakaoDto.getStoreNm());
-            variables.put("#{사용포인트}", kakaoDto.getMinusPoint());
+            variables.put("#{적립포인트}", kakaoDto.getMinusPoint());
             variables.put("#{누적포인트}", kakaoDto.getTotalPoint());
-            variables.put("#{시드티켓}", kakaoDto.getTicket2());
+            variables.put("#{주간티켓}", kakaoDto.getTicket1());
+            variables.put("#{프리티켓}", kakaoDto.getTicket2());
+            variables.put("#{씨티티켓}", kakaoDto.getTicket3());
             variables.put("#{외식쿠폰}", kakaoDto.getCouponPoint());
             variables.put("#{지점1}", "창원 상남점");
             variables.put("#{담당자 전화번호1}", "010-4383-4561");

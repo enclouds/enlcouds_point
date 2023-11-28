@@ -263,7 +263,7 @@
             </div>
             <div class="modal-body">
                 <div class="form_box">
-                    <p class="tb_tit">티켓 1 정보</p>
+                    <p class="tb_tit">주간 티켓 정보</p>
                     <table class="form">
                         <colgroup>
                             <col width="20%;">
@@ -313,7 +313,7 @@
             </div>
             <div class="modal-body">
                 <div class="form_box">
-                    <p class="tb_tit">티켓 1 정보</p>
+                    <p class="tb_tit">주간 티켓 정보</p>
                     <table class="form">
                         <colgroup>
                             <col width="20%;">
@@ -363,7 +363,7 @@
             </div>
             <div class="modal-body">
                 <div class="form_box">
-                    <p class="tb_tit">티켓 2 정보</p>
+                    <p class="tb_tit">프리 티켓 정보</p>
                     <table class="form">
                         <colgroup>
                             <col width="20%;">
@@ -413,7 +413,7 @@
             </div>
             <div class="modal-body">
                 <div class="form_box">
-                    <p class="tb_tit">티켓 3 정보</p>
+                    <p class="tb_tit">씨티 티켓 정보</p>
                     <table class="form">
                         <colgroup>
                             <col width="20%;">
@@ -463,7 +463,7 @@
             </div>
             <div class="modal-body">
                 <div class="form_box">
-                    <p class="tb_tit">티켓 2 정보</p>
+                    <p class="tb_tit">프리 티켓 정보</p>
                     <table class="form">
                         <colgroup>
                             <col width="20%;">
@@ -513,7 +513,7 @@
             </div>
             <div class="modal-body">
                 <div class="form_box">
-                    <p class="tb_tit">티켓 3 정보</p>
+                    <p class="tb_tit">씨티 티켓 정보</p>
                     <table class="form">
                         <colgroup>
                             <col width="20%;">
@@ -873,12 +873,12 @@
                     <th scope="col" colspan="3" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >외식 쿠폰 처리</th>
                     <th scope="col" colspan="2">승점</th>
                     <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >승점 처리</th>
-                    <th scope="col" rowspan="2">총 티켓1</th>
-                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >Ticket1 처리</th>
-                    <th scope="col" rowspan="2">총 티켓2</th>
-                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >Ticket2 처리</th>
-                    <th scope="col" rowspan="2">총 티켓3</th>
-                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >Ticket3 처리</th>
+                    <th scope="col" rowspan="2">총 주간 티켓</th>
+                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >주간 티켓 처리</th>
+                    <th scope="col" rowspan="2">총 프리 티켓</th>
+                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >프리 티켓 처리</th>
+                    <th scope="col" rowspan="2">총 씨티 티켓</th>
+                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >씨티 티켓 처리</th>
                     <th scope="col" rowspan="2">메모</th>
                     <th scope="col" rowspan="2">등록 일자</th>
                     <th scope="col" rowspan="2">최근 방문 일자</th>
@@ -938,24 +938,24 @@
                     </td>
                     <td th:text="${list.ticket}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket}]])">적립(티켓1)</button>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket}]])">적립(주간티켓)</button>
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn red" th:if="${list.ticket}>0" th:onclick="javascript:fnTicketUse([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket}]])">차감(티켓1)</button>
+                        <button type="button" class="tb_btn red" th:if="${list.ticket}>0" th:onclick="javascript:fnTicketUse([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket}]])">차감(주간티켓)</button>
                     </td>
                     <td th:text="${list.ticket2}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket2([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket2}]])">적립(티켓2)</button>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket2([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket2}]])">적립(프리티켓)</button>
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn red" th:if="${list.ticket2}>0" th:onclick="javascript:fnTicketUse2([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket2}]])">차감(티켓2)</button>
+                        <button type="button" class="tb_btn red" th:if="${list.ticket2}>0" th:onclick="javascript:fnTicketUse2([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket2}]])">차감(프리티켓)</button>
                     </td>
                     <td th:text="${list.ticket3}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket3([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket3}]])">적립(티켓3)</button>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket3([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket3}]])">적립(씨티티켓)</button>
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn red" th:if="${list.ticket3}>0" th:onclick="javascript:fnTicketUse3([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket3}]])">차감(티켓3)</button>
+                        <button type="button" class="tb_btn red" th:if="${list.ticket3}>0" th:onclick="javascript:fnTicketUse3([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket3}]])">차감(씨티티켓)</button>
                     </td>
                     <td>
                         <button type="button" class="tb_btn green" th:if="${list.memo} != null and ${list.memo} != ''" th:onclick="javascript:fnMemoPopup([[${list.memo}]])">메모</button>

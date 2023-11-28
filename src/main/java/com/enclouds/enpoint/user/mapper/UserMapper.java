@@ -100,6 +100,8 @@ public interface UserMapper {
 
     List<PointDto> selectTicketHistory2(UserDto userDto) throws Exception;
 
+    List<PointDto> selectTicketHistory3(UserDto userDto) throws Exception;
+
     List<CouponDto> selectCouponHistory(UserDto userDto) throws Exception;
 
     PointDto getTotalPoint(UserDto userDto) throws Exception;

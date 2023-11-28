@@ -153,11 +153,13 @@ public class CustomUserServiceImpl implements CustomUserService{
                     PointDto pointDto = userMapper.getTotalPoint(userDto);
 
                     KakaoDto kakaoDto = new KakaoDto();
-                    kakaoDto.setTemplateId("KA01TP231109023623527IQaBnvMp51G");
+                    kakaoDto.setTemplateId("KA01TP231127074830060CQH0Bq6e7I5");
                     kakaoDto.setNickName(pointDto.getNickName());
                     kakaoDto.setRcvNum(userDto.getPhoneNum());
                     kakaoDto.setCouponPoint(pointDto.getCouponPoint());
+                    kakaoDto.setTicket1(pointDto.getTicket1());
                     kakaoDto.setTicket2(pointDto.getTicket2());
+                    kakaoDto.setTicket3(pointDto.getTicket3());
                     kakaoDto.setAddPoint(userDto.getAddPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
                     kakaoDto.setTotalPoint(pointDto.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
                     kakaoDto.setStoreNm(pointDto.getAgentName());
@@ -448,11 +450,13 @@ public class CustomUserServiceImpl implements CustomUserService{
                     PointDto pointDto2 = userMapper.getTotalPoint(userDto);
 
                     KakaoDto kakaoDto = new KakaoDto();
-                    kakaoDto.setTemplateId("KA01TP231106074813097cHJ4QneyYUg");
+                    kakaoDto.setTemplateId("KA01TP231127074911495jJtEBsek5Wq");
                     kakaoDto.setNickName(pointDto2.getNickName());
                     kakaoDto.setRcvNum(userDto.getPhoneNum());
                     kakaoDto.setCouponPoint(pointDto2.getCouponPoint());
+                    kakaoDto.setTicket1(pointDto2.getTicket1());
                     kakaoDto.setTicket2(pointDto2.getTicket2());
+                    kakaoDto.setTicket3(pointDto2.getTicket3());
                     kakaoDto.setMinusPoint(userDto.getMinusPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
                     kakaoDto.setTotalPoint(pointDto2.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
                     kakaoDto.setStoreNm(pointDto2.getAgentName());
@@ -655,6 +659,11 @@ public class CustomUserServiceImpl implements CustomUserService{
     @Override
     public List<PointDto> selectTicketHistory2(UserDto userDto) throws Exception {
         return userMapper.selectTicketHistory2(userDto);
+    }
+
+    @Override
+    public List<PointDto> selectTicketHistory3(UserDto userDto) throws Exception {
+        return userMapper.selectTicketHistory3(userDto);
     }
 
     @Override

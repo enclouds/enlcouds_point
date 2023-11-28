@@ -418,6 +418,20 @@
 		order by pt.reg_date desc
 	</select>
 
+	<select id="selectTicketHistory3" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
+		select case when ticket_gbn = 'ADD' then '적립' else '차감' end as ticketGbnNm
+		, case when ticket_gbn = 'ADD' then format(pt.ticket, 0) else format(pt.ticket * -1, 0) end as ticket
+		, pt.phone_num
+		, pa.agent_name
+		, date_format(pt.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		from p_ticket3 pt
+		left join p_agent pa on pa.agent_code = pt.agent_code
+		WHERE 1=1
+		AND phone_num = #{phoneNum}
+		AND pp.reg_date BETWEEN DATE_ADD(NOW(), INTERVAL -3 MONTH) AND NOW()
+		order by pt.reg_date desc
+	</select>
+
 	<select id="getTotalCouponPoint" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
 		select format(coupon_point, 0) as point
 		, coupon_point as pointInt
@@ -431,7 +445,9 @@
 		, point as pointInt
 		, (select agent_name from p_agent pa where pa.agent_code = #{agentCode}) as agent_name
 		, format(coupon_point, 0) as coupon_point
+		, format(ticket, 0) as ticket1
 		, format(ticket2, 0) as ticket2
+		, format(ticket3, 0) as ticket3
 		, nick_name
 		from p_user pu
 		where 1=1

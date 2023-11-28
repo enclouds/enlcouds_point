@@ -11,19 +11,19 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title center">티켓 내역 정보</h1>
+                <h1 class="modal-title center">주간 티켓 내역 정보</h1>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form_box" style="height:400px;">
-                    <p class="tb_tit">티켓 내역 정보</p>
+                    <p class="tb_tit">주간 티켓 내역 정보</p>
                     <table class="form">
                         <thead>
                         <tr>
                             <th scope="col">적립구분</th>
-                            <th scope="col">티켓수량</th>
+                            <th scope="col">주간티켓수량</th>
                             <th scope="col">일자</th>
                             <th scope="col">처리자</th>
                         </tr>
@@ -46,7 +46,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title center">티켓1 정보</h1>
+                <h1 class="modal-title center">주간 티켓 정보</h1>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -67,13 +67,13 @@
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">총 티켓1</th>
+                            <th scope="row">총 주간 티켓</th>
                             <td>
                                 <input type="text" name="totalMinusTicket" id="totalMinusTicket" readonly>
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">차감 티켓1</th>
+                            <th scope="row">차감 주간 티켓</th>
                             <td>
                                 <input type="text" name="minusTicket" id="minusTicket" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                             </td>
@@ -96,7 +96,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title center">티켓2 정보</h1>
+                <h1 class="modal-title center">프리 티켓 정보</h1>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -117,13 +117,13 @@
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">총 티켓2</th>
+                            <th scope="row">총 프리 티켓</th>
                             <td>
                                 <input type="text" name="totalMinusTicket2" id="totalMinusTicket2" readonly>
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">차감 티켓2</th>
+                            <th scope="row">차감 프리 티켓</th>
                             <td>
                                 <input type="text" name="minusTicket2" id="minusTicket2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                             </td>
@@ -146,7 +146,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title center">티켓3 정보</h1>
+                <h1 class="modal-title center">씨티 티켓 정보</h1>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -167,13 +167,13 @@
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">총 티켓3</th>
+                            <th scope="row">총 씨티 티켓</th>
                             <td>
                                 <input type="text" name="totalMinusTicket3" id="totalMinusTicket3" readonly>
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">차감 티켓3</th>
+                            <th scope="row">차감 씨티 티켓</th>
                             <td>
                                 <input type="text" name="minusTicket3" id="minusTicket3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                             </td>
@@ -211,9 +211,9 @@
             <div class="search_option">
                 <span class="input_group">
                     <select id="schCond1" name="schCond1" style="width:100px;">
-                        <option value="ticket1" th:selected="${params.schCond1} == 'ticket1'">티켓1</option>
-                        <option value="ticket2" th:selected="${params.schCond1} == 'ticket2'">티켓2</option>
-                        <option value="ticket3" th:selected="${params.schCond1} == 'ticket3'">티켓3</option>
+                        <option value="ticket1" th:selected="${params.schCond1} == 'ticket1'">주간 티켓</option>
+                        <option value="ticket2" th:selected="${params.schCond1} == 'ticket2'">프리 티켓</option>
+                        <option value="ticket3" th:selected="${params.schCond1} == 'ticket3'">씨티 티켓</option>
                     </select>
                     <input type="text" style="width:1000px;" id="schText" name="schText" placeholder="검색어" th:value="${params.schText}" onkeyup="if(window.event.keyCode==13){fnSearch()}">
                 </span>
@@ -229,17 +229,18 @@
                 <tr>
                     <th scope="col">RANKING</th>
                     <th scope="col">별명</th>
-                    <th scope="col">티켓1</th>
-                    <th scope="col">티켓1 차감</th>
-                    <th scope="col">티켓2</th>
-                    <th scope="col">티켓2 차감</th>
-                    <th scope="col">티켓3</th>
-                    <th scope="col">티켓3 차감</th>
+                    <th scope="col">주간 티켓</th>
+                    <th scope="col">주간 티켓 차감</th>
+                    <th scope="col">프리 티켓</th>
+                    <th scope="col">프리 티켓 차감</th>
+                    <th scope="col">씨티 티켓</th>
+                    <th scope="col">씨티 티켓 차감</th>
                     <th sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" scope="col">전화번호</th>
                     <th sec:authorize="hasRole('ROLE_AGENT')" scope="col">전화번호</th>
                     <th scope="col">등록일자</th>
-                    <th scope="col">티켓 내역1</th>
-                    <th scope="col">티켓 내역2</th>
+                    <th scope="col">주간 티켓 내역</th>
+                    <th scope="col">프리 티켓 내역</th>
+                    <th scope="col">씨티 티켓 내역</th>
                     <th scope="col">최근 방문 일자</th>
                 </tr>
                 </thead>
@@ -249,24 +250,27 @@
                     <td th:text="${list.nickName}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
                     <td th:text="${list.ticketStr}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
                     <td>
-                        <button type="button" class="tb_btn red" th:if="${list.ticket}>0" th:onclick="javascript:fnMinusTicket([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket}]])">차감(티켓1)</button>
+                        <button type="button" class="tb_btn red" th:if="${list.ticket}>0" th:onclick="javascript:fnMinusTicket([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket}]])">차감(주간 티켓)</button>
                     </td>
                     <td th:text="${list.ticketStr2}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
                     <td>
-                        <button type="button" class="tb_btn red" th:if="${list.ticket2}>0" th:onclick="javascript:fnMinusTicket2([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket2}]])">차감(티켓2)</button>
+                        <button type="button" class="tb_btn red" th:if="${list.ticket2}>0" th:onclick="javascript:fnMinusTicket2([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket2}]])">차감(프리 티켓)</button>
                     </td>
                     <td th:text="${list.ticketStr3}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
                     <td>
-                        <button type="button" class="tb_btn red" th:if="${list.ticket3}>0" th:onclick="javascript:fnMinusTicket3([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket3}]])">차감(티켓3)</button>
+                        <button type="button" class="tb_btn red" th:if="${list.ticket3}>0" th:onclick="javascript:fnMinusTicket3([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket3}]])">차감(씨티 티켓)</button>
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" th:text="${list.phoneNum}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
                     <td sec:authorize="hasRole('ROLE_AGENT')" th:text="${list.phoneNumMasking}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
                     <td th:text="${list.regDate}"></td>
                     <td>
-                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory([[${list.phoneNum}]])">내역(티켓1)</button>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory([[${list.phoneNum}]])">내역(주간 티켓)</button>
                     </td>
                     <td>
-                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory2([[${list.phoneNum}]])">내역(티켓2)</button>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory2([[${list.phoneNum}]])">내역(프리 티켓)</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory3([[${list.phoneNum}]])">내역(씨티 티켓)</button>
                     </td>
                     <td th:text="${list.maxDate}"></td>
                 </tr>
@@ -342,6 +346,43 @@
             processData:false,
             type: "POST",
             url: "/user/ticket/selectTicketHistory2Ajax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                if(response.historyTicketList != null){
+                    var appendStr = '';
+                    for(var i=0 ; i<response.historyTicketList.length ; i++){
+                        var appendStr_01 = "<td>"+response.historyTicketList[i]['ticketGbnNm']+"</td>>";
+                        var appendStr_02 = "<td>"+response.historyTicketList[i]['ticket']+"</td>>";
+                        var appendStr_03 = "<td>"+response.historyTicketList[i]['regDate']+"</td>>";
+                        var appendStr_04 = "<td>"+response.historyTicketList[i]['agentName']+"</td>>";
+
+                        appendStr += "<tr>" + appendStr_01 + appendStr_02 + appendStr_03 + appendStr_04 + "</>tr>";
+                    }
+
+                    $("#historyTbody").append(appendStr);
+                }
+
+                $("#history_ticket_modal").show();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function fnTicketHistory3(phoneNum){
+        $("#historyTbody").empty();
+
+        var formData = new FormData();
+
+        formData.append("phoneNum", phoneNum);
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/user/ticket/selectTicketHistory3Ajax",
             data: formData,
             success: function(response) {
                 // 성공 시 동작
