@@ -31,4 +31,6 @@ public interface ApiMapper {
 
     List<ApiBannerDto> getBannerList() throws Exception;
 
+    List<ApiAgentDto> getAgentList() throws Exception;
+
 }

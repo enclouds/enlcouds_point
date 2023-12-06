@@ -169,6 +169,14 @@
 		and use_yn = 'Y'
 	</select>
 
+	<select id="getAgentList" resultType="com.enclouds.enpoint.api.dto.ApiAgentDto">
+		select agent_code
+		, agent_name
+		from p_agent pa
+		where 1=1
+		AND agent_gbn = 'AG'
+	</select>
+
 </mapper>
 
 

@@ -82,6 +82,15 @@
                             </td>
                         </tr>
                         <tr>
+                            <th scope="row"><em class="required">*</em>등록지점</th>
+                            <td>
+                                <select id="agentCode" name="agentCode">
+                                    <option value="">--선택--</option>
+                                    <option th:each="agentList:${agentList}" th:value="${agentList.agentCode}" th:utext="${agentList.agentName}" th:selected="${agentList.agentCode == agentCode}"></option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
                             <th scope="row">메모</th>
                             <td>
                                 <textarea name="memo" id="memo"></textarea>
@@ -129,6 +138,15 @@
                             <th scope="row">닉네임</th>
                             <td>
                                 <input type="text" name="uptNickName" id="uptNickName">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">등록지점</th>
+                            <td>
+                                <select id="uptAgentCode" name="uptAgentCode">
+                                    <option value="">--선택--</option>
+                                    <option th:each="agentList:${agentList}" th:value="${agentList.agentCode}" th:utext="${agentList.agentName}"></option>
+                                </select>
                             </td>
                         </tr>
                         <tr>
@@ -865,6 +883,7 @@
                 <thead>
                 <tr>
                     <th scope="col" rowspan="2">별명</th>
+                    <th scope="col" rowspan="2">지점</th>
                     <th sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VIEW')" scope="col" rowspan="2">전화번호</th>
                     <th scope="col" rowspan="2">전화번호</th>
                     <th scope="col" rowspan="2">적립 총 포인트</th>
@@ -906,8 +925,9 @@
                 <tbody>
                 <tr th:each="list:${userList}">
                     <td th:text="${list.nickName}"></td>
-                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VIEW')"><a href="javascript:callFunction();" th:text="${list.phoneNum}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.phoneNumMasking}]], [[${list.phoneNum}]], [[${list.nickName}]], [[${list.memo}]], [[${list.point}]], [[${list.orgPoint}]])"></a></td>
-                    <td sec:authorize="hasAnyRole('ROLE_AGENT', 'ROLE_VIEW')"><a href="javascript:callFunction();" th:text="${list.phoneNumMasking}" style="color:blue;" th:onclick="javascript:fnUptModalMas([[${list.phoneNumMasking}]], [[${list.phoneNum}]], [[${list.nickName}]], [[${list.memo}]], [[${list.point}]], [[${list.orgPoint}]])"></a></td>
+                    <td th:text="${list.agentName}"></td>
+                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VIEW')"><a href="javascript:callFunction();" th:text="${list.phoneNum}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.phoneNumMasking}]], [[${list.phoneNum}]], [[${list.nickName}]], [[${list.memo}]], [[${list.point}]], [[${list.orgPoint}]], [[${list.agentCode}]])"></a></td>
+                    <td sec:authorize="hasAnyRole('ROLE_AGENT', 'ROLE_VIEW')"><a href="javascript:callFunction();" th:text="${list.phoneNumMasking}" style="color:blue;" th:onclick="javascript:fnUptModalMas([[${list.phoneNumMasking}]], [[${list.phoneNum}]], [[${list.nickName}]], [[${list.memo}]], [[${list.point}]], [[${list.orgPoint}]], [[${list.agentCode}]])"></a></td>
                     <td th:text="${list.point}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
                         <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddPoint([[${list.phoneNum}]], [[${list.nickName}]], [[${list.point}]])">적립(포인트)</button>
@@ -1023,22 +1043,24 @@
         $("#reg_jackpot_modal").show();
     }
 
-    function fnUptModal(phoneNumMasking, phoneNum, nickName, memo, point, orgPoint){
+    function fnUptModal(phoneNumMasking, phoneNum, nickName, memo, point, orgPoint, agentCode){
         selectTrSeq = phoneNum;
         pointVal = orgPoint;
 
         $("#uptPhoneNum").val(phoneNum);
         $("#uptNickName").val(nickName);
+        $("#uptAgentCode").val(agentCode);
         $("#uptMemo").val(memo);
         $("#upt_modal").show();
     }
 
-    function fnUptModalMas(phoneNumMasking, phoneNum, nickName, memo, point, orgPoint){
+    function fnUptModalMas(phoneNumMasking, phoneNum, nickName, memo, point, orgPoint, agentCode){
         selectTrSeq = phoneNum;
         pointVal = orgPoint;
 
         $("#uptPhoneNum").val(phoneNumMasking);
         $("#uptNickName").val(nickName);
+        $("#uptAgentCode").val(agentCode);
         $("#uptMemo").val(memo);
         $("#upt_modal").show();
     }
@@ -1309,8 +1331,15 @@
             return;
         }
 
+        if($("#agentCode").val() == ''){
+            alert("등록지점은 필수 입니다.");
+            $("#agentCode").focus();
+            return;
+        }
+
         formData.append("phoneNum", $("#phoneNum").val());
         formData.append("nickName", $("#nickName").val());
+        formData.append("agentCode", $("#agentCode").val());
         formData.append("memo", $("#memo").val());
         formData.append("point", $("#point").val());
 
@@ -1336,6 +1365,7 @@
 
         formData.append("phoneNum", selectTrSeq);
         formData.append("nickName", $("#uptNickName").val());
+        formData.append("agentCode", $("#uptAgentCode").val());
         formData.append("memo", $("#uptMemo").val());
 
         $.ajax({

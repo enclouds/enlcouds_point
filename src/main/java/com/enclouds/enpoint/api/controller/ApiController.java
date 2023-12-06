@@ -1,5 +1,6 @@
 package com.enclouds.enpoint.api.controller;
 
+import com.enclouds.enpoint.agent.service.AgentService;
 import com.enclouds.enpoint.api.dto.*;
 import com.enclouds.enpoint.api.service.ApiService;
 import com.enclouds.enpoint.user.dto.UserDto;
@@ -270,6 +271,30 @@ public class ApiController {
         }
 
         return apiBannerListDto;
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "/getAgentList")
+    @ResponseBody
+    public ApiAgentListDto getAgentList() throws Exception{
+
+        List<ApiAgentDto> agentDtoList = apiService.getAgentList();
+
+        ApiAgentListDto apiAgentListDto = new ApiAgentListDto();
+        if(apiAgentListDto != null){
+            if(agentDtoList.isEmpty()) {
+                apiAgentListDto.setResultCode("E001");
+                apiAgentListDto.setResultMsg("조회된 정보가 없습니다.");
+            }else {
+                apiAgentListDto.setAgentList(agentDtoList);
+                apiAgentListDto.setResultCode("0000");
+                apiAgentListDto.setResultMsg("정상");
+            }
+        }else {
+            apiAgentListDto.setResultCode("E001");
+            apiAgentListDto.setResultMsg("조회된 정보가 없습니다.");
+        }
+
+        return apiAgentListDto;
     }
 
 }

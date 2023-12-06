@@ -32,4 +32,6 @@ public interface ApiService {
 
     List<ApiBannerDto> getBannerList() throws Exception;
 
+    List<ApiAgentDto> getAgentList() throws Exception;
+
 }

@@ -237,4 +237,9 @@ public class ApiServiceImpl implements ApiService{
         return apiMapper.getBannerList();
     }
 
+    @Override
+    public List<ApiAgentDto> getAgentList() throws Exception {
+        return apiMapper.getAgentList();
+    }
+
 }

@@ -112,10 +112,14 @@ public class UserController {
                userDto.setSchCond1("nick");
             }
 
+            mv.addObject("agentCode", userInfo.getAgentCode());
+
             userDto.setId(userId);
 
             List<UserDto> userList = customUserService.selectCustomUserList(userDto);
             mv.addObject("userList", userList);
+
+            mv.addObject("agentList", agentService.selectAgentTotalListAsAG());
 
             //잭팟 정보(사용중중 최근 잭팟)
             JackpotDto jackpotDto = new JackpotDto();
