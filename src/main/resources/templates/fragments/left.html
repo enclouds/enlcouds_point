@@ -29,6 +29,9 @@
                     <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_VIEW')">
                         <button type="button" class="depth2" th:onclick="|location.href='@{/user/list}'|">회원 목록</button>
                     </li>
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_VIEW')">
+                        <button type="button" class="depth2" th:onclick="|location.href='@{/user/visit/list}'|">회원 최근 방문 목록</button>
+                    </li>
                     <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT')">
                         <button type="button" class="depth2" th:onclick="|location.href='@{/user/point/list}'|">포인트 적립/차감 목록</button>
                     </li>

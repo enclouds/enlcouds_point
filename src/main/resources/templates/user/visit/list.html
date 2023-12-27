@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+
+<style>
+    #my-spinner { width: 100%; height: 100%; top: 0; left: 0; display: none; opacity: .6; background: silver; position: absolute; z-index: 2; }
+    #my-spinner div { width: 100%; height: 100%; display: table; }
+    #my-spinner span { display: table-cell; text-align: center; vertical-align: middle; }
+    #my-spinner img { background: white; padding: 1em; border-radius: .7em; }
+</style>
+
+<body>
+
+<!-- container S -->
+<div class="container">
+    <!-- header S -->
+    <div th:replace="/fragments/left.html :: fragment-left('m2', '/user/visit/list')"></div>
+    <!-- header E -->
+
+    <!-- content S -->
+    <div class="content">
+        <div class="con_top">
+            <ul>
+                <li>회원 최근 방문</li>
+                <li>목록</li>
+            </ul>
+        </div>
+        <p class="page_info">회원 최근 방문 목록</p>
+
+        <form id="schFrm">
+            <div class="search_option">
+                <span class="input_group">
+                    <select id="schCond2" name="schCond2" style="width:150px;">
+                        <option value="">전체</option>
+                        <option th:each="list:${agentTotalList}" th:value="${list.agentCode}" th:text="${list.agentName}" th:selected="${list.agentCode} == ${params.schCond2}"></option>
+                    </select>
+
+                    <span class="datepicker_group">
+                        <input type="text" id="schStartDte" name="schStartDte" class="datepicker" placeholder="시작일" th:value="${params.schStartDte}">
+                        <em>~</em>
+                        <input type="text" id="schEndDte" name="schEndDte" class="datepicker" placeholder="종료일" th:value="${params.schEndDte}">
+                    </span>
+
+                </span>
+                <button type="button" class="search_btn" th:onclick="javascript:fnSearch();">조회</button>
+            </div>
+        </form>
+
+        <div class="list_box">
+            <table class="list">
+                <colgroup>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col" rowspan="2">별명</th>
+                    <th scope="col" rowspan="2">지점</th>
+                    <th sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VIEW')" scope="col" rowspan="2">전화번호</th>
+                    <th scope="col" rowspan="2">전화번호</th>
+                    <th scope="col" rowspan="2">적립 총 포인트</th>
+                    <th scope="col" rowspan="2">외식 쿠폰</th>
+                    <th scope="col" colspan="2">승점</th>
+                    <th scope="col" rowspan="2">총 프리 티켓</th>
+                    <th scope="col" rowspan="2">총 주간 티켓</th>
+                    <th scope="col" rowspan="2">총 씨티 티켓</th>
+                    <th scope="col" rowspan="2">등록 일자</th>
+                    <th scope="col" rowspan="2">최근 방문 일자</th>
+                </tr>
+                <tr>
+                    <th scope="col" >주간승점</th>
+                    <th scope="col" >월간승점</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="list:${userList}">
+                    <td th:text="${list.nickName}"></td>
+                    <td th:text="${list.agentName}"></td>
+                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VIEW')" th:text="${list.phoneNum}"></td>
+                    <td sec:authorize="hasAnyRole('ROLE_AGENT', 'ROLE_VIEW')" th:text="${list.phoneNumMasking}"></td>
+                    <td th:text="${#numbers.formatInteger(list.point, 0, 'COMMA')}" ></td>
+                    <td th:text="${#numbers.formatInteger(list.couponPoint, 0, 'COMMA')}"></td>
+                    <td th:text="${#numbers.formatInteger(list.rankPoint, 0, 'COMMA')}"></td>
+                    <td th:text="${#numbers.formatInteger(list.rankSumPoint, 0, 'COMMA')}"></td>
+                    <td th:text="${#numbers.formatInteger(list.ticket2, 0, 'COMMA')}"></td>
+                    <td th:text="${#numbers.formatInteger(list.ticket, 0, 'COMMA')}"></td>
+                    <td th:text="${#numbers.formatInteger(list.ticket3, 0, 'COMMA')}"></td>
+                    <td th:text="${list.regDate}"></td>
+                    <td th:text="${list.maxDate}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- pagination -->
+        <div class="paging" title="페이지">
+
+            <th:block layout:fragment="paging">
+                <nav th:replace="/fragments/pagination.html :: fragment-pagination"></nav>
+            </th:block>
+
+            <th:block layout:fragment="script">
+                <script th:inline="javascript">
+						/*<![CDATA[*/
+
+						function movePage(uri, queryString) {
+							location.href = uri + queryString;
+						}
+
+						/*]]>*/
+					</script>
+            </th:block>
+
+        </div>
+        <!-- /pagination -->
+
+    </div>
+    <!-- content E -->
+
+</div>
+<!-- container E -->
+</body>
+<script th:src="@{/static/js/common.js}"></script>
+<script th:inline="javascript">
+
+    $( function() {
+    });
+
+    function fnSearch(){
+        $("#schFrm").submit();
+    }
+
+</script>
+
+</html>

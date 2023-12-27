@@ -215,6 +215,12 @@
                         <option value="ticket2" th:selected="${params.schCond1} == 'ticket2'">프리 티켓</option>
                         <option value="ticket3" th:selected="${params.schCond1} == 'ticket3'">씨티 티켓</option>
                     </select>
+
+                    <select id="schCond2" name="schCond2" style="width:150px;">
+                        <option value="">전체</option>
+                        <option th:each="list:${agentTotalList}" th:value="${list.agentCode}" th:text="${list.agentName}" th:selected="${list.agentCode} == ${params.schCond2}"></option>
+                    </select>
+
                     <input type="text" style="width:1000px;" id="schText" name="schText" placeholder="검색어" th:value="${params.schText}" onkeyup="if(window.event.keyCode==13){fnSearch()}">
                 </span>
                 <button type="button" class="search_btn" th:onclick="javascript:fnSearch();">조회</button>

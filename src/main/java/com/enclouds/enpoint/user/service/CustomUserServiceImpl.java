@@ -36,6 +36,17 @@ public class CustomUserServiceImpl implements CustomUserService{
     }
 
     @Override
+    public List<UserDto> selectCustomUserListByVisit(UserDto userDto) throws Exception {
+        int userTotalCount = userMapper.selectCustomUserListByVisitTotalCount(userDto);
+
+        PaginationInfo paginationInfo = new PaginationInfo(userDto);
+        paginationInfo.setTotalRecordCount(userTotalCount);
+        userDto.setPaginationInfo(paginationInfo);
+
+        return userMapper.selectCustomUserListByVisit(userDto);
+    }
+
+    @Override
     public List<PointDto> selectUserPointList(PointDto pointDto) throws Exception {
         int userPointTotalCount = userMapper.selectUserPointListTotalCount(pointDto);
 

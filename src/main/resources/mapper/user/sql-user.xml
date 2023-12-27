@@ -49,6 +49,9 @@
 		<if test="schCond1 == 'phone'">
 			AND pu.phone_num like '%${schText}%'
 		</if>
+		<if test="schCond2 != ''">
+			AND pa.agent_code = #{schCond2}
+		</if>
 	</select>
 
 	<select id="selectCustomUserList" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.UserDto">
@@ -91,10 +94,64 @@
 			AND pu.phone_num like '%${schText}%'
 		</if>
 
+		<if test="schCond2 != ''">
+			AND pa.agent_code = #{schCond2}
+		</if>
+
 		order by pu.reg_date desc
 
 		LIMIT
 		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
+	</select>
+
+	<select id="selectCustomUserListByVisit" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.UserDto">
+		SELECT TAB.*
+		FROM (
+		SELECT pu.*
+		, date_format((select max(pp.reg_date) from p_point pp where pp.phone_num = pu.phone_num), '%Y-%m-%d %H:%m:%s') as maxDate
+		FROM p_user pu
+		WHERE 1=1
+			<if test="schCond2 != ''">
+				AND pu.agent_code = #{schCond2}
+			</if>
+		) TAB
+		WHERE TAB.maxDate is not null
+
+		<if test="schStartDte != ''">
+			<if test="schEndDte != ''">
+				<![CDATA[
+					and TAB.maxDate >= concat(#{schStartDte}, ' 00:00:00')
+					and TAB.maxDate <= concat(#{schEndDte}, ' 23:59:59')
+				]]>
+			</if>
+		</if>
+		ORDER BY TAB.maxDate DESC
+
+		LIMIT
+		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
+	</select>
+
+	<select id="selectCustomUserListByVisitTotalCount" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="int">
+		SELECT count(*)
+		FROM (
+		SELECT pu.*
+		, date_format((select max(pp.reg_date) from p_point pp where pp.phone_num = pu.phone_num), '%Y-%m-%d %H:%m:%s') as maxDate
+		FROM p_user pu
+		WHERE 1=1
+		<if test="schCond2 != ''">
+			AND pu.agent_code = #{schCond2}
+		</if>
+		) TAB
+		WHERE TAB.maxDate is not null
+
+		<if test="schStartDte != ''">
+			<if test="schEndDte != ''">
+				<![CDATA[
+					and TAB.maxDate >= concat(#{schStartDte}, ' 00:00:00')
+					and TAB.maxDate <= concat(#{schEndDte}, ' 23:59:59')
+				]]>
+			</if>
+		</if>
 	</select>
 
 	<select id="selectDuplUser" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="int">
@@ -764,11 +821,16 @@
 		, date_format((select max(reg_date) from p_point pp where pp.phone_num = pu.phone_num), '%Y-%m-%d') as maxDate
 		, CAST(rank_point AS signed integer) as intRankPoint
 		, CAST(rank_sum_point AS signed integer) as intRankSumPoint
+		, pu.agent_code
 		FROM p_user pu, (SELECT @rownum:=0) TMP
 		WHERE 1=1
 		AND (rank_point > 0 or rank_sum_point > 0)
 		AND pu.nick_name like '%${schText}%'
 		) TAB
+		WHERE 1=1
+		<if test="schCond2 != ''">
+			AND TAB.agent_code = #{schCond2}
+		</if>
 		<if test="schCond1 == 'week'">
 			ORDER BY TAB.intRankPoint desc
 		</if>
@@ -938,12 +1000,17 @@
 		, format(ticket, 0) as ticket_str
 		, format(ticket2, 0) as ticket_str2
 		, format(ticket3, 0) as ticket_str3
+		, pu.agent_code
 		FROM p_user pu,  (SELECT @rownum:=0) TMP
 		WHERE 1=1
 		AND pu.nick_name like '%${schText}%'
 		AND (pu.ticket > 0 or pu.ticket2 > 0 or pu.ticket3 > 0)
 		ORDER BY ticket desc
 		) TAB
+		WHERE 1=1
+		<if test="schCond2 != ''">
+			AND TAB.agent_code = #{schCond2}
+		</if>
 		<if test="schCond1 == 'ticket1'">
 			ORDER BY TAB.intRankTicket desc
 		</if>

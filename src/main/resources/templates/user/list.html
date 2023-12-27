@@ -86,7 +86,7 @@
                             <td>
                                 <select id="agentCode" name="agentCode">
                                     <option value="">--선택--</option>
-                                    <option th:each="agentList:${agentList}" th:value="${agentList.agentCode}" th:utext="${agentList.agentName}" th:selected="${agentList.agentCode == agentCode}"></option>
+                                    <option th:each="agentList:${agentTotalList}" th:value="${agentList.agentCode}" th:utext="${agentList.agentName}" th:selected="${agentList.agentCode == agentCode}"></option>
                                 </select>
                             </td>
                         </tr>
@@ -145,7 +145,7 @@
                             <td>
                                 <select id="uptAgentCode" name="uptAgentCode">
                                     <option value="">--선택--</option>
-                                    <option th:each="agentList:${agentList}" th:value="${agentList.agentCode}" th:utext="${agentList.agentName}"></option>
+                                    <option th:each="agentList:${agentTotalList}" th:value="${agentList.agentCode}" th:utext="${agentList.agentName}"></option>
                                 </select>
                             </td>
                         </tr>
@@ -867,6 +867,12 @@
                         <option value="nick" th:selected="${params.schCond1} == 'nick'">별명</option>
                         <option value="phone" th:selected="${params.schCond1} == 'phone'">전화번호</option>
                     </select>
+
+                    <select id="schCond2" name="schCond2" style="width:150px;">
+                        <option value="">전체</option>
+                        <option th:each="list:${agentTotalList}" th:value="${list.agentCode}" th:text="${list.agentName}" th:selected="${list.agentCode} == ${params.schCond2}"></option>
+                    </select>
+
                     <input type="text" style="width:1000px;" id="schText" name="schText" placeholder="검색어" th:value="${params.schText}" onkeyup="if(window.event.keyCode==13){fnSearch()}">
                 </span>
                 <button type="button" class="search_btn" th:onclick="javascript:fnSearch();">조회</button>
@@ -892,10 +898,10 @@
                     <th scope="col" colspan="3" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >외식 쿠폰 처리</th>
                     <th scope="col" colspan="2">승점</th>
                     <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >승점 처리</th>
-                    <th scope="col" rowspan="2">총 주간 티켓</th>
-                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >주간 티켓 처리</th>
                     <th scope="col" rowspan="2">총 프리 티켓</th>
                     <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >프리 티켓 처리</th>
+                    <th scope="col" rowspan="2">총 주간 티켓</th>
+                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >주간 티켓 처리</th>
                     <th scope="col" rowspan="2">총 씨티 티켓</th>
                     <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >씨티 티켓 처리</th>
                     <th scope="col" rowspan="2">메모</th>
@@ -956,19 +962,19 @@
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
                         <button type="button" class="tb_btn red" th:onclick="javascript:fnMinusRankPoint([[${list.phoneNum}]], [[${list.nickName}]], [[${list.rankPoint}]])">차감(승점)</button>
                     </td>
-                    <td th:text="${list.ticket}"></td>
-                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket}]])">적립(주간티켓)</button>
-                    </td>
-                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn red" th:if="${list.ticket}>0" th:onclick="javascript:fnTicketUse([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket}]])">차감(주간티켓)</button>
-                    </td>
                     <td th:text="${list.ticket2}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
                         <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket2([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket2}]])">적립(프리티켓)</button>
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
                         <button type="button" class="tb_btn red" th:if="${list.ticket2}>0" th:onclick="javascript:fnTicketUse2([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket2}]])">차감(프리티켓)</button>
+                    </td>
+                    <td th:text="${list.ticket}"></td>
+                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket}]])">적립(주간티켓)</button>
+                    </td>
+                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
+                        <button type="button" class="tb_btn red" th:if="${list.ticket}>0" th:onclick="javascript:fnTicketUse([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket}]])">차감(주간티켓)</button>
                     </td>
                     <td th:text="${list.ticket3}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >

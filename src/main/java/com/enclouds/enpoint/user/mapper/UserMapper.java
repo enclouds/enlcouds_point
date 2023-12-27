@@ -36,9 +36,13 @@ public interface UserMapper {
      */
     List<UserDto> selectCustomUserList(UserDto userDto) throws Exception;
 
+    List<UserDto> selectCustomUserListByVisit(UserDto userDto) throws Exception;
+
     UserDto selectCustomUserInfo(UserDto userDto) throws Exception;
 
     int selectCustomUserListTotalCount(UserDto userDto) throws Exception;
+
+    int selectCustomUserListByVisitTotalCount(UserDto userDto) throws Exception;
 
     List<PointDto> selectUserPointList(PointDto pointDto) throws Exception;
 

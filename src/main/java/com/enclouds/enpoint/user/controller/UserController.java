@@ -112,14 +112,96 @@ public class UserController {
                userDto.setSchCond1("nick");
             }
 
+            if(userDto.getSchCond2() == null){
+               userDto.setSchCond2("");
+            }
+
             mv.addObject("agentCode", userInfo.getAgentCode());
 
             userDto.setId(userId);
 
+            mv.addObject("agentTotalList", agentService.selectAgentTotalListAsAG());
+
             List<UserDto> userList = customUserService.selectCustomUserList(userDto);
             mv.addObject("userList", userList);
 
-            mv.addObject("agentList", agentService.selectAgentTotalListAsAG());
+            //잭팟 정보(사용중중 최근 잭팟)
+            JackpotDto jackpotDto = new JackpotDto();
+            jackpotDto.setStoreGbn("hunters");
+            JackpotDto jackpotInfo = jackpotService.selectJackPotInfo(jackpotDto);
+            mv.addObject("jackpotInfo", jackpotInfo);
+         }else {
+            return new ModelAndView("redirect:/");
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      mv.addObject("userInfo", userInfo);
+      mv.addObject("params", userDto);
+
+      return mv;
+   }
+
+   @RequestMapping(value = "/user/visit/list", method = RequestMethod.GET)
+   public ModelAndView userVisitList(HttpServletResponse response, @ModelAttribute UserDto userDto) throws Exception{
+      ModelAndView mv = new ModelAndView("user/visit/list");
+
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+
+      try {
+         if(principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            if(userId.equals("raise")){
+               return new ModelAndView("redirect:/game/list");
+            }
+
+            if(userId.equals("kingslounge")){
+               return new ModelAndView("redirect:/user/rank/list");
+            }
+
+            userDto.setAgentCode(userInfo.getAgentCode());
+
+            if(userDto.getSchCond1() == null){
+               userDto.setSchCond1("nick");
+            }
+
+            if(userDto.getSchCond2() == null){
+               userDto.setSchCond2("");
+            }
+
+            String startDateStr = DateUtils.addDay(DateUtils.getToday(), -7);
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+            Date startDateDte = format.parse(startDateStr);
+            SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+            String startDate = format2.format(startDateDte);
+
+            if(userDto.getSchStartDte() == null){
+               userDto.setSchStartDte(startDate);
+            }
+
+            Date todayDate = format.parse(DateUtils.getToday());
+            String today = format2.format(todayDate);
+
+            if(StringUtils.isEmpty(userDto.getSchEndDte())){
+               userDto.setSchEndDte(today);
+            }
+
+            mv.addObject("agentCode", userInfo.getAgentCode());
+
+            userDto.setId(userId);
+
+            mv.addObject("agentTotalList", agentService.selectAgentTotalListAsAG());
+
+            List<UserDto> userList = customUserService.selectCustomUserListByVisit(userDto);
+            mv.addObject("userList", userList);
 
             //잭팟 정보(사용중중 최근 잭팟)
             JackpotDto jackpotDto = new JackpotDto();
@@ -1171,6 +1253,12 @@ public class UserController {
                userDto.setSchCond1("week");
             }
 
+            if(userDto.getSchCond2() == null){
+               userDto.setSchCond2("");
+            }
+
+            mv.addObject("agentTotalList", agentService.selectAgentTotalListAsAG());
+
             List<UserDto> userRankList = customUserService.selectUserRankList(userDto);
             mv.addObject("userRankList", userRankList);
          }else {
@@ -1203,8 +1291,14 @@ public class UserController {
             userInfo = userService.getUserInfo(userId);
 
             if(userDto.getSchCond1() == null){
-               userDto.setSchCond1("ticket1");
+               userDto.setSchCond1("ticket2");
             }
+
+            if(userDto.getSchCond2() == null){
+               userDto.setSchCond2("");
+            }
+
+            mv.addObject("agentTotalList", agentService.selectAgentTotalListAsAG());
 
             List<UserDto> userTicketRankList = customUserService.selectUserTicketRankList(userDto);
             mv.addObject("userTicketRankList", userTicketRankList);

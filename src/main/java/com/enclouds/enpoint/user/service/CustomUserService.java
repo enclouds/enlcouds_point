@@ -11,6 +11,8 @@ public interface CustomUserService {
 
     List<UserDto> selectCustomUserList(UserDto userDto) throws Exception;
 
+    List<UserDto> selectCustomUserListByVisit(UserDto userDto) throws Exception;
+
     UserDto selectCustomUserInfo(UserDto userDto) throws Exception;
 
     List<PointDto> selectUserPointList(PointDto pointDto) throws Exception;
