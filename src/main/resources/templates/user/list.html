@@ -808,6 +808,41 @@
 <!-- modal E -->
 
 <!-- modal S -->
+<div class="modal fade large" id="history_ticket_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">주간 티켓 내역 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box" style="height:400px;">
+                    <p class="tb_tit">주간 티켓 내역 정보</p>
+                    <table class="form">
+                        <thead>
+                        <tr>
+                            <th scope="col">적립구분</th>
+                            <th scope="col">주간티켓수량</th>
+                            <th scope="col">일자</th>
+                            <th scope="col">처리자</th>
+                        </tr>
+                        </thead>
+                        <tbody id="historyTbodyTicket">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('history_ticket_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
 <div class="modal fade large" id="history_coupon_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -900,10 +935,13 @@
                     <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >승점 처리</th>
                     <th scope="col" rowspan="2">총 프리 티켓</th>
                     <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >프리 티켓 처리</th>
+                    <th scope="col" rowspan="2">프리 티켓 내역</th>
                     <th scope="col" rowspan="2">총 주간 티켓</th>
                     <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >주간 티켓 처리</th>
+                    <th scope="col" rowspan="2">주간 티켓 내역</th>
                     <th scope="col" rowspan="2">총 씨티 티켓</th>
                     <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >씨티 티켓 처리</th>
+                    <th scope="col" rowspan="2">씨티 티켓 내역</th>
                     <th scope="col" rowspan="2">메모</th>
                     <th scope="col" rowspan="2">등록 일자</th>
                     <th scope="col" rowspan="2">최근 방문 일자</th>
@@ -969,6 +1007,9 @@
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
                         <button type="button" class="tb_btn red" th:if="${list.ticket2}>0" th:onclick="javascript:fnTicketUse2([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket2}]])">차감(프리티켓)</button>
                     </td>
+                    <td>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory2([[${list.phoneNum}]])">내역(프리 티켓)</button>
+                    </td>
                     <td th:text="${list.ticket}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
                         <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket}]])">적립(주간티켓)</button>
@@ -976,12 +1017,18 @@
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
                         <button type="button" class="tb_btn red" th:if="${list.ticket}>0" th:onclick="javascript:fnTicketUse([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket}]])">차감(주간티켓)</button>
                     </td>
+                    <td>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory([[${list.phoneNum}]])">내역(주간 티켓)</button>
+                    </td>
                     <td th:text="${list.ticket3}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
                         <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket3([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket3}]])">적립(씨티티켓)</button>
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
                         <button type="button" class="tb_btn red" th:if="${list.ticket3}>0" th:onclick="javascript:fnTicketUse3([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket3}]])">차감(씨티티켓)</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory3([[${list.phoneNum}]])">내역(씨티 티켓)</button>
                     </td>
                     <td>
                         <button type="button" class="tb_btn green" th:if="${list.memo} != null and ${list.memo} != ''" th:onclick="javascript:fnMemoPopup([[${list.memo}]])">메모</button>
@@ -1863,6 +1910,117 @@
         $("#memo_modal #memo_ul").children().remove();
         $("#memo_modal #memo_ul").append("<li>" + memo + "</li>" );
         $("#memo_modal").show();
+    }
+
+    function fnTicketHistory(phoneNum){
+        $("#historyTbodyTicket").empty();
+
+        var formData = new FormData();
+
+        formData.append("phoneNum", phoneNum);
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/user/ticket/selectTicketHistoryAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                if(response.historyTicketList != null){
+                    var appendStr = '';
+                    for(var i=0 ; i<response.historyTicketList.length ; i++){
+                        var appendStr_01 = "<td>"+response.historyTicketList[i]['ticketGbnNm']+"</td>>";
+                        var appendStr_02 = "<td>"+response.historyTicketList[i]['ticket']+"</td>>";
+                        var appendStr_03 = "<td>"+response.historyTicketList[i]['regDate']+"</td>>";
+                        var appendStr_04 = "<td>"+response.historyTicketList[i]['agentName']+"</td>>";
+
+                        appendStr += "<tr>" + appendStr_01 + appendStr_02 + appendStr_03 + appendStr_04 + "</>tr>";
+                    }
+
+                    $("#historyTbodyTicket").append(appendStr);
+                }
+
+                $("#history_ticket_modal").show();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function fnTicketHistory2(phoneNum){
+        $("#historyTbodyTicket").empty();
+
+        var formData = new FormData();
+
+        formData.append("phoneNum", phoneNum);
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/user/ticket/selectTicketHistory2Ajax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                if(response.historyTicketList != null){
+                    var appendStr = '';
+                    for(var i=0 ; i<response.historyTicketList.length ; i++){
+                        var appendStr_01 = "<td>"+response.historyTicketList[i]['ticketGbnNm']+"</td>>";
+                        var appendStr_02 = "<td>"+response.historyTicketList[i]['ticket']+"</td>>";
+                        var appendStr_03 = "<td>"+response.historyTicketList[i]['regDate']+"</td>>";
+                        var appendStr_04 = "<td>"+response.historyTicketList[i]['agentName']+"</td>>";
+
+                        appendStr += "<tr>" + appendStr_01 + appendStr_02 + appendStr_03 + appendStr_04 + "</>tr>";
+                    }
+
+                    $("#historyTbodyTicket").append(appendStr);
+                }
+
+                $("#history_ticket_modal").show();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function fnTicketHistory3(phoneNum){
+        $("#historyTbodyTicket").empty();
+
+        var formData = new FormData();
+
+        formData.append("phoneNum", phoneNum);
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/user/ticket/selectTicketHistory3Ajax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                if(response.historyTicketList != null){
+                    var appendStr = '';
+                    for(var i=0 ; i<response.historyTicketList.length ; i++){
+                        var appendStr_01 = "<td>"+response.historyTicketList[i]['ticketGbnNm']+"</td>>";
+                        var appendStr_02 = "<td>"+response.historyTicketList[i]['ticket']+"</td>>";
+                        var appendStr_03 = "<td>"+response.historyTicketList[i]['regDate']+"</td>>";
+                        var appendStr_04 = "<td>"+response.historyTicketList[i]['agentName']+"</td>>";
+
+                        appendStr += "<tr>" + appendStr_01 + appendStr_02 + appendStr_03 + appendStr_04 + "</>tr>";
+                    }
+
+                    $("#historyTbodyTicket").append(appendStr);
+                }
+
+                $("#history_ticket_modal").show();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
     }
 
 </script>
