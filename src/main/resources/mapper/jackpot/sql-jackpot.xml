@@ -189,7 +189,7 @@
 		LEFT JOIN p_jackpot pj on pj.seq = pja.jackpot_seq
 		LEFT JOIN p_agent pa on pa.agent_code = pja.reg_agent_code
 		WHERE 1=1
-		<if test="regAgentCode != 1 and regAgentCode != 12">
+		<if test="regAgentCode != 1 and regAgentCode != 12 and regAgentCode != 16">
 			AND reg_agent_code = #{regAgentCode}
 		</if>
 		<if test="schCond1 != ''">
