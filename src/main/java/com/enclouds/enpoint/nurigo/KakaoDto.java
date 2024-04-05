@@ -17,5 +17,6 @@ public class KakaoDto {
     private String totalPoint;
     private String authCode;
     private String couponPoint;
+    private String agentTel;
 
 }

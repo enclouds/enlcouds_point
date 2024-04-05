@@ -980,6 +980,41 @@ public class UserController {
       return result;
    }
 
+   @PostMapping("/user/updateTicket1ResetAjax")
+   public @ResponseBody Map<String, Object> updateTicket1ResetAjax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+      int resultCode;
+      Map<String, Object> result = new HashMap<String, Object>();
+
+      try {
+         if (principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            userDto.setAgentCode(userInfo.getAgentCode());
+
+            resultCode = customUserService.updateTicket1ResetAjax(userDto);
+
+            if (resultCode > 0) {
+               result.put("resultCode", 0);
+               result.put("resultMsg", "정상적으로 초기화 되었습니다.");
+            } else {
+               result.put("resultCode", -1);
+               result.put("resultMsg", "초기화에 실패 하였습니다.");
+            }
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      return result;
+   }
+
    @PostMapping("/user/updateUserMinusCouponPointAjax")
    public @ResponseBody Map<String, Object> updateUserMinusCouponPointAjax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
       Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

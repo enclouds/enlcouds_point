@@ -57,6 +57,8 @@ public interface CustomUserService {
 
     int updateUserMinusTicket3(UserDto userDto) throws Exception;
 
+    int updateTicket1ResetAjax(UserDto userDto) throws Exception;
+
     int updateUserHumanAjax(UserDto userDto) throws Exception;
 
     int updateUserRankDefAjax(UserDto userDto) throws Exception;

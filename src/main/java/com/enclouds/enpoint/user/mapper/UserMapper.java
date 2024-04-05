@@ -160,6 +160,8 @@ public interface UserMapper {
 
     int useTicketAsCnt3(UserDto userDto) throws Exception;
 
+    int updateTicket1ResetAjax(UserDto userDto) throws Exception;
+
     int insertCouponHistory(UserDto userDto) throws Exception;
 
 }

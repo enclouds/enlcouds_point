@@ -19,6 +19,7 @@ public class PointDto extends CommonDto {
     private String phoneNum;
     private String phoneNumMasking;
     private String nickName;
+    private String agentTel;
 
     private int minusPoint;
     private int addPoint;

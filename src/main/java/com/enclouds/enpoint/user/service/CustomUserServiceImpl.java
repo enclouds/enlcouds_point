@@ -164,7 +164,7 @@ public class CustomUserServiceImpl implements CustomUserService{
                     PointDto pointDto = userMapper.getTotalPoint(userDto);
 
                     KakaoDto kakaoDto = new KakaoDto();
-                    kakaoDto.setTemplateId("KA01TP231127074830060CQH0Bq6e7I5");
+                    kakaoDto.setTemplateId("KA01TP240207000313733KDbd3vtZ2Uq");
                     kakaoDto.setNickName(pointDto.getNickName());
                     kakaoDto.setRcvNum(userDto.getPhoneNum());
                     kakaoDto.setCouponPoint(pointDto.getCouponPoint());
@@ -174,6 +174,7 @@ public class CustomUserServiceImpl implements CustomUserService{
                     kakaoDto.setAddPoint(userDto.getAddPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
                     kakaoDto.setTotalPoint(pointDto.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
                     kakaoDto.setStoreNm(pointDto.getAgentName());
+                    kakaoDto.setAgentTel(pointDto.getAgentTel());
 
                     KakaoExampleController kakaoExampleController = new KakaoExampleController();
                     kakaoExampleController.sendOneAta(kakaoDto);
@@ -461,7 +462,7 @@ public class CustomUserServiceImpl implements CustomUserService{
                     PointDto pointDto2 = userMapper.getTotalPoint(userDto);
 
                     KakaoDto kakaoDto = new KakaoDto();
-                    kakaoDto.setTemplateId("KA01TP231127074911495jJtEBsek5Wq");
+                    kakaoDto.setTemplateId("KA01TP2403212343075794DuTjfujlVd");
                     kakaoDto.setNickName(pointDto2.getNickName());
                     kakaoDto.setRcvNum(userDto.getPhoneNum());
                     kakaoDto.setCouponPoint(pointDto2.getCouponPoint());
@@ -471,6 +472,7 @@ public class CustomUserServiceImpl implements CustomUserService{
                     kakaoDto.setMinusPoint(userDto.getMinusPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
                     kakaoDto.setTotalPoint(pointDto2.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
                     kakaoDto.setStoreNm(pointDto2.getAgentName());
+                    kakaoDto.setAgentTel(pointDto2.getAgentTel());
 
                     KakaoExampleController kakaoExampleController = new KakaoExampleController();
                     kakaoExampleController.sendOneAta(kakaoDto);
@@ -535,6 +537,11 @@ public class CustomUserServiceImpl implements CustomUserService{
         userMapper.insertMinusTicketAsCnt3(userDto);
 
         return userMapper.useTicketAsCnt3(userDto);
+    }
+
+    @Override
+    public int updateTicket1ResetAjax(UserDto userDto) throws Exception {
+        return userMapper.updateTicket1ResetAjax(userDto);
     }
 
     @Override

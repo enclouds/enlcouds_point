@@ -224,6 +224,7 @@
                     <input type="text" style="width:1000px;" id="schText" name="schText" placeholder="검색어" th:value="${params.schText}" onkeyup="if(window.event.keyCode==13){fnSearch()}">
                 </span>
                 <button type="button" class="search_btn" th:onclick="javascript:fnSearch();">조회</button>
+                <button type="button" class="reset_btn" th:onclick="javascript:fnTicket1Reset();">주간티켓 초기화</button>
             </div>
         </form>
 
@@ -542,6 +543,36 @@
             }
         });
 
+    }
+
+    function fnTicket1Reset(){
+        var msg = "주간티켓을 초기화 하시겠습니까?";
+
+        if(confirm(msg)){
+
+            $("#loading_modal").show();
+            $("#my-spinner").show();
+
+            $.ajax({
+                contentType:false,
+                processData:false,
+                type: "POST",
+                url: "/user/updateTicket1ResetAjax",
+                data: formData,
+                success: function(response) {
+                    // 성공 시 동작
+                    alert(response.resultMsg);
+                    $("#loading_modal").hide();
+                    $("#my-spinner").hide();
+                    fnSearch();
+                },
+                error: function(error) {
+                    // 실패 시 동작
+                    $("#loading_modal").hide();
+                    $("#my-spinner").hide();
+                }
+            });
+        }
     }
 
 </script>

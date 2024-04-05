@@ -514,6 +514,7 @@
 		, format(ticket2, 0) as ticket2
 		, format(ticket3, 0) as ticket3
 		, nick_name
+		, (select tel from p_agent pa where pa.agent_code = pu.agent_code) as agent_tel
 		from p_user pu
 		where 1=1
 		and phone_num = #{phoneNum}
@@ -1032,6 +1033,11 @@
 		UPDATE p_user
 		SET rank_sum_point = rank_sum_point - #{minusRankSumPoint}
 		WHERE phone_num = #{phoneNum}
+	</update>
+
+	<update id="updateTicket1ResetAjax" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+		UPDATE p_user
+		SET ticket = 0
 	</update>
 
 </mapper>

@@ -107,8 +107,8 @@ public class KakaoExampleController {
             variables.put("#{담당자 전화번호8}", "010-7591-4963");
             variables.put("#{지점9}", "마산 합성점");
             variables.put("#{담당자 전화번호9}", "010-3919-6360");
-            variables.put("#{지점10}", "");
-            variables.put("#{담당자 전화번호10}", "");
+            variables.put("#{지점10}", "부산 경성대점");
+            variables.put("#{담당자 전화번호10}", "010-3823-2244");
             kakaoOption.setVariables(variables);
             //New 차감
         }else if(kakaoDto.getTemplateId().equals("KA01TP231127074911495jJtEBsek5Wq")){
@@ -139,8 +139,34 @@ public class KakaoExampleController {
             variables.put("#{담당자 전화번호8}", "010-7591-4963");
             variables.put("#{지점9}", "마산 합성점");
             variables.put("#{담당자 전화번호9}", "010-3919-6360");
-            variables.put("#{지점10}", "");
-            variables.put("#{담당자 전화번호10}", "");
+            variables.put("#{지점10}", "부산 경성대점");
+            variables.put("#{담당자 전화번호10}", "010-3823-2244");
+            kakaoOption.setVariables(variables);
+        }else if(kakaoDto.getTemplateId().equals("KA01TP240207000313733KDbd3vtZ2Uq")){
+            HashMap<String, String> variables = new HashMap<>();
+            variables.put("#{닉네임}", kakaoDto.getNickName());
+            variables.put("#{상점명}", kakaoDto.getStoreNm());
+            variables.put("#{적립포인트}", kakaoDto.getAddPoint());
+            variables.put("#{누적포인트}", kakaoDto.getTotalPoint());
+            variables.put("#{주간티켓}", kakaoDto.getTicket1());
+            variables.put("#{프리티켓}", kakaoDto.getTicket2());
+            variables.put("#{씨티티켓}", kakaoDto.getTicket3());
+            variables.put("#{외식쿠폰}", kakaoDto.getCouponPoint());
+            variables.put("#{지점}", kakaoDto.getStoreNm());
+            variables.put("#{담당자 전화번호}", kakaoDto.getAgentTel());
+            kakaoOption.setVariables(variables);
+        }else if(kakaoDto.getTemplateId().equals("KA01TP2403212343075794DuTjfujlVd")){
+            HashMap<String, String> variables = new HashMap<>();
+            variables.put("#{닉네임}", kakaoDto.getNickName());
+            variables.put("#{상점명}", kakaoDto.getStoreNm());
+            variables.put("#{적립포인트}", kakaoDto.getMinusPoint());
+            variables.put("#{누적포인트}", kakaoDto.getTotalPoint());
+            variables.put("#{주간티켓}", kakaoDto.getTicket1());
+            variables.put("#{프리티켓}", kakaoDto.getTicket2());
+            variables.put("#{씨티티켓}", kakaoDto.getTicket3());
+            variables.put("#{외식쿠폰}", kakaoDto.getCouponPoint());
+            variables.put("#{지점}", kakaoDto.getStoreNm());
+            variables.put("#{담당자 전화번호}", kakaoDto.getAgentTel());
             kakaoOption.setVariables(variables);
         }
 
