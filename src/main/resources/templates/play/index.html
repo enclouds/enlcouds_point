@@ -249,41 +249,49 @@
               sec = time%60;
               min = min%60;
 
-              var tm = min;
-              var ts = sec;
+              if(sec < 0){
+                  nextBeep();
+                  blindLvl++;
+                  breakTimeSum();
+                  nextLvl();
+                  return false;
+              }{
+                  var tm = min;
+                  var ts = sec;
 
-              if(tm < 10){
-                  tm = "0" + min;
+                  if(tm < 10){
+                      tm = "0" + min;
+                  }
+
+                  if(ts < 10){
+                      ts = "0" + sec;
+                  }
+
+                  document.getElementById("timeMi").innerHTML = tm;
+                  document.getElementById("timeSs").innerHTML = ts;
+
+                  b_min = Math.floor(breakTime/60%60);
+                  b_hour = Math.floor(breakTime/60/60);
+                  b_sec = breakTime%60;
+
+                  var b_th = b_hour;
+                  var b_tm = b_min;
+                  var b_ts = b_sec;
+
+                  if(b_th < 10){
+                      b_th = "0" + b_hour;
+                  }
+
+                  if(b_tm < 10){
+                      b_tm = "0" + b_min;
+                  }
+
+                  if(b_ts < 10){
+                      b_ts = "0" + b_sec;
+                  }
+
+                  $("#breakTime").text(b_th + ":" + b_tm + ":" + b_ts);
               }
-
-              if(ts < 10){
-                  ts = "0" + sec;
-              }
-
-              document.getElementById("timeMi").innerHTML = tm;
-              document.getElementById("timeSs").innerHTML = ts;
-
-              b_min = Math.floor(breakTime/60%60);
-              b_hour = Math.floor(breakTime/60/60);
-              b_sec = breakTime%60;
-
-              var b_th = b_hour;
-              var b_tm = b_min;
-              var b_ts = b_sec;
-
-              if(b_th < 10){
-                  b_th = "0" + b_hour;
-              }
-
-              if(b_tm < 10){
-                  b_tm = "0" + b_min;
-              }
-
-              if(b_ts < 10){
-                  b_ts = "0" + b_sec;
-              }
-
-              $("#breakTime").text(b_th + ":" + b_tm + ":" + b_ts);
           });
 
           $("#refreshBtn").click(function(){
@@ -351,7 +359,6 @@
 
                 if(time < 1){
                     nextBeep();
-                    clearInterval(timer);
                     blindLvl++;
                     nextLvl();
                 }
