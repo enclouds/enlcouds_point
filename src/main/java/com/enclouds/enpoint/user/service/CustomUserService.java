@@ -83,6 +83,8 @@ public interface CustomUserService {
 
     void updateWeekRankPoint() throws Exception;
 
+    int updateAllUserWeekTicketDefAjax() throws Exception;
+
     int updateAllUserRankMoveAjax() throws Exception;
 
     int updateAllUserWeekRankDefAjax() throws Exception;

@@ -909,6 +909,12 @@
 		WHERE 1=1
 	</update>
 
+	<update id="updateAllUserWeekTicketDefAjax">
+		UPDATE p_user
+		SET ticket = 0
+		WHERE 1=1
+	</update>
+
 	<update id="updateAllUserRankMove">
 		update p_user pu
 		set pu.rank_sum_point = pu.rank_sum_point + pu.rank_point

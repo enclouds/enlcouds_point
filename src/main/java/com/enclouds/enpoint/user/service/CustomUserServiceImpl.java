@@ -642,6 +642,11 @@ public class CustomUserServiceImpl implements CustomUserService{
     }
 
     @Override
+    public int updateAllUserWeekTicketDefAjax() throws Exception {
+        return userMapper.updateAllUserWeekTicketDefAjax();
+    }
+
+    @Override
     public int updateAllUserWeekRankDefAjax() throws Exception {
         return userMapper.updateAllUserWeekRankDefAjax();
     }

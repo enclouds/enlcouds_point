@@ -164,4 +164,6 @@ public interface UserMapper {
 
     int insertCouponHistory(UserDto userDto) throws Exception;
 
+    int updateAllUserWeekTicketDefAjax() throws Exception;
+
 }
