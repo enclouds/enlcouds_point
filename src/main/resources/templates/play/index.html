@@ -250,7 +250,6 @@
               min = min%60;
 
               if(sec < 0){
-                  nextBeep();
                   blindLvl++;
                   breakTimeSum();
                   nextLvl();
@@ -358,7 +357,6 @@
 
 
                 if(time < 1){
-                    nextBeep();
                     blindLvl++;
                     nextLvl();
                 }
@@ -422,6 +420,7 @@
         clearInterval(timer);
         starFlag = true;
 
+        nextBeep();
         timeGo();
     }
 
