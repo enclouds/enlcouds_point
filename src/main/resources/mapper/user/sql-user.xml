@@ -74,7 +74,7 @@
 		, pu.memo
 		, date_format((select max(pp.reg_date) from p_point pp where pp.phone_num = pu.phone_num), '%Y-%m-%d %H:%m:%s') as maxDate
 		, rank_point
-		, format(coupon_point, 0) as coupon_point
+		, coupon_point as coupon_point
 		, coupon_point as org_coupon_point
 		, rank_sum_point
 		, pu.agent_code
@@ -171,7 +171,7 @@
 		, memo
 		, agent_code)
 		VALUES
-		( #{phoneNum}
+		( TRIM(#{phoneNum})
 		, #{nickName}
 		, 'NORMAL'
 		, #{point}
@@ -549,7 +549,7 @@
 
 	<select id="selectUserPointListTotalCount" parameterType="com.enclouds.enpoint.user.dto.PointDto" resultType="int">
 		SELECT count(*)
-		FROM p_point
+		FROM p_point pp
 		WHERE 1=1
 		<choose>
 			<when test='agentCode == 1'>
@@ -806,7 +806,43 @@
 		AND phone_num = #{phoneNum}
 	</update>
 
+	<select id="selectUserRankListListTotalCount" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="int">
+		SELECT count(*)
+		from (
+		SELECT nick_name
+		, phone_num
+		, case when length(phone_num) = 10 then concat(concat(SUBSTR(phone_num, 1 ,3), '***'), SUBSTR(phone_num, 7 ,10))
+		when length(phone_num) = 11 then concat(concat(SUBSTR(phone_num, 1 ,4), '***'), SUBSTR(phone_num, 8 ,11))
+		end as phone_num_masking
+		, rank_point
+		, format(rank_point, 0) as rank_point_str
+		, rank_sum_point
+		, format(rank_sum_point, 0) as rank_sum_point_str
+		, date_format(reg_date, '%Y-%m-%d') as regDate
+		, date_format((select max(reg_date) from p_point pp where pp.phone_num = pu.phone_num), '%Y-%m-%d') as maxDate
+		, CAST(rank_point AS signed integer) as intRankPoint
+		, CAST(rank_sum_point AS signed integer) as intRankSumPoint
+		, pu.agent_code
+		FROM p_user pu, (SELECT @rownum:=0) TMP
+		WHERE 1=1
+		AND (rank_point > 0 or rank_sum_point > 0)
+		AND pu.nick_name like '%${schText}%'
+		) TAB
+		WHERE 1=1
+		<if test="schCond2 != ''">
+			AND TAB.agent_code = #{schCond2}
+		</if>
+		<if test="schCond1 == 'week'">
+			ORDER BY TAB.intRankPoint desc
+		</if>
+		<if test="schCond1 == 'sum'">
+			ORDER BY TAB.intRankSumPoint desc
+		</if>
+	</select>
+
 	<select id="selectUserRankList" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.UserDto">
+		select *
+		from (
 		SELECT @rownum:=@rownum+1 as ranking, TAB.*
 		from (
 		SELECT nick_name
@@ -838,6 +874,9 @@
 		<if test="schCond1 == 'sum'">
 			ORDER BY TAB.intRankSumPoint desc
 		</if>
+		) TAB
+		LIMIT
+		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
 	</select>
 
 	<update id="updateUserAddCouponPoint" parameterType="com.enclouds.enpoint.user.dto.UserDto">
@@ -988,7 +1027,50 @@
 		AND phone_num = #{phoneNum}
 	</update>
 
+	<select id="selectUserTicketRankListTotalCount" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="int">
+		SELECT count(*)
+		from (
+		SELECT nick_name
+		, phone_num
+		, case when length(phone_num) = 10 then concat(concat(SUBSTR(phone_num, 1 ,3), '***'), SUBSTR(phone_num, 7 ,10))
+		when length(phone_num) = 11 then concat(concat(SUBSTR(phone_num, 1 ,4), '***'), SUBSTR(phone_num, 8 ,11))
+		end as phone_num_masking
+		, date_format(reg_date, '%Y-%m-%d') as regDate
+		, date_format((select max(reg_date) from p_point pp where pp.phone_num = pu.phone_num), '%Y-%m-%d') as maxDate
+		, CAST(ticket AS signed integer) as intRankTicket
+		, CAST(ticket2 AS signed integer) as intRankTicket2
+		, CAST(ticket3 AS signed integer) as intRankTicket3
+		, pu.ticket
+		, pu.ticket2
+		, pu.ticket3
+		, format(ticket, 0) as ticket_str
+		, format(ticket2, 0) as ticket_str2
+		, format(ticket3, 0) as ticket_str3
+		, pu.agent_code
+		FROM p_user pu,  (SELECT @rownum:=0) TMP
+		WHERE 1=1
+		AND pu.nick_name like '%${schText}%'
+		AND (pu.ticket > 0 or pu.ticket2 > 0 or pu.ticket3 > 0)
+		ORDER BY ticket desc
+		) TAB
+		WHERE 1=1
+		<if test="schCond2 != ''">
+			AND TAB.agent_code = #{schCond2}
+		</if>
+		<if test="schCond1 == 'ticket1'">
+			ORDER BY TAB.intRankTicket desc
+		</if>
+		<if test="schCond1 == 'ticket2'">
+			ORDER BY TAB.intRankTicket2 desc
+		</if>
+		<if test="schCond1 == 'ticket3'">
+			ORDER BY TAB.intRankTicket3 desc
+		</if>
+	</select>
+
 	<select id="selectUserTicketRankList" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.UserDto">
+		select *
+		from (
 		SELECT @rownum:=@rownum+1 as ranking, TAB.*
 		from (
 		SELECT nick_name
@@ -1027,6 +1109,9 @@
 		<if test="schCond1 == 'ticket3'">
 			ORDER BY TAB.intRankTicket3 desc
 		</if>
+		) TAB
+		LIMIT
+		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
 	</select>
 
 	<update id="updateUserAddSumRankPoint" parameterType="com.enclouds.enpoint.user.dto.UserDto">

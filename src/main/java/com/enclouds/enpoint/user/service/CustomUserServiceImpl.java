@@ -552,7 +552,7 @@ public class CustomUserServiceImpl implements CustomUserService{
 
             PointDto pointDto = userMapper.getTotalCouponPoint(userDto);
 
-            if(pointDto.getPointInt() < Integer.parseInt(userDto.getMinusCouponPoint())){
+            if(pointDto.getPointInt() < userDto.getMinusCouponPoint()){
                 result = -2;
                 return  result;
             }
@@ -630,6 +630,12 @@ public class CustomUserServiceImpl implements CustomUserService{
 
     @Override
     public List<UserDto> selectUserRankList(UserDto userDto) throws Exception {
+        int userRankTotalCount = userMapper.selectUserRankListListTotalCount(userDto);
+
+        PaginationInfo paginationInfo = new PaginationInfo(userDto);
+        paginationInfo.setTotalRecordCount(userRankTotalCount);
+        userDto.setPaginationInfo(paginationInfo);
+
         return userMapper.selectUserRankList(userDto);
     }
 
@@ -671,6 +677,12 @@ public class CustomUserServiceImpl implements CustomUserService{
 
     @Override
     public List<UserDto> selectUserTicketRankList(UserDto userDto) throws Exception {
+        int userTicketTotalCount = userMapper.selectUserTicketRankListTotalCount(userDto);
+
+        PaginationInfo paginationInfo = new PaginationInfo(userDto);
+        paginationInfo.setTotalRecordCount(userTicketTotalCount);
+        userDto.setPaginationInfo(paginationInfo);
+
         return userMapper.selectUserTicketRankList(userDto);
     }
 

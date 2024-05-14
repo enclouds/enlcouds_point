@@ -285,6 +285,28 @@
             </table>
         </div>
 
+        <!-- pagination -->
+        <div class="paging" title="페이지">
+
+            <th:block layout:fragment="paging">
+                <nav th:replace="/fragments/pagination.html :: fragment-pagination"></nav>
+            </th:block>
+
+            <th:block layout:fragment="script">
+                <script th:inline="javascript">
+                    /*<![CDATA[*/
+
+                    function movePage(uri, queryString) {
+                        location.href = uri + queryString;
+                    }
+
+                    /*]]>*/
+                </script>
+            </th:block>
+
+        </div>
+        <!-- /pagination -->
+
     </div>
     <!-- content E -->
 

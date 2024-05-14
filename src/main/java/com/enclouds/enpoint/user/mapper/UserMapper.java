@@ -118,7 +118,11 @@ public interface UserMapper {
 
     PointDto getTotalCouponPoint(UserDto userDto) throws Exception;
 
+    int selectUserRankListListTotalCount(UserDto userDto) throws Exception;
+
     List<UserDto> selectUserRankList(UserDto userDto) throws Exception;
+
+    int selectUserTicketRankListTotalCount(UserDto userDto) throws Exception;
 
     List<UserDto> selectUserTicketRankList(UserDto userDto) throws Exception;
 
