@@ -167,7 +167,7 @@ public class CustomUserServiceImpl implements CustomUserService{
                     kakaoDto.setTemplateId("KA01TP240207000313733KDbd3vtZ2Uq");
                     kakaoDto.setNickName(pointDto.getNickName());
                     kakaoDto.setRcvNum(userDto.getPhoneNum());
-                    kakaoDto.setCouponPoint(pointDto.getCouponPoint());
+                    kakaoDto.setCouponPoint(String.valueOf(pointDto.getCouponPoint()));
                     kakaoDto.setTicket1(pointDto.getTicket1());
                     kakaoDto.setTicket2(pointDto.getTicket2());
                     kakaoDto.setTicket3(pointDto.getTicket3());
@@ -465,7 +465,7 @@ public class CustomUserServiceImpl implements CustomUserService{
                     kakaoDto.setTemplateId("KA01TP2403212343075794DuTjfujlVd");
                     kakaoDto.setNickName(pointDto2.getNickName());
                     kakaoDto.setRcvNum(userDto.getPhoneNum());
-                    kakaoDto.setCouponPoint(pointDto2.getCouponPoint());
+                    kakaoDto.setCouponPoint(String.valueOf(pointDto2.getCouponPoint()));
                     kakaoDto.setTicket1(pointDto2.getTicket1());
                     kakaoDto.setTicket2(pointDto2.getTicket2());
                     kakaoDto.setTicket3(pointDto2.getTicket3());
@@ -552,7 +552,7 @@ public class CustomUserServiceImpl implements CustomUserService{
 
             PointDto pointDto = userMapper.getTotalCouponPoint(userDto);
 
-            if(pointDto.getPointInt() < userDto.getMinusCouponPoint()){
+            if(pointDto.getCouponPoint() < userDto.getMinusCouponPoint()){
                 result = -2;
                 return  result;
             }

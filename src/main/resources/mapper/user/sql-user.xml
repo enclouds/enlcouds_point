@@ -499,7 +499,7 @@
 
 	<select id="getTotalCouponPoint" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
 		select format(coupon_point, 0) as point
-		, coupon_point as pointInt
+		, coupon_point as couponPoint
 		from p_user pu
 		where 1=1
 		and phone_num = #{phoneNum}
@@ -509,7 +509,7 @@
 		select format(point, 0) as point
 		, point as pointInt
 		, (select agent_name from p_agent pa where pa.agent_code = #{agentCode}) as agent_name
-		, format(coupon_point, 0) as coupon_point
+		, coupon_point as coupon_point
 		, format(ticket, 0) as ticket1
 		, format(ticket2, 0) as ticket2
 		, format(ticket3, 0) as ticket3
