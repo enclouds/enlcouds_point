@@ -168,6 +168,36 @@ public class KakaoExampleController {
             variables.put("#{지점}", kakaoDto.getStoreNm());
             variables.put("#{담당자 전화번호}", kakaoDto.getAgentTel());
             kakaoOption.setVariables(variables);
+        }else if(kakaoDto.getTemplateId().equals("KA01TP240508062419040Z64NKB9aSZi")){
+            HashMap<String, String> variables = new HashMap<>();
+            variables.put("#{닉네임}", kakaoDto.getNickName());
+            variables.put("#{상점명}", kakaoDto.getStoreNm());
+            variables.put("#{적립포인트}", kakaoDto.getAddPoint());
+            variables.put("#{누적포인트}", kakaoDto.getTotalPoint());
+            variables.put("#{주간티켓}", kakaoDto.getTicket1());
+            variables.put("#{프리티켓}", kakaoDto.getTicket2());
+            variables.put("#{씨티티켓}", kakaoDto.getTicket3());
+            variables.put("#{팀프로티켓}", kakaoDto.getTicket4());
+            variables.put("#{온라인티켓}", kakaoDto.getTicket5());
+            variables.put("#{외식쿠폰}", kakaoDto.getCouponPoint());
+            variables.put("#{지점}", kakaoDto.getStoreNm());
+            variables.put("#{담당자 전화번호}", kakaoDto.getAgentTel());
+            kakaoOption.setVariables(variables);
+        }else if(kakaoDto.getTemplateId().equals("KA01TP240508062443303DlQ00SPPCrQ")){
+            HashMap<String, String> variables = new HashMap<>();
+            variables.put("#{닉네임}", kakaoDto.getNickName());
+            variables.put("#{상점명}", kakaoDto.getStoreNm());
+            variables.put("#{적립포인트}", kakaoDto.getMinusPoint());
+            variables.put("#{누적포인트}", kakaoDto.getTotalPoint());
+            variables.put("#{주간티켓}", kakaoDto.getTicket1());
+            variables.put("#{프리티켓}", kakaoDto.getTicket2());
+            variables.put("#{씨티티켓}", kakaoDto.getTicket3());
+            variables.put("#{팀프로티켓}", kakaoDto.getTicket4());
+            variables.put("#{온라인티켓}", kakaoDto.getTicket5());
+            variables.put("#{외식쿠폰}", kakaoDto.getCouponPoint());
+            variables.put("#{지점}", kakaoDto.getStoreNm());
+            variables.put("#{담당자 전화번호}", kakaoDto.getAgentTel());
+            kakaoOption.setVariables(variables);
         }
 
         Message message = new Message();

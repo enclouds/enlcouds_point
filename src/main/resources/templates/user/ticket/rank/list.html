@@ -191,6 +191,106 @@
 </div>
 <!-- modal E -->
 
+<!-- modal S -->
+<div class="modal fade small" id="minus_ticket_modal4" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">팀프로 티켓 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">회원정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">별명</th>
+                            <td>
+                                <input type="text" name="minusTicketNickName4" id="minusTicketNickName4" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">총 팀프로 티켓</th>
+                            <td>
+                                <input type="text" name="totalMinusTicket4" id="totalMinusTicket4" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">차감 팀프로 티켓</th>
+                            <td>
+                                <input type="text" name="minusTicket4" id="minusTicket4" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn red btn-primary" th:onclick="javascript:minusTicket4();">차감</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('minus_ticket_modal4');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="minus_ticket_modal5" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">온라인 티켓 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">회원정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">별명</th>
+                            <td>
+                                <input type="text" name="minusTicketNickName5" id="minusTicketNickName5" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">총 온라인 티켓</th>
+                            <td>
+                                <input type="text" name="totalMinusTicket5" id="totalMinusTicket5" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">차감 온라인 티켓</th>
+                            <td>
+                                <input type="text" name="minusTicket5" id="minusTicket5" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn red btn-primary" th:onclick="javascript:minusTicket5();">차감</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('minus_ticket_modal5');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
 <!-- container S -->
 <div class="container">
     <!-- header S -->
@@ -214,6 +314,8 @@
                         <option value="ticket1" th:selected="${params.schCond1} == 'ticket1'">주간 티켓</option>
                         <option value="ticket2" th:selected="${params.schCond1} == 'ticket2'">프리 티켓</option>
                         <option value="ticket3" th:selected="${params.schCond1} == 'ticket3'">씨티 티켓</option>
+                        <option value="ticket4" th:selected="${params.schCond1} == 'ticket4'">팀프로 티켓</option>
+                        <option value="ticket5" th:selected="${params.schCond1} == 'ticket5'">온라인 티켓</option>
                     </select>
 
                     <select id="schCond2" name="schCond2" style="width:150px;">
@@ -242,12 +344,18 @@
                     <th scope="col">프리 티켓 차감</th>
                     <th scope="col">씨티 티켓</th>
                     <th scope="col">씨티 티켓 차감</th>
+                    <th scope="col">팀프로 티켓</th>
+                    <th scope="col">팀프로 티켓 차감</th>
+                    <th scope="col">온라인 티켓</th>
+                    <th scope="col">온라인 티켓 차감</th>
                     <th sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" scope="col">전화번호</th>
                     <th sec:authorize="hasRole('ROLE_AGENT')" scope="col">전화번호</th>
                     <th scope="col">등록일자</th>
                     <th scope="col">주간 티켓 내역</th>
                     <th scope="col">프리 티켓 내역</th>
                     <th scope="col">씨티 티켓 내역</th>
+                    <th scope="col">팀프로 티켓 내역</th>
+                    <th scope="col">온라인 티켓 내역</th>
                     <th scope="col">최근 방문 일자</th>
                 </tr>
                 </thead>
@@ -267,6 +375,14 @@
                     <td>
                         <button type="button" class="tb_btn red" th:if="${list.ticket3}>0" th:onclick="javascript:fnMinusTicket3([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket3}]])">차감(씨티 티켓)</button>
                     </td>
+                    <td th:text="${list.ticketStr4}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
+                    <td>
+                        <button type="button" class="tb_btn red" th:if="${list.ticket4}>0" th:onclick="javascript:fnMinusTicket4([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket4}]])">차감(팀프로 티켓)</button>
+                    </td>
+                    <td th:text="${list.ticketStr5}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
+                    <td>
+                        <button type="button" class="tb_btn red" th:if="${list.ticket5}>0" th:onclick="javascript:fnMinusTicket5([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket5}]])">차감(온라인 티켓)</button>
+                    </td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" th:text="${list.phoneNum}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
                     <td sec:authorize="hasRole('ROLE_AGENT')" th:text="${list.phoneNumMasking}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
                     <td th:text="${list.regDate}"></td>
@@ -278,6 +394,12 @@
                     </td>
                     <td>
                         <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory3([[${list.phoneNum}]])">내역(씨티 티켓)</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory4([[${list.phoneNum}]])">내역(팀프로 티켓)</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory5([[${list.phoneNum}]])">내역(온라인 티켓)</button>
                     </td>
                     <td th:text="${list.maxDate}"></td>
                 </tr>
@@ -437,6 +559,80 @@
         });
     }
 
+    function fnTicketHistory4(phoneNum){
+        $("#historyTbody").empty();
+
+        var formData = new FormData();
+
+        formData.append("phoneNum", phoneNum);
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/user/ticket/selectTicketHistory4Ajax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                if(response.historyTicketList != null){
+                    var appendStr = '';
+                    for(var i=0 ; i<response.historyTicketList.length ; i++){
+                        var appendStr_01 = "<td>"+response.historyTicketList[i]['ticketGbnNm']+"</td>>";
+                        var appendStr_02 = "<td>"+response.historyTicketList[i]['ticket']+"</td>>";
+                        var appendStr_03 = "<td>"+response.historyTicketList[i]['regDate']+"</td>>";
+                        var appendStr_04 = "<td>"+response.historyTicketList[i]['agentName']+"</td>>";
+
+                        appendStr += "<tr>" + appendStr_01 + appendStr_02 + appendStr_03 + appendStr_04 + "</>tr>";
+                    }
+
+                    $("#historyTbody").append(appendStr);
+                }
+
+                $("#history_ticket_modal").show();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function fnTicketHistory5(phoneNum){
+        $("#historyTbody").empty();
+
+        var formData = new FormData();
+
+        formData.append("phoneNum", phoneNum);
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/user/ticket/selectTicketHistory5Ajax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                if(response.historyTicketList != null){
+                    var appendStr = '';
+                    for(var i=0 ; i<response.historyTicketList.length ; i++){
+                        var appendStr_01 = "<td>"+response.historyTicketList[i]['ticketGbnNm']+"</td>>";
+                        var appendStr_02 = "<td>"+response.historyTicketList[i]['ticket']+"</td>>";
+                        var appendStr_03 = "<td>"+response.historyTicketList[i]['regDate']+"</td>>";
+                        var appendStr_04 = "<td>"+response.historyTicketList[i]['agentName']+"</td>>";
+
+                        appendStr += "<tr>" + appendStr_01 + appendStr_02 + appendStr_03 + appendStr_04 + "</>tr>";
+                    }
+
+                    $("#historyTbody").append(appendStr);
+                }
+
+                $("#history_ticket_modal").show();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
     function fnModalClose(id){
         $("#"+id).hide();
     }
@@ -469,6 +665,26 @@
         $("#minus_ticket_modal3").show();
 
         $("#minusTicket3").focus();
+    }
+
+    function fnMinusTicket4(phoneNum, nickName, ticket){
+        selectTrSeq = phoneNum;
+
+        $("#minusTicketNickName4").val(nickName);
+        $("#totalMinusTicket4").val(ticket);
+        $("#minus_ticket_modal4").show();
+
+        $("#minusTicket4").focus();
+    }
+
+    function fnMinusTicket5(phoneNum, nickName, ticket){
+        selectTrSeq = phoneNum;
+
+        $("#minusTicketNickName5").val(nickName);
+        $("#totalMinusTicket5").val(ticket);
+        $("#minus_ticket_modal5").show();
+
+        $("#minusTicket5").focus();
     }
 
     function minusTicket(){
@@ -550,6 +766,70 @@
             processData:false,
             type: "POST",
             url: "/user/updateUserMinusTicket3Ajax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                $("#loading_modal").hide();
+                $("#my-spinner").hide();
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+                $("#loading_modal").hide();
+                $("#my-spinner").hide();
+            }
+        });
+
+    }
+
+    function minusTicket4(){
+        var formData = new FormData();
+
+        formData.append("phoneNum", selectTrSeq);
+        formData.append("minusTicket", $("#minusTicket4").val());
+
+        $("#minus_ticket_modal4").hide();
+        $("#loading_modal").show();
+        $("#my-spinner").show();
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/user/updateUserMinusTicket4Ajax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                $("#loading_modal").hide();
+                $("#my-spinner").hide();
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+                $("#loading_modal").hide();
+                $("#my-spinner").hide();
+            }
+        });
+
+    }
+
+    function minusTicket5(){
+        var formData = new FormData();
+
+        formData.append("phoneNum", selectTrSeq);
+        formData.append("minusTicket", $("#minusTicket5").val());
+
+        $("#minus_ticket_modal5").hide();
+        $("#loading_modal").show();
+        $("#my-spinner").show();
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/user/updateUserMinusTicket5Ajax",
             data: formData,
             success: function(response) {
                 // 성공 시 동작

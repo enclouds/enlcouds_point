@@ -67,9 +67,9 @@
                     <td th:text="${list.nickName}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" th:text="${list.phoneNum}"></td>
                     <td sec:authorize="hasRole('ROLE_AGENT')" th:text="${list.phoneNumMasking}"></td>
-                    <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatInteger(list.addCoupon, 0, 'COMMA')}"></td>
-                    <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatInteger(list.minusCoupon, 0, 'COMMA')}"></td>
-                    <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatInteger(list.preCouponCnt, 0, 'COMMA')}"></td>
+                    <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatDecimal(list.addCoupon, 1, 1)}"></td>
+                    <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatDecimal(list.minusCoupon, 1, 1)}"></td>
+                    <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatDecimal(list.preCouponCnt, 1, 1)}"></td>
                     <td th:text="${list.regDate}"></td>
                 </tr>
                 </tbody>

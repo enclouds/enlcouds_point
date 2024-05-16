@@ -164,13 +164,15 @@ public class CustomUserServiceImpl implements CustomUserService{
                     PointDto pointDto = userMapper.getTotalPoint(userDto);
 
                     KakaoDto kakaoDto = new KakaoDto();
-                    kakaoDto.setTemplateId("KA01TP240207000313733KDbd3vtZ2Uq");
+                    kakaoDto.setTemplateId("KA01TP240508062419040Z64NKB9aSZi");
                     kakaoDto.setNickName(pointDto.getNickName());
                     kakaoDto.setRcvNum(userDto.getPhoneNum());
                     kakaoDto.setCouponPoint(String.valueOf(pointDto.getCouponPoint()));
                     kakaoDto.setTicket1(pointDto.getTicket1());
                     kakaoDto.setTicket2(pointDto.getTicket2());
                     kakaoDto.setTicket3(pointDto.getTicket3());
+                    kakaoDto.setTicket4(pointDto.getTicket4());
+                    kakaoDto.setTicket5(pointDto.getTicket5());
                     kakaoDto.setAddPoint(userDto.getAddPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
                     kakaoDto.setTotalPoint(pointDto.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
                     kakaoDto.setStoreNm(pointDto.getAgentName());
@@ -382,6 +384,116 @@ public class CustomUserServiceImpl implements CustomUserService{
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateUserAddTicket4(UserDto userDto) throws Exception {
+        try {
+            int result = -1;
+
+            PointDto preTicketDto = userMapper.getTotalTicket4(userDto);
+            AgentDto agentDto = new AgentDto();
+            agentDto.setAgentCode(userDto.getAgentCode());
+            AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
+
+            if(agentInfo.getTicketInt4() < Integer.parseInt(userDto.getAddTicket())){
+                result = -2;
+                return  result;
+            }
+
+            //총 티켓 증가
+            result = userMapper.updateUserAddTicket4(userDto);
+
+            //티켓 내역 생성
+            if(result > 0){
+                userDto.setDefTicket(agentInfo.getTicketInt4());
+                userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
+                result = userMapper.insertAddTicket4(userDto);
+
+                /*if(result > 0){
+                    //카카오톡 전송
+                    PointDto pointDto = userMapper.getTotalPoint(userDto);
+
+                    KakaoDto kakaoDto = new KakaoDto();
+                    kakaoDto.setTemplateId("KA01TP221011062400156k4kpTZGoW5f");
+                    kakaoDto.setRcvNum(userDto.getPhoneNum());
+                    kakaoDto.setAddPoint(userDto.getAddPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
+                    kakaoDto.setTotalPoint(pointDto.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
+                    kakaoDto.setStoreNm(pointDto.getAgentName());
+
+                    KakaoExampleController kakaoExampleController = new KakaoExampleController();
+                    kakaoExampleController.sendOneAta(kakaoDto);
+                }*/
+
+                //해당 가맹점 티켓 차감
+                if(result > 0){
+                    AgentDto agentDto1 = new AgentDto();
+                    agentDto1.setAgentCode(userDto.getAgentCode());
+                    agentDto1.setMinusTicket(userDto.getAddTicket());
+
+                    agentService.updateAgentMinusTicket4(agentDto1);
+                }
+            }
+            return result;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateUserAddTicket5(UserDto userDto) throws Exception {
+        try {
+            int result = -1;
+
+            PointDto preTicketDto = userMapper.getTotalTicket5(userDto);
+            AgentDto agentDto = new AgentDto();
+            agentDto.setAgentCode(userDto.getAgentCode());
+            AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
+
+            if(agentInfo.getTicketInt4() < Integer.parseInt(userDto.getAddTicket())){
+                result = -2;
+                return  result;
+            }
+
+            //총 티켓 증가
+            result = userMapper.updateUserAddTicket5(userDto);
+
+            //티켓 내역 생성
+            if(result > 0){
+                userDto.setDefTicket(agentInfo.getTicketInt5());
+                userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
+                result = userMapper.insertAddTicket5(userDto);
+
+                /*if(result > 0){
+                    //카카오톡 전송
+                    PointDto pointDto = userMapper.getTotalPoint(userDto);
+
+                    KakaoDto kakaoDto = new KakaoDto();
+                    kakaoDto.setTemplateId("KA01TP221011062400156k4kpTZGoW5f");
+                    kakaoDto.setRcvNum(userDto.getPhoneNum());
+                    kakaoDto.setAddPoint(userDto.getAddPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
+                    kakaoDto.setTotalPoint(pointDto.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
+                    kakaoDto.setStoreNm(pointDto.getAgentName());
+
+                    KakaoExampleController kakaoExampleController = new KakaoExampleController();
+                    kakaoExampleController.sendOneAta(kakaoDto);
+                }*/
+
+                //해당 가맹점 티켓 차감
+                if(result > 0){
+                    AgentDto agentDto1 = new AgentDto();
+                    agentDto1.setAgentCode(userDto.getAgentCode());
+                    agentDto1.setMinusTicket(userDto.getAddTicket());
+
+                    agentService.updateAgentMinusTicket5(agentDto1);
+                }
+            }
+            return result;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public int updateUserAddRankPoint(UserDto userDto) throws Exception {
         return userMapper.updateUserAddRankPoint(userDto);
     }
@@ -462,13 +574,15 @@ public class CustomUserServiceImpl implements CustomUserService{
                     PointDto pointDto2 = userMapper.getTotalPoint(userDto);
 
                     KakaoDto kakaoDto = new KakaoDto();
-                    kakaoDto.setTemplateId("KA01TP2403212343075794DuTjfujlVd");
+                    kakaoDto.setTemplateId("KA01TP240508062443303DlQ00SPPCrQ");
                     kakaoDto.setNickName(pointDto2.getNickName());
                     kakaoDto.setRcvNum(userDto.getPhoneNum());
                     kakaoDto.setCouponPoint(String.valueOf(pointDto2.getCouponPoint()));
                     kakaoDto.setTicket1(pointDto2.getTicket1());
                     kakaoDto.setTicket2(pointDto2.getTicket2());
                     kakaoDto.setTicket3(pointDto2.getTicket3());
+                    kakaoDto.setTicket4(pointDto2.getTicket4());
+                    kakaoDto.setTicket5(pointDto2.getTicket5());
                     kakaoDto.setMinusPoint(userDto.getMinusPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
                     kakaoDto.setTotalPoint(pointDto2.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
                     kakaoDto.setStoreNm(pointDto2.getAgentName());
@@ -537,6 +651,36 @@ public class CustomUserServiceImpl implements CustomUserService{
         userMapper.insertMinusTicketAsCnt3(userDto);
 
         return userMapper.useTicketAsCnt3(userDto);
+    }
+
+    @Override
+    public int updateUserMinusTicket4(UserDto userDto) throws Exception {
+        AgentDto agentDto = new AgentDto();
+        agentDto.setAgentCode(userDto.getAgentCode());
+        AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
+
+        PointDto preTicketDto = userMapper.getTotalTicket4(userDto);
+
+        userDto.setDefTicket(agentInfo.getTicketInt());
+        userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
+        userMapper.insertMinusTicketAsCnt4(userDto);
+
+        return userMapper.useTicketAsCnt4(userDto);
+    }
+
+    @Override
+    public int updateUserMinusTicket5(UserDto userDto) throws Exception {
+        AgentDto agentDto = new AgentDto();
+        agentDto.setAgentCode(userDto.getAgentCode());
+        AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
+
+        PointDto preTicketDto = userMapper.getTotalTicket5(userDto);
+
+        userDto.setDefTicket(agentInfo.getTicketInt());
+        userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
+        userMapper.insertMinusTicketAsCnt5(userDto);
+
+        return userMapper.useTicketAsCnt5(userDto);
     }
 
     @Override
@@ -699,6 +843,16 @@ public class CustomUserServiceImpl implements CustomUserService{
     @Override
     public List<PointDto> selectTicketHistory3(UserDto userDto) throws Exception {
         return userMapper.selectTicketHistory3(userDto);
+    }
+
+    @Override
+    public List<PointDto> selectTicketHistory4(UserDto userDto) throws Exception {
+        return userMapper.selectTicketHistory4(userDto);
+    }
+
+    @Override
+    public List<PointDto> selectTicketHistory5(UserDto userDto) throws Exception {
+        return userMapper.selectTicketHistory5(userDto);
     }
 
     @Override

@@ -75,6 +75,34 @@
 		order by pt.reg_date desc
 	</select>
 
+	<select id="getTicketHistory4" parameterType="com.enclouds.enpoint.api.dto.ApiDto" resultType="com.enclouds.enpoint.api.dto.ApiTicketHistoryDto">
+		select ticket_gbn
+		, case when ticket_gbn = 'ADD' then '적립' else '차감' end as ticketGbnNm
+		, case when ticket_gbn = 'ADD' then format(pt.ticket, 0) else format(pt.ticket * -1, 0) end as ticket
+		, pt.phone_num
+		, pa.agent_name
+		, date_format(pt.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		from p_ticket4 pt
+		left join p_agent pa on pa.agent_code = pt.agent_code
+		WHERE 1=1
+		AND phone_num = #{phoneNum}
+		order by pt.reg_date desc
+	</select>
+
+	<select id="getTicketHistory5" parameterType="com.enclouds.enpoint.api.dto.ApiDto" resultType="com.enclouds.enpoint.api.dto.ApiTicketHistoryDto">
+		select ticket_gbn
+		, case when ticket_gbn = 'ADD' then '적립' else '차감' end as ticketGbnNm
+		, case when ticket_gbn = 'ADD' then format(pt.ticket, 0) else format(pt.ticket * -1, 0) end as ticket
+		, pt.phone_num
+		, pa.agent_name
+		, date_format(pt.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		from p_ticket5 pt
+		left join p_agent pa on pa.agent_code = pt.agent_code
+		WHERE 1=1
+		AND phone_num = #{phoneNum}
+		order by pt.reg_date desc
+	</select>
+
 	<select id="getRankList" parameterType="com.enclouds.enpoint.api.dto.ApiDto" resultType="com.enclouds.enpoint.api.dto.ApiRankDto">
 		SELECT @rownum:=@rownum+1 as ranking, TAB.*
 		from (
@@ -116,15 +144,21 @@
 		, CAST(ticket AS signed integer) as intRankTicket
 		, CAST(ticket2 AS signed integer) as intRankTicket2
 		, CAST(ticket3 AS signed integer) as intRankTicket3
+		, CAST(ticket4 AS signed integer) as intRankTicket4
+		, CAST(ticket5 AS signed integer) as intRankTicket5
 		, pu.ticket
 		, pu.ticket2
 		, pu.ticket3
+		, pu.ticket4
+		, pu.ticket5
 		, format(ticket, 0) as ticket_str
 		, format(ticket2, 0) as ticket_str2
 		, format(ticket3, 0) as ticket_str3
+		, format(ticket4, 0) as ticket_str4
+		, format(ticket5, 0) as ticket_str5
 		FROM p_user pu,  (SELECT @rownum:=0) TMP
 		WHERE 1=1
-		AND (pu.ticket > 0 or pu.ticket2 > 0 or pu.ticket3 > 0)
+		AND (pu.ticket > 0 or pu.ticket2 > 0 or pu.ticket3 > 0 or pu.ticket4 > 0 or pu.ticket5 > 0)
 		ORDER BY ticket desc
 		) TAB
 		<if test="schCond1 == 'ticket1'">
@@ -135,6 +169,12 @@
 		</if>
 		<if test="schCond1 == 'ticket3'">
 			ORDER BY TAB.intRankTicket3 desc
+		</if>
+		<if test="schCond1 == 'ticket4'">
+			ORDER BY TAB.intRankTicket4 desc
+		</if>
+		<if test="schCond1 == 'ticket5'">
+			ORDER BY TAB.intRankTicket5 desc
 		</if>
 	</select>
 

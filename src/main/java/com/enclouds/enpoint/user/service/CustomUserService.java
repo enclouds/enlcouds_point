@@ -39,6 +39,10 @@ public interface CustomUserService {
 
     int updateUserAddTicket3(UserDto userDto) throws Exception;
 
+    int updateUserAddTicket4(UserDto userDto) throws Exception;
+
+    int updateUserAddTicket5(UserDto userDto) throws Exception;
+
     int useTicket(UserDto userDto) throws Exception;
 
     int useTicket2(UserDto userDto) throws Exception;
@@ -57,6 +61,10 @@ public interface CustomUserService {
 
     int updateUserMinusTicket3(UserDto userDto) throws Exception;
 
+    int updateUserMinusTicket4(UserDto userDto) throws Exception;
+
+    int updateUserMinusTicket5(UserDto userDto) throws Exception;
+
     int updateTicket1ResetAjax(UserDto userDto) throws Exception;
 
     int updateUserHumanAjax(UserDto userDto) throws Exception;
@@ -74,6 +82,10 @@ public interface CustomUserService {
     List<PointDto> selectTicketHistory2(UserDto userDto) throws Exception;
 
     List<PointDto> selectTicketHistory3(UserDto userDto) throws Exception;
+
+    List<PointDto> selectTicketHistory4(UserDto userDto) throws Exception;
+
+    List<PointDto> selectTicketHistory5(UserDto userDto) throws Exception;
 
     List<CouponDto> selectCouponHistory(UserDto userDto) throws Exception;
 

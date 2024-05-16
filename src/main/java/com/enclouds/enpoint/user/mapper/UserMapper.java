@@ -78,6 +78,10 @@ public interface UserMapper {
 
     int insertAddTicket3(UserDto userDto) throws Exception;
 
+    int insertAddTicket4(UserDto userDto) throws Exception;
+
+    int insertAddTicket5(UserDto userDto) throws Exception;
+
     int insertMinusTicket(UserDto userDto) throws Exception;
 
     int insertMinusTicket2(UserDto userDto) throws Exception;
@@ -106,6 +110,10 @@ public interface UserMapper {
 
     List<PointDto> selectTicketHistory3(UserDto userDto) throws Exception;
 
+    List<PointDto> selectTicketHistory4(UserDto userDto) throws Exception;
+
+    List<PointDto> selectTicketHistory5(UserDto userDto) throws Exception;
+
     List<CouponDto> selectCouponHistory(UserDto userDto) throws Exception;
 
     PointDto getTotalPoint(UserDto userDto) throws Exception;
@@ -115,6 +123,10 @@ public interface UserMapper {
     PointDto getTotalTicket2(UserDto userDto) throws Exception;
 
     PointDto getTotalTicket3(UserDto userDto) throws Exception;
+
+    PointDto getTotalTicket4(UserDto userDto) throws Exception;
+
+    PointDto getTotalTicket5(UserDto userDto) throws Exception;
 
     PointDto getTotalCouponPoint(UserDto userDto) throws Exception;
 
@@ -148,6 +160,10 @@ public interface UserMapper {
 
     int updateUserAddTicket3(UserDto userDto) throws Exception;
 
+    int updateUserAddTicket4(UserDto userDto) throws Exception;
+
+    int updateUserAddTicket5(UserDto userDto) throws Exception;
+
     int updateUserAddSumRankPoint(UserDto userDto) throws Exception;
 
     int updateUserMinusSumRank(UserDto userDto) throws Exception;
@@ -162,7 +178,15 @@ public interface UserMapper {
 
     int insertMinusTicketAsCnt3(UserDto userDto) throws Exception;
 
+    int insertMinusTicketAsCnt4(UserDto userDto) throws Exception;
+
+    int insertMinusTicketAsCnt5(UserDto userDto) throws Exception;
+
     int useTicketAsCnt3(UserDto userDto) throws Exception;
+
+    int useTicketAsCnt4(UserDto userDto) throws Exception;
+
+    int useTicketAsCnt5(UserDto userDto) throws Exception;
 
     int updateTicket1ResetAjax(UserDto userDto) throws Exception;
 

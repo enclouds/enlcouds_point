@@ -90,6 +90,10 @@ public class ApiServiceImpl implements ApiService{
             ticketHistoryDtoList = apiMapper.getTicketHistory2(apiDto);
         }else if(apiDto.getTicketGbn().equals("3")) {
             ticketHistoryDtoList = apiMapper.getTicketHistory3(apiDto);
+        }else if(apiDto.getTicketGbn().equals("4")) {
+            ticketHistoryDtoList = apiMapper.getTicketHistory4(apiDto);
+        }else if(apiDto.getTicketGbn().equals("5")) {
+            ticketHistoryDtoList = apiMapper.getTicketHistory5(apiDto);
         }
 
         return ticketHistoryDtoList;
@@ -130,6 +134,18 @@ public class ApiServiceImpl implements ApiService{
 
             if(result > 0){
                 result = userMapper.updateUserAddTicket3(userDto);
+            }
+        }else if(apiDto.getTicketGbn().equals("4")){
+            result = userMapper.insertAddTicket4(userDto);
+
+            if(result > 0){
+                result = userMapper.updateUserAddTicket4(userDto);
+            }
+        }else if(apiDto.getTicketGbn().equals("5")){
+            result = userMapper.insertAddTicket5(userDto);
+
+            if(result > 0){
+                result = userMapper.updateUserAddTicket5(userDto);
             }
         }
 
@@ -182,6 +198,28 @@ public class ApiServiceImpl implements ApiService{
             }else {
                 userMapper.insertMinusTicketAsCnt3(userDto);
                 result = userMapper.useTicketAsCnt3(userDto);
+            }
+        }else if(apiDto.getTicketGbn().equals("4")){
+            PointDto preTicketDto = userMapper.getTotalTicket4(userDto);
+            userDto.setDefTicket(agentInfo.getTicketInt());
+            userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
+
+            if(preTicketDto.getTicketInt() < Integer.parseInt(apiDto.getMinusTicket())){
+                return -1;
+            }else {
+                userMapper.insertMinusTicketAsCnt4(userDto);
+                result = userMapper.useTicketAsCnt4(userDto);
+            }
+        }else if(apiDto.getTicketGbn().equals("5")){
+            PointDto preTicketDto = userMapper.getTotalTicket5(userDto);
+            userDto.setDefTicket(agentInfo.getTicketInt());
+            userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
+
+            if(preTicketDto.getTicketInt() < Integer.parseInt(apiDto.getMinusTicket())){
+                return -1;
+            }else {
+                userMapper.insertMinusTicketAsCnt5(userDto);
+                result = userMapper.useTicketAsCnt5(userDto);
             }
         }
 

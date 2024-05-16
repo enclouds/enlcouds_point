@@ -147,6 +147,44 @@ public class AgentServiceImpl implements AgentService{
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    public int updateAgentAddTicket4(AgentDto agentDto) throws Exception {
+        try {
+            int result = -1;
+
+            //총 티켓 증가
+            result = agentMapper.updateAgentAddTicket4(agentDto);
+
+            //포인트 내역 생성
+            if(result > 0){
+                agentMapper.insertAddAgentTicket4(agentDto);
+            }
+            return result;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateAgentAddTicket5(AgentDto agentDto) throws Exception {
+        try {
+            int result = -1;
+
+            //총 티켓 증가
+            result = agentMapper.updateAgentAddTicket5(agentDto);
+
+            //포인트 내역 생성
+            if(result > 0){
+                agentMapper.insertAddAgentTicket5(agentDto);
+            }
+            return result;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public int updateAgentMinusPoint(AgentDto agentDto) throws Exception {
         try {
             int result = -1;
@@ -232,6 +270,46 @@ public class AgentServiceImpl implements AgentService{
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateAgentMinusTicket4(AgentDto agentDto) throws Exception {
+        try {
+            int result = -1;
+
+            //총 티켓 차감
+            result = agentMapper.updateAgentMinusTicket4(agentDto);
+
+            //티켓 차감 내역 생성
+            if(result > 0){
+                agentMapper.insertMinusAgentTicket4(agentDto);
+            }
+
+            return result;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateAgentMinusTicket5(AgentDto agentDto) throws Exception {
+        try {
+            int result = -1;
+
+            //총 티켓 차감
+            result = agentMapper.updateAgentMinusTicket5(agentDto);
+
+            //티켓 차감 내역 생성
+            if(result > 0){
+                agentMapper.insertMinusAgentTicket5(agentDto);
+            }
+
+            return result;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public List<PointDto> selectAgentPointHistory(AgentDto agentDto) throws Exception {
         return agentMapper.selectAgentPointHistory(agentDto);
     }
@@ -249,6 +327,16 @@ public class AgentServiceImpl implements AgentService{
     @Override
     public List<PointDto> selectAgentTicketHistory3(AgentDto agentDto) throws Exception {
         return agentMapper.selectAgentTicketHistory3(agentDto);
+    }
+
+    @Override
+    public List<PointDto> selectAgentTicketHistory4(AgentDto agentDto) throws Exception {
+        return agentMapper.selectAgentTicketHistory4(agentDto);
+    }
+
+    @Override
+    public List<PointDto> selectAgentTicketHistory5(AgentDto agentDto) throws Exception {
+        return agentMapper.selectAgentTicketHistory5(agentDto);
     }
 
     @Override

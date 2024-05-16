@@ -314,6 +314,106 @@
 <!-- modal E -->
 
 <!-- modal S -->
+<div class="modal fade small" id="add_ticket_modal4" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">팀프로 티켓 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">팀프로 티켓 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">가맹점명</th>
+                            <td>
+                                <input type="text" name="addTicketAgentName4" id="addTicketAgentName4" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">총 티켓</th>
+                            <td>
+                                <input type="text" name="totalTicket4" id="totalTicket4" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">적립 티켓</th>
+                            <td>
+                                <input type="text" name="addTicket4" id="addTicket4">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:addTicket4();">적립</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('add_ticket_modal4');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="add_ticket_modal5" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">온라인 티켓 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">온라인 티켓 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">가맹점명</th>
+                            <td>
+                                <input type="text" name="addTicketAgentName5" id="addTicketAgentName5" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">총 티켓</th>
+                            <td>
+                                <input type="text" name="totalTicket5" id="totalTicket5" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">적립 티켓</th>
+                            <td>
+                                <input type="text" name="addTicket5" id="addTicket5">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:addTicket5();">적립</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('add_ticket_modal5');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
 <div class="modal fade small" id="minus_point_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -514,6 +614,106 @@
 <!-- modal E -->
 
 <!-- modal S -->
+<div class="modal fade small" id="minus_ticket_modal4" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">팀프로 티켓 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">팀프로 티켓 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">가맹점</th>
+                            <td>
+                                <input type="text" name="minusTicketAgentName4" id="minusTicketAgentName4" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">총 티켓</th>
+                            <td>
+                                <input type="text" name="totalMinusTicket4" id="totalMinusTicket4" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">차감 티켓</th>
+                            <td>
+                                <input type="text" name="minusTicket4" id="minusTicket4">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn red btn-primary" th:onclick="javascript:minusTicket4();">차감</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('minus_ticket_modal4');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="minus_ticket_modal5" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">온라인 티켓 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">온라인 티켓 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">가맹점</th>
+                            <td>
+                                <input type="text" name="minusTicketAgentName5" id="minusTicketAgentName5" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">총 티켓</th>
+                            <td>
+                                <input type="text" name="totalMinusTicket5" id="totalMinusTicket5" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">차감 티켓</th>
+                            <td>
+                                <input type="text" name="minusTicket5" id="minusTicket5">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn red btn-primary" th:onclick="javascript:minusTicket5();">차감</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('minus_ticket_modal5');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
 <div class="modal fade large" id="history_point_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -629,10 +829,20 @@
                     <th scope="col" colspan="3">프리 티켓</th>
                     <th scope="col" rowspan="2">총 잔여 씨티 티켓</th>
                     <th scope="col" colspan="3">씨티 티켓</th>
+                    <th scope="col" rowspan="2">총 잔여 팀프로 티켓</th>
+                    <th scope="col" colspan="3">팀프로 티켓</th>
+                    <th scope="col" rowspan="2">총 잔여 온라인 티켓</th>
+                    <th scope="col" colspan="3">온라인 티켓</th>
                     <th scope="col" rowspan="2">메모</th>
                     <th scope="col" rowspan="2">등록일자</th>
                 </tr>
                 <tr>
+                    <th scope="col">적립</th>
+                    <th scope="col">차감</th>
+                    <th scope="col">내역</th>
+                    <th scope="col">적립</th>
+                    <th scope="col">차감</th>
+                    <th scope="col">내역</th>
                     <th scope="col">적립</th>
                     <th scope="col">차감</th>
                     <th scope="col">내역</th>
@@ -692,6 +902,26 @@
                     </td>
                     <td>
                         <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory3([[${list.agentCode}]])">내역</button>
+                    </td>
+                    <td th:text="${list.ticketStr4}"></td>
+                    <td>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket4([[${list.agentCode}]], [[${list.agentName}]], [[${list.ticket4}]])">적립</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn red" th:onclick="javascript:fnMinusTicket4([[${list.agentCode}]], [[${list.agentName}]], [[${list.ticket4}]])">차감</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory4([[${list.agentCode}]])">내역</button>
+                    </td>
+                    <td th:text="${list.ticketStr5}"></td>
+                    <td>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket5([[${list.agentCode}]], [[${list.agentName}]], [[${list.ticket5}]])">적립</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn red" th:onclick="javascript:fnMinusTicket5([[${list.agentCode}]], [[${list.agentName}]], [[${list.ticket5}]])">차감</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory5([[${list.agentCode}]])">내역</button>
                     </td>
                     <td th:text="${list.memo}"></td>
                     <td th:text="${list.regDate}"></td>
@@ -789,6 +1019,22 @@
         $("#add_ticket_modal3").show();
     }
 
+    function fnAddTicket4(agentCode, agentName, ticket){
+        selectTrSeq = agentCode;
+
+        $("#addTicketAgentName4").val(agentName);
+        $("#totalTicket4").val(ticket);
+        $("#add_ticket_modal4").show();
+    }
+
+    function fnAddTicket5(agentCode, agentName, ticket){
+        selectTrSeq = agentCode;
+
+        $("#addTicketAgentName5").val(agentName);
+        $("#totalTicket5").val(ticket);
+        $("#add_ticket_modal5").show();
+    }
+
     function fnMinusPoint(agentCode, agentName, point){
         selectTrSeq = agentCode;
 
@@ -819,6 +1065,22 @@
         $("#minusTicketAgentName3").val(agentName);
         $("#totalMinusTicket3").val(ticket);
         $("#minus_ticket_modal3").show();
+    }
+
+    function fnMinusTicket4(agentCode, agentName, ticket){
+        selectTrSeq = agentCode;
+
+        $("#minusTicketAgentName4").val(agentName);
+        $("#totalMinusTicket4").val(ticket);
+        $("#minus_ticket_modal4").show();
+    }
+
+    function fnMinusTicket5(agentCode, agentName, ticket){
+        selectTrSeq = agentCode;
+
+        $("#minusTicketAgentName5").val(agentName);
+        $("#totalMinusTicket5").val(ticket);
+        $("#minus_ticket_modal5").show();
     }
 
     function fnPointHistory(agentCode){
@@ -941,6 +1203,78 @@
             processData:false,
             type: "POST",
             url: "/agent/selectAgentTicketHistory3Ajax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                if(response.historyTicketList != null){
+                    var appendStr = '';
+                    for(var i=0 ; i<response.historyTicketList.length ; i++){
+                        var appendStr_01 = "<td>"+response.historyTicketList[i]['ticketGbnNm']+"</td>>";
+                        var appendStr_02 = "<td>"+response.historyTicketList[i]['ticket']+"</td>>";
+                        var appendStr_03 = "<td>"+response.historyTicketList[i]['regDate']+"</td>>";
+
+                        appendStr += "<tr>" + appendStr_01 + appendStr_02 + appendStr_03 + "</>tr>";
+                    }
+
+                    $("#historyTicketTbody").append(appendStr);
+                }
+
+                $("#history_ticket_modal").show();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function fnTicketHistory4(agentCode){
+        $("#historyTicketTbody").empty();
+
+        var formData = new FormData();
+
+        formData.append("agentCode", agentCode);
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/agent/selectAgentTicketHistory4Ajax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                if(response.historyTicketList != null){
+                    var appendStr = '';
+                    for(var i=0 ; i<response.historyTicketList.length ; i++){
+                        var appendStr_01 = "<td>"+response.historyTicketList[i]['ticketGbnNm']+"</td>>";
+                        var appendStr_02 = "<td>"+response.historyTicketList[i]['ticket']+"</td>>";
+                        var appendStr_03 = "<td>"+response.historyTicketList[i]['regDate']+"</td>>";
+
+                        appendStr += "<tr>" + appendStr_01 + appendStr_02 + appendStr_03 + "</>tr>";
+                    }
+
+                    $("#historyTicketTbody").append(appendStr);
+                }
+
+                $("#history_ticket_modal").show();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function fnTicketHistory5(agentCode){
+        $("#historyTicketTbody").empty();
+
+        var formData = new FormData();
+
+        formData.append("agentCode", agentCode);
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/agent/selectAgentTicketHistory5Ajax",
             data: formData,
             success: function(response) {
                 // 성공 시 동작
@@ -1163,6 +1497,52 @@
         });
     }
 
+    function addTicket4(){
+        var formData = new FormData();
+
+        formData.append("agentCode", selectTrSeq);
+        formData.append("addTicket", $("#addTicket4").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/agent/updateAgentAddTicket4Ajax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function addTicket5(){
+        var formData = new FormData();
+
+        formData.append("agentCode", selectTrSeq);
+        formData.append("addTicket", $("#addTicket5").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/agent/updateAgentAddTicket5Ajax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
     function minusPoint(){
         var formData = new FormData();
 
@@ -1243,6 +1623,52 @@
             processData:false,
             type: "POST",
             url: "/agent/updateAgentMinusTicket3Ajax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function minusTicket4(){
+        var formData = new FormData();
+
+        formData.append("agentCode", selectTrSeq);
+        formData.append("minusTicket", $("#minusTicket4").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/agent/updateAgentMinusTicket4Ajax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function minusTicket5(){
+        var formData = new FormData();
+
+        formData.append("agentCode", selectTrSeq);
+        formData.append("minusTicket", $("#minusTicket5").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/agent/updateAgentMinusTicket5Ajax",
             data: formData,
             success: function(response) {
                 // 성공 시 동작

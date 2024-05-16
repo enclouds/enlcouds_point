@@ -12,6 +12,8 @@ public class KakaoDto {
     private String ticket1;
     private String ticket2;
     private String ticket3;
+    private String ticket4;
+    private String ticket5;
     private String addPoint;
     private String minusPoint;
     private String totalPoint;

@@ -31,6 +31,10 @@ public interface AgentMapper {
 
     int updateAgentAddTicket3(AgentDto agentDto) throws Exception;
 
+    int updateAgentAddTicket4(AgentDto agentDto) throws Exception;
+
+    int updateAgentAddTicket5(AgentDto agentDto) throws Exception;
+
     int insertAddAgentPoint(AgentDto agentDto) throws Exception;
 
     int insertAddTopAgentPoint(AgentDto agentDto) throws Exception;
@@ -40,6 +44,10 @@ public interface AgentMapper {
     int insertAddAgentTicket2(AgentDto agentDto) throws Exception;
 
     int insertAddAgentTicket3(AgentDto agentDto) throws Exception;
+
+    int insertAddAgentTicket4(AgentDto agentDto) throws Exception;
+
+    int insertAddAgentTicket5(AgentDto agentDto) throws Exception;
 
     int updateAgentMinusPoint(AgentDto agentDto) throws Exception;
 
@@ -53,11 +61,19 @@ public interface AgentMapper {
 
     int updateAgentMinusTicket3(AgentDto agentDto) throws Exception;
 
+    int updateAgentMinusTicket4(AgentDto agentDto) throws Exception;
+
+    int updateAgentMinusTicket5(AgentDto agentDto) throws Exception;
+
     int insertMinusAgentTicket(AgentDto agentDto) throws Exception;
 
     int insertMinusAgentTicket2(AgentDto agentDto) throws Exception;
 
     int insertMinusAgentTicket3(AgentDto agentDto) throws Exception;
+
+    int insertMinusAgentTicket4(AgentDto agentDto) throws Exception;
+
+    int insertMinusAgentTicket5(AgentDto agentDto) throws Exception;
 
     List<PointDto> selectAgentPointHistory(AgentDto agentDto) throws Exception;
 
@@ -66,6 +82,10 @@ public interface AgentMapper {
     List<PointDto> selectAgentTicketHistory2(AgentDto agentDto) throws Exception;
 
     List<PointDto> selectAgentTicketHistory3(AgentDto agentDto) throws Exception;
+
+    List<PointDto> selectAgentTicketHistory4(AgentDto agentDto) throws Exception;
+
+    List<PointDto> selectAgentTicketHistory5(AgentDto agentDto) throws Exception;
 
     AgentDto selectAgentInfo(AgentDto agentDto) throws Exception;
 

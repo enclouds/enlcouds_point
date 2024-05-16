@@ -23,12 +23,18 @@ public class AgentDto extends CommonDto {
     private Integer ticketInt;
     private Integer ticketInt2;
     private Integer ticketInt3;
+    private Integer ticketInt4;
+    private Integer ticketInt5;
     private Integer ticket;
     private Integer ticket2;
     private Integer ticket3;
+    private Integer ticket4;
+    private Integer ticket5;
     private String ticketStr;
     private String ticketStr2;
     private String ticketStr3;
+    private String ticketStr4;
+    private String ticketStr5;
     private String addTicket;
     private String minusTicket;
 
