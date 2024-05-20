@@ -424,8 +424,8 @@ html .ui-button.ui-state-disabled:active{background:#fff;font-size:1.5rem;text-a
 
   .side_menu{display:none;left:inherit;right:0;}
   .side_menu.open{display:block;z-index:7777;width:70%;max-width:inherit;}
-  .top_info{height:6rem !important;}
-  .side_menu .menu{top:6rem;height:calc(100% - 14rem);overflow:scroll;}
+  .top_info{height:11rem !important;}
+  .side_menu .menu{top:11rem;height:calc(100% - 14rem);overflow:scroll;}
 
   .menu_close{display:inline-block;width:3.5rem;height:6rem;text-indent:-9999px;background:url(../img/icon_menu_close.svg) no-repeat center center;background-size:1.6rem;}
   .btn_logout{width:3.5rem;height:6rem;text-indent:-9999px;background:url(../img/icon_logout.svg) no-repeat center center;background-size:2rem;}
