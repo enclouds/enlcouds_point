@@ -14,6 +14,8 @@ public class ApiUserRtnDto extends ApiRtnDto{
     private Integer ticket;
     private Integer ticket2;
     private Integer ticket3;
+    private Integer ticket4;
+    private Integer ticket5;
     private Integer rank;
     private Integer totalRankCnt;
     private Integer agentCode;

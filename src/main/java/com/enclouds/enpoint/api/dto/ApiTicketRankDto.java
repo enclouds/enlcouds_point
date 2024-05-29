@@ -10,5 +10,7 @@ public class ApiTicketRankDto {
     private String ticketStr;
     private String ticketStr2;
     private String ticketStr3;
+    private String ticketStr4;
+    private String ticketStr5;
 
 }
