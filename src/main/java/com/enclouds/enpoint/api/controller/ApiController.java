@@ -78,6 +78,30 @@ public class ApiController {
         return apiRtnDto;
     }
 
+    //선결제 지점 API
+    @RequestMapping(method = RequestMethod.POST, path = "/pre/addPoint")
+    @ResponseBody
+    public ApiRtnDto preAddPoint(@RequestBody ApiPreDto apiPreDto) throws Exception{
+        ApiRtnDto apiRtnDto = new ApiRtnDto();
+
+        if(apiPreDto.getApiKey().equals("1fodTP6QWCAGUp9")){
+            int result = apiService.preAddPoint(apiPreDto);
+
+            if(result > 0){
+                apiRtnDto.setResultCode("0000");
+                apiRtnDto.setResultMsg("정상");
+            }else {
+                apiRtnDto.setResultCode("E002");
+                apiRtnDto.setResultMsg("적립에 실패 하였습니다.");
+            }
+        }else {
+            apiRtnDto.setResultCode("E999");
+            apiRtnDto.setResultMsg("API Key Not Match.");
+        }
+
+        return apiRtnDto;
+    }
+
     @RequestMapping(method = RequestMethod.POST, path = "/minusPoint")
     @ResponseBody
     public ApiRtnDto minusPoint(@RequestBody ApiDto apiDto) throws Exception{

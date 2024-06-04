@@ -12,6 +12,8 @@ public interface ApiService {
 
     int addPoint(ApiDto apiDto) throws Exception;
 
+    int preAddPoint(ApiPreDto apiPreDto) throws Exception;
+
     int minusPoint(ApiDto apiDto) throws Exception;
 
     List<ApiTicketHistoryDto> getTicketHistory(ApiDto apiDto) throws Exception;

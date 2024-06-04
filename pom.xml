@@ -31,7 +31,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-            <!--개발시 제거-->
+            <!-- 개발시 제거 -->
             <scope>provided</scope>
         </dependency>
 

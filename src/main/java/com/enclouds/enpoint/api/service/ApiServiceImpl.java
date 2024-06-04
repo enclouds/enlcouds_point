@@ -4,9 +4,13 @@ import com.enclouds.enpoint.agent.dto.AgentDto;
 import com.enclouds.enpoint.agent.service.AgentService;
 import com.enclouds.enpoint.api.dto.*;
 import com.enclouds.enpoint.api.mapper.ApiMapper;
+import com.enclouds.enpoint.nurigo.KakaoDto;
 import com.enclouds.enpoint.user.dto.PointDto;
 import com.enclouds.enpoint.user.dto.UserDto;
 import com.enclouds.enpoint.user.mapper.UserMapper;
+import com.enclouds.enpoint.user.service.CustomUserService;
+import com.enclouds.enpoint.user.service.UserService;
+import net.nurigo.sdk.KakaoExampleController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +29,9 @@ public class ApiServiceImpl implements ApiService{
 
     @Autowired
     private AgentService agentService;
+
+    @Autowired
+    private CustomUserService customUserService;
 
     @Override
     public ApiUserRtnDto selectUserInfo(ApiDto apiDto) throws Exception {
@@ -51,6 +58,60 @@ public class ApiServiceImpl implements ApiService{
             userDto.setDefPoint(0);
             userDto.setAgentCode(16);
             result = userMapper.insertAddPoint(userDto);
+        }
+
+        return result;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int preAddPoint(ApiPreDto apiPreDto) throws Exception {
+        UserDto userDto = new UserDto();
+        userDto.setPhoneNum(apiPreDto.getPhoneNum());
+        userDto.setAddPoint(apiPreDto.getAddPoint());
+        userDto.setAgentCode(23);
+
+        PointDto prePointDto = userMapper.getTotalPoint(userDto);
+
+        //적립
+        int result = userMapper.updateUserAddPoint(userDto);
+
+        if(result > 0){
+            //적립 내역
+            userDto.setPrivateDefPoint(prePointDto.getPointInt());
+            userDto.setDefPoint(0);
+            userDto.setTotalCouponPoint(prePointDto.getCouponPoint());
+            result = userMapper.insertAddPoint(userDto);
+
+            if(result > 0){
+                //외식쿠폰 적립
+                Double coupon = Double.parseDouble(apiPreDto.getAddPoint()) / 10000;
+                userDto.setAddCouponPoint(coupon);
+                result = customUserService.updateUserAddCouponPoint(userDto);
+
+                if(result > 0){
+                    //카카오톡 전송
+                    PointDto pointDto = userMapper.getTotalPoint(userDto);
+
+                    KakaoDto kakaoDto = new KakaoDto();
+                    kakaoDto.setTemplateId("KA01TP240508062419040Z64NKB9aSZi");
+                    kakaoDto.setNickName(pointDto.getNickName());
+                    kakaoDto.setRcvNum(userDto.getPhoneNum());
+                    kakaoDto.setCouponPoint(String.valueOf(pointDto.getCouponPoint()));
+                    kakaoDto.setTicket1(pointDto.getTicket1());
+                    kakaoDto.setTicket2(pointDto.getTicket2());
+                    kakaoDto.setTicket3(pointDto.getTicket3());
+                    kakaoDto.setTicket4(pointDto.getTicket4());
+                    kakaoDto.setTicket5(pointDto.getTicket5());
+                    kakaoDto.setAddPoint(userDto.getAddPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
+                    kakaoDto.setTotalPoint(pointDto.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
+                    kakaoDto.setStoreNm(pointDto.getAgentName());
+                    kakaoDto.setAgentTel(pointDto.getAgentTel());
+
+                    KakaoExampleController kakaoExampleController = new KakaoExampleController();
+                    kakaoExampleController.sendOneAta(kakaoDto);
+                }
+            }
         }
 
         return result;
