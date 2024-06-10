@@ -66,6 +66,8 @@ public class ApiServiceImpl implements ApiService{
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int preAddPoint(ApiPreDto apiPreDto) throws Exception {
+        int result = 0;
+
         UserDto userDto = new UserDto();
         userDto.setPhoneNum(apiPreDto.getPhoneNum());
         userDto.setAddPoint(apiPreDto.getAddPoint());
@@ -73,45 +75,49 @@ public class ApiServiceImpl implements ApiService{
 
         PointDto prePointDto = userMapper.getTotalPoint(userDto);
 
-        //적립
-        int result = userMapper.updateUserAddPoint(userDto);
-
-        if(result > 0){
-            //적립 내역
-            userDto.setPrivateDefPoint(prePointDto.getPointInt());
-            userDto.setDefPoint(0);
-            userDto.setTotalCouponPoint(prePointDto.getCouponPoint());
-            result = userMapper.insertAddPoint(userDto);
+        if(prePointDto != null){
+            //적립
+            result = userMapper.updateUserAddPoint(userDto);
 
             if(result > 0){
-                //외식쿠폰 적립
-                Double coupon = Double.parseDouble(apiPreDto.getAddPoint()) / 10000;
-                userDto.setAddCouponPoint(coupon);
-                result = customUserService.updateUserAddCouponPoint(userDto);
+                //적립 내역
+                userDto.setPrivateDefPoint(prePointDto.getPointInt());
+                userDto.setDefPoint(0);
+                userDto.setTotalCouponPoint(prePointDto.getCouponPoint());
+                result = userMapper.insertAddPoint(userDto);
 
                 if(result > 0){
-                    //카카오톡 전송
-                    PointDto pointDto = userMapper.getTotalPoint(userDto);
+                    //외식쿠폰 적립
+                    Double coupon = Double.parseDouble(apiPreDto.getAddPoint()) / 10000;
+                    userDto.setAddCouponPoint(coupon);
+                    result = customUserService.updateUserAddCouponPoint(userDto);
 
-                    KakaoDto kakaoDto = new KakaoDto();
-                    kakaoDto.setTemplateId("KA01TP240508062419040Z64NKB9aSZi");
-                    kakaoDto.setNickName(pointDto.getNickName());
-                    kakaoDto.setRcvNum(userDto.getPhoneNum());
-                    kakaoDto.setCouponPoint(String.valueOf(pointDto.getCouponPoint()));
-                    kakaoDto.setTicket1(pointDto.getTicket1());
-                    kakaoDto.setTicket2(pointDto.getTicket2());
-                    kakaoDto.setTicket3(pointDto.getTicket3());
-                    kakaoDto.setTicket4(pointDto.getTicket4());
-                    kakaoDto.setTicket5(pointDto.getTicket5());
-                    kakaoDto.setAddPoint(userDto.getAddPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
-                    kakaoDto.setTotalPoint(pointDto.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
-                    kakaoDto.setStoreNm(pointDto.getAgentName());
-                    kakaoDto.setAgentTel(pointDto.getAgentTel());
+                    if(result > 0){
+                        //카카오톡 전송
+                        PointDto pointDto = userMapper.getTotalPoint(userDto);
 
-                    KakaoExampleController kakaoExampleController = new KakaoExampleController();
-                    kakaoExampleController.sendOneAta(kakaoDto);
+                        KakaoDto kakaoDto = new KakaoDto();
+                        kakaoDto.setTemplateId("KA01TP240508062419040Z64NKB9aSZi");
+                        kakaoDto.setNickName(pointDto.getNickName());
+                        kakaoDto.setRcvNum(userDto.getPhoneNum());
+                        kakaoDto.setCouponPoint(String.valueOf(pointDto.getCouponPoint()));
+                        kakaoDto.setTicket1(pointDto.getTicket1());
+                        kakaoDto.setTicket2(pointDto.getTicket2());
+                        kakaoDto.setTicket3(pointDto.getTicket3());
+                        kakaoDto.setTicket4(pointDto.getTicket4());
+                        kakaoDto.setTicket5(pointDto.getTicket5());
+                        kakaoDto.setAddPoint(userDto.getAddPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
+                        kakaoDto.setTotalPoint(pointDto.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
+                        kakaoDto.setStoreNm(pointDto.getAgentName());
+                        kakaoDto.setAgentTel(pointDto.getAgentTel());
+
+                        KakaoExampleController kakaoExampleController = new KakaoExampleController();
+                        kakaoExampleController.sendOneAta(kakaoDto);
+                    }
                 }
             }
+        }else {
+            result = 999;
         }
 
         return result;

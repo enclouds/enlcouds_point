@@ -88,8 +88,13 @@ public class ApiController {
             int result = apiService.preAddPoint(apiPreDto);
 
             if(result > 0){
-                apiRtnDto.setResultCode("0000");
-                apiRtnDto.setResultMsg("정상");
+                if(result == 999){
+                    apiRtnDto.setResultCode("E001");
+                    apiRtnDto.setResultMsg("회원으로 등록되어 있지 않은 핸드폰 번호 입니다.");
+                }else {
+                    apiRtnDto.setResultCode("0000");
+                    apiRtnDto.setResultMsg("정상처리");
+                }
             }else {
                 apiRtnDto.setResultCode("E002");
                 apiRtnDto.setResultMsg("적립에 실패 하였습니다.");

@@ -1214,7 +1214,7 @@
 		FROM p_user pu,  (SELECT @rownum:=0) TMP
 		WHERE 1=1
 		AND pu.nick_name like '%${schText}%'
-		AND (pu.ticket > 0 or pu.ticket2 > 0 or pu.ticket3 > 0)
+		AND (pu.ticket > 0 or pu.ticket2 > 0 or pu.ticket3 > 0 or pu.ticket4 > 0 or pu.ticket5 > 0)
 		ORDER BY ticket desc
 		) TAB
 		WHERE 1=1
@@ -1269,7 +1269,7 @@
 		FROM p_user pu,  (SELECT @rownum:=0) TMP
 		WHERE 1=1
 		AND pu.nick_name like '%${schText}%'
-		AND (pu.ticket > 0 or pu.ticket2 > 0 or pu.ticket3 > 0)
+		AND (pu.ticket > 0 or pu.ticket2 > 0 or pu.ticket3 > 0 or pu.ticket4 > 0 or pu.ticket5 > 0)
 		ORDER BY ticket desc
 		) TAB
 		WHERE 1=1

@@ -631,7 +631,7 @@ public class CustomUserServiceImpl implements CustomUserService{
 
         PointDto preTicketDto = userMapper.getTotalTicket2(userDto);
 
-        userDto.setDefTicket(agentInfo.getTicketInt());
+        userDto.setDefTicket(agentInfo.getTicketInt2());
         userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
         userMapper.insertMinusTicketAsCnt2(userDto);
 
@@ -646,7 +646,7 @@ public class CustomUserServiceImpl implements CustomUserService{
 
         PointDto preTicketDto = userMapper.getTotalTicket3(userDto);
 
-        userDto.setDefTicket(agentInfo.getTicketInt());
+        userDto.setDefTicket(agentInfo.getTicketInt3());
         userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
         userMapper.insertMinusTicketAsCnt3(userDto);
 
@@ -661,7 +661,7 @@ public class CustomUserServiceImpl implements CustomUserService{
 
         PointDto preTicketDto = userMapper.getTotalTicket4(userDto);
 
-        userDto.setDefTicket(agentInfo.getTicketInt());
+        userDto.setDefTicket(agentInfo.getTicketInt4());
         userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
         userMapper.insertMinusTicketAsCnt4(userDto);
 
@@ -676,7 +676,7 @@ public class CustomUserServiceImpl implements CustomUserService{
 
         PointDto preTicketDto = userMapper.getTotalTicket5(userDto);
 
-        userDto.setDefTicket(agentInfo.getTicketInt());
+        userDto.setDefTicket(agentInfo.getTicketInt5());
         userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
         userMapper.insertMinusTicketAsCnt5(userDto);
 
