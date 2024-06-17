@@ -174,7 +174,11 @@ public class UserController {
             }
 
             if(userDto.getSchCond2() == null){
-               userDto.setSchCond2("");
+               if(userInfo.getAgentGbn().equals("AG")){
+                  userDto.setSchCond2(String.valueOf(userInfo.getAgentCode()));
+               }else {
+                  userDto.setSchCond2("");
+               }
             }
 
             String startDateStr = DateUtils.addDay(DateUtils.getToday(), -7);

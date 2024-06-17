@@ -9,4 +9,6 @@ public class ApiAgentListDto extends ApiRtnDto{
 
     private List<ApiAgentDto> agentList;
 
+    private List<ApiTicketDto> ticketList;
+
 }

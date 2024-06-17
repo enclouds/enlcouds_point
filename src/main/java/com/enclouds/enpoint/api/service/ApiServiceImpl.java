@@ -347,4 +347,9 @@ public class ApiServiceImpl implements ApiService{
         return apiMapper.getAgentList();
     }
 
+    @Override
+    public List<ApiTicketDto> getTicketList() throws Exception {
+        return apiMapper.getTicketList();
+    }
+
 }

@@ -307,14 +307,16 @@ public class ApiController {
     public ApiAgentListDto getAgentList() throws Exception{
 
         List<ApiAgentDto> agentDtoList = apiService.getAgentList();
+        List<ApiTicketDto> ticketDtoList = apiService.getTicketList();
 
         ApiAgentListDto apiAgentListDto = new ApiAgentListDto();
-        if(apiAgentListDto != null){
+        if(agentDtoList != null){
             if(agentDtoList.isEmpty()) {
                 apiAgentListDto.setResultCode("E001");
                 apiAgentListDto.setResultMsg("조회된 정보가 없습니다.");
             }else {
                 apiAgentListDto.setAgentList(agentDtoList);
+                apiAgentListDto.setTicketList(ticketDtoList);
                 apiAgentListDto.setResultCode("0000");
                 apiAgentListDto.setResultMsg("정상");
             }

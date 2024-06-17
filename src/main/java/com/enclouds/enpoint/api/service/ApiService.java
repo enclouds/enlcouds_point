@@ -36,4 +36,6 @@ public interface ApiService {
 
     List<ApiAgentDto> getAgentList() throws Exception;
 
+    List<ApiTicketDto> getTicketList() throws Exception;
+
 }

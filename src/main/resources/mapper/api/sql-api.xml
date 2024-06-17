@@ -217,6 +217,12 @@
 		AND agent_gbn = 'AG'
 	</select>
 
+	<select id="getTicketList" resultType="com.enclouds.enpoint.api.dto.ApiTicketDto">
+		select code as ticketCode
+		, name as ticketName
+		from g_ticket
+	</select>
+
 </mapper>
 
 

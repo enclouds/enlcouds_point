@@ -64,6 +64,8 @@
                     <th scope="col" rowspan="2">총 프리 티켓</th>
                     <th scope="col" rowspan="2">총 주간 티켓</th>
                     <th scope="col" rowspan="2">총 씨티 티켓</th>
+                    <th scope="col" rowspan="2">총 팀프로 티켓</th>
+                    <th scope="col" rowspan="2">총 온라인 티켓</th>
                     <th scope="col" rowspan="2">등록 일자</th>
                     <th scope="col" rowspan="2">최근 방문 일자</th>
                 </tr>
@@ -85,6 +87,8 @@
                     <td th:text="${#numbers.formatInteger(list.ticket2, 0, 'COMMA')}"></td>
                     <td th:text="${#numbers.formatInteger(list.ticket, 0, 'COMMA')}"></td>
                     <td th:text="${#numbers.formatInteger(list.ticket3, 0, 'COMMA')}"></td>
+                    <td th:text="${#numbers.formatInteger(list.ticket4, 0, 'COMMA')}"></td>
+                    <td th:text="${#numbers.formatInteger(list.ticket5, 0, 'COMMA')}"></td>
                     <td th:text="${list.regDate}"></td>
                     <td th:text="${list.maxDate}"></td>
                 </tr>
