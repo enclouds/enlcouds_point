@@ -51,6 +51,7 @@ public class UserService implements UserDetailsService {
 
         if(username.equals("enclouds")){
             authorities.add(new SimpleGrantedAuthority("ROLE_SUPER_ADMIN"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN_SUB"));
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
             authorities.add(new SimpleGrantedAuthority("ROLE_AGENT"));
             authorities.add(new SimpleGrantedAuthority("ROLE_JACKPOT"));
@@ -65,6 +66,9 @@ public class UserService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority("ROLE_GAME"));
         }else if(username.equals("admin001")){
             authorities.add(new SimpleGrantedAuthority("ROLE_VIEW"));
+        }else if(username.equals("k_online")){
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN_SUB"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_AGENT"));
         }else {
             authorities.add(new SimpleGrantedAuthority("ROLE_AGENT"));
         }

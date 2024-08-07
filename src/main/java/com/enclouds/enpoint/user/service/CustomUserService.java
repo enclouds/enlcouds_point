@@ -25,6 +25,8 @@ public interface CustomUserService {
 
     int selectDuplUser(UserDto userDto) throws Exception;
 
+    int selectDuplUser2(UserDto userDto) throws Exception;
+
     int insertUser(UserDto userDto) throws Exception;
 
     int updateUser(UserDto userDto) throws Exception;
@@ -106,5 +108,7 @@ public interface CustomUserService {
     int updateUserAddSumRankPoint(UserDto userDto) throws Exception;
 
     int updateUserMinusSumRank(UserDto userDto) throws Exception;
+
+    String selectPointSum() throws Exception;
 
 }

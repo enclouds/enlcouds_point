@@ -801,8 +801,8 @@
             <div class="search_option">
                 <span class="input_group">
                     <select id="schCond1" name="schCond1" style="width:100px;">
-                        <option value="name">가맹점명</option>
-                        <option value="id">id</option>
+                        <option value="name" th:selected="${params.schCond1} == 'name'">가맹점명</option>
+                        <option value="id" th:selected="${params.schCond1} == 'id'">id</option>
                     </select>
                     <input type="text" style="width:1000px;" id="schText" name="schText" placeholder="검색어" th:value="${params.schText}">
                 </span>

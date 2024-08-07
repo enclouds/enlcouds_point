@@ -88,11 +88,23 @@
                 </ul>
             </div>
 
-            <div class="menu_box active" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
+            <!--<div class="menu_box active" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
                 <h2 class="menu2">게시판 관리</h2>
                 <ul>
                     <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
                         <button type="button" class="depth2" th:onclick="|location.href='@{/bdd/list}'|">게시물 목록</button>
+                    </li>
+                </ul>
+            </div>-->
+
+            <div class="menu_box active" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_ADMIN_SUB')">
+                <h2 class="menu2">Sub Admin</h2>
+                <ul>
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_ADMIN_SUB')">
+                        <button type="button" class="depth2" th:onclick="|location.href='@{/agent/sub/list}'|">Sub Admin 가맹점 적립</button>
+                    </li>
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_ADMIN_SUB')">
+                        <button type="button" class="depth2" th:onclick="|location.href='@{/agent/point/sub/list}'|">Sub Admin 가맹점 적립 내역</button>
                     </li>
                 </ul>
             </div>

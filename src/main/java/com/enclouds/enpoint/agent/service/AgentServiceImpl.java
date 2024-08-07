@@ -29,6 +29,11 @@ public class AgentServiceImpl implements AgentService{
     }
 
     @Override
+    public List<AgentDto> selectSubAdminAgentList(AgentDto agentDto) throws Exception {
+        return agentMapper.selectSubAdminAgentList(agentDto);
+    }
+
+    @Override
     public List<AgentDto> selectAgentTotalList(AgentDto agentDto) throws Exception {
         return agentMapper.selectAgentTotalList(agentDto);
     }
@@ -79,6 +84,44 @@ public class AgentServiceImpl implements AgentService{
                 if(agentDto.getAgentUpCode() != null) {
                     if (agentDto.getAgentUpCode().equals(1)) {
                         agentMapper.insertAddTopAgentPoint(agentDto);
+                    }
+                }
+            }
+            return result;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateSubAdminAgentAddPoint(AgentDto agentDto) throws Exception {
+        try {
+            int result = -1;
+
+            //차감할 포인트 존재 확인
+            int point = agentMapper.selectSubAdminPoint();
+
+            if(point < Integer.parseInt(agentDto.getAddPoint())){
+                result = -2;
+                return result;
+            }
+
+            //지점 총 포인트 증가
+            result = agentMapper.updateAgentAddPoint(agentDto);
+
+            //포인트 내역 생성
+            if(result > 0){
+                //온라인 지점 포인트 차감
+                result = agentMapper.updateSubAgentMinusPoint(agentDto);
+
+                if(result > 0){
+                    agentMapper.insertAddAgentPoint(agentDto);
+                    //Sub Admin(온라인 지점) 포인트 처리 내역
+                    if(agentDto.getAgentUpCode() != null) {
+                        if (agentDto.getAgentUpCode().equals(16)) {
+                            agentMapper.insertAddSubAgentPoint(agentDto);
+                        }
                     }
                 }
             }
@@ -358,6 +401,17 @@ public class AgentServiceImpl implements AgentService{
         agentDto.setPaginationInfo(paginationInfo);
 
         return agentMapper.selectAgentPointList(agentDto);
+    }
+
+    @Override
+    public List<AgentDto> selectAgentSubPointList(AgentDto agentDto) throws Exception {
+        int userPointTotalCount = agentMapper.selectAgentSubPointListTotalCount(agentDto);
+
+        PaginationInfo paginationInfo = new PaginationInfo(agentDto);
+        paginationInfo.setTotalRecordCount(userPointTotalCount);
+        agentDto.setPaginationInfo(paginationInfo);
+
+        return agentMapper.selectAgentSubPointList(agentDto);
     }
 
 }

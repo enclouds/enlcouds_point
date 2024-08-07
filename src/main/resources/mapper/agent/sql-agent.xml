@@ -41,15 +41,48 @@
 		where 1=1
 		and agent_up_code = #{schAgentCode}
 
-		<if test="schCond1 == 'nick'">
-			AND pu.nick_name like '%${schText}%'
+		<if test="schCond1 == 'name'">
+			AND pa.agent_name like '%${schText}%'
 		</if>
-		<if test="schCond1 == 'phoneNum'">
-			AND pu.phone_num like '%${schText}%'
+		<if test="schCond1 == 'id'">
+			AND pa.id like '%${schText}%'
 		</if>
 
 		LIMIT
 		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
+	</select>
+
+	<select id="selectSubAdminAgentList" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="com.enclouds.enpoint.agent.dto.AgentDto">
+		select agent_code
+		, agent_up_code
+		, id
+		, password
+		, password_str
+		, agent_name
+		, memo
+		, format(point, 0) as point
+		, date_format(reg_date, '%Y-%m-%d') as regDate
+		, ticket
+		, format(ticket, 0) as ticketStr
+		, ticket2
+		, format(ticket2, 0) as ticketStr2
+		, ticket3
+		, format(ticket3, 0) as ticketStr3
+		, ticket4
+		, format(ticket4, 0) as ticketStr4
+		, ticket5
+		, format(ticket5, 0) as ticketStr5
+		from p_agent pa
+		where 1=1
+		and agent_gbn = 'AG'
+		and agent_code not in(16, 23)
+
+		<if test="schCond1 == 'name'">
+			AND pa.agent_name like '%${schText}%'
+		</if>
+		<if test="schCond1 == 'id'">
+			AND pa.id like '%${schText}%'
+		</if>
 	</select>
 
 	<select id="selectAgentTotalList" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="com.enclouds.enpoint.agent.dto.AgentDto">
@@ -196,6 +229,33 @@
 		, #{agentCode}
 		, NOW() )
 	</insert>
+
+	<insert id="insertAddSubAgentPoint" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+		INSERT INTO p_sub_agent_point
+		( gbn
+		, point
+		, agent_code
+		, reg_date)
+		VALUES
+		( 'ADD'
+		, #{addPoint}
+		, #{agentCode}
+		, NOW() )
+	</insert>
+
+	<update id="updateSubAgentMinusPoint" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+		UPDATE p_agent
+		SET point = point - #{addPoint}
+		WHERE 1=1
+		AND agent_code = #{agentUpCode}
+	</update>
+
+	<select id="selectSubAdminPoint" resultType="int">
+		SELECT point
+		FROM p_agent
+		WHERE 1=1
+		AND agent_code = 16
+	</select>
 
 	<insert id="insertAddAgentTicket" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
 		INSERT INTO p_agent_ticket
@@ -532,6 +592,40 @@
 
 	</select>
 
+	<select id="selectAgentSubPointListTotalCount" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="int">
+		SELECT count(*)
+		FROM p_sub_agent_point
+		WHERE 1=1
+
+		<choose>
+			<when test='agentCode == 16'>
+				<if test="schCond1 != ''">
+					AND agent_code = #{schCond1}
+				</if>
+			</when>
+			<otherwise>
+				AND agent_code = #{agentCode}
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test="schCond2 == 'minus'">
+				AND gbn = 'MINUS'
+				AND point = #{schText}
+			</when>
+			<when test="schCond2 == 'add'">
+				AND gbn = 'ADD'
+				AND point = #{schText}
+			</when>
+		</choose>
+
+		<![CDATA[
+			and reg_date >= concat(#{schStartDte}, ' 00:00:00')
+			and reg_date <= concat(#{schEndDte}, ' 23:59:59')
+		]]>
+
+	</select>
+
 	<select id="selectAgentPointList" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="com.enclouds.enpoint.agent.dto.AgentDto">
 		select pa.agent_name
 		, case when ptap.gbn = 'ADD' then ptap.point else 0 end as addPoint
@@ -543,6 +637,48 @@
 
 		<choose>
 			<when test='agentCode == 1'>
+				<if test="schCond1 != ''">
+					AND ptap.agent_code = #{schCond1}
+				</if>
+			</when>
+			<otherwise>
+				AND ptap.agent_code = #{agentCode}
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test="schCond2 == 'minus'">
+				AND ptap.gbn = 'MINUS'
+				AND ptap.point = #{schText}
+			</when>
+			<when test="schCond2 == 'add'">
+				AND ptap.gbn = 'ADD'
+				AND ptap.point = #{schText}
+			</when>
+		</choose>
+
+		<![CDATA[
+			and ptap.reg_date >= concat(#{schStartDte}, ' 00:00:00')
+			and ptap.reg_date <= concat(#{schEndDte}, ' 23:59:59')
+		]]>
+
+		order by ptap.reg_date desc
+
+		LIMIT
+		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
+	</select>
+
+	<select id="selectAgentSubPointList" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="com.enclouds.enpoint.agent.dto.AgentDto">
+		select pa.agent_name
+		, case when ptap.gbn = 'ADD' then ptap.point else 0 end as addPoint
+		, case when ptap.gbn = 'MINUS' then ptap.point * -1 else 0 end as minusPoint
+		, date_format(ptap.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		from p_sub_agent_point ptap
+		LEFT JOIN p_agent pa on pa.agent_code = ptap.agent_code
+		where 1=1
+
+		<choose>
+			<when test='agentCode == 16'>
 				<if test="schCond1 != ''">
 					AND ptap.agent_code = #{schCond1}
 				</if>

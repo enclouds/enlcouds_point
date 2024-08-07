@@ -130,6 +130,9 @@ public class UserController {
             jackpotDto.setStoreGbn("hunters");
             JackpotDto jackpotInfo = jackpotService.selectJackPotInfo(jackpotDto);
             mv.addObject("jackpotInfo", jackpotInfo);
+
+            String pointSum = customUserService.selectPointSum();
+            mv.addObject("pointSum", pointSum);
          }else {
             return new ModelAndView("redirect:/");
          }
@@ -247,16 +250,23 @@ public class UserController {
                result.put("resultCode", -1);
                result.put("resultMsg", "이미 존재하는 전화번호 입니다.");
             }else {
-               userDto.setAgentCode(userInfo.getAgentCode());
-               userDto.setAgentName(userInfo.getAgentName());
-               resultCode = customUserService.insertUser(userDto);
+               int cnt2 = customUserService.selectDuplUser2(userDto);
 
-               if (resultCode > 0) {
-                  result.put("resultCode", 0);
-                  result.put("resultMsg", "정상적으로 등록 되었습니다.");
-               } else {
+               if(cnt2 > 0){
                   result.put("resultCode", -1);
-                  result.put("resultMsg", "등록에 실패 하였습니다.");
+                  result.put("resultMsg", "이미 존재하는 지점에 닉네임 입니다.");
+               }else {
+                  userDto.setAgentCode(userInfo.getAgentCode());
+                  userDto.setAgentName(userInfo.getAgentName());
+                  resultCode = customUserService.insertUser(userDto);
+
+                  if (resultCode > 0) {
+                     result.put("resultCode", 0);
+                     result.put("resultMsg", "정상적으로 등록 되었습니다.");
+                  } else {
+                     result.put("resultCode", -1);
+                     result.put("resultMsg", "등록에 실패 하였습니다.");
+                  }
                }
             }
          }
@@ -283,14 +293,20 @@ public class UserController {
             userId = userDetails.getUsername();
             userInfo = userService.getUserInfo(userId);
 
-            resultCode = customUserService.updateUser(userDto);
-
-            if (resultCode > 0) {
-               result.put("resultCode", 0);
-               result.put("resultMsg", "정상적으로 수정 되었습니다.");
-            } else {
+            int cnt = customUserService.selectDuplUser2(userDto);
+            if(cnt > 0){
                result.put("resultCode", -1);
-               result.put("resultMsg", "수정에 실패 하였습니다.");
+               result.put("resultMsg", "이미 존재하는 지점에 닉네임 입니다.");
+            }else {
+               resultCode = customUserService.updateUser(userDto);
+
+               if (resultCode > 0) {
+                  result.put("resultCode", 0);
+                  result.put("resultMsg", "정상적으로 수정 되었습니다.");
+               } else {
+                  result.put("resultCode", -1);
+                  result.put("resultMsg", "수정에 실패 하였습니다.");
+               }
             }
          }
       } catch (ClassCastException cce){

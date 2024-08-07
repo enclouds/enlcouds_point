@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+
+<body>
+
+<!-- modal S -->
+<div class="modal fade small" id="add_point_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">포인트 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">포인트 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">가맹점명</th>
+                            <td>
+                                <input type="text" name="addPointAgentName" id="addPointAgentName" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">총 포인트</th>
+                            <td>
+                                <input type="text" name="totalPoint" id="totalPoint" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">적립 포인트</th>
+                            <td>
+                                <input type="text" name="addPoint" id="addPoint">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:addPoint();">적립</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('add_point_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- container S -->
+<div class="container">
+    <!-- header S -->
+    <div th:replace="/fragments/left.html :: fragment-left('m2', '/agent/sub/list')"></div>
+    <!-- header E -->
+
+    <!-- content S -->
+    <div class="content">
+        <div class="con_top">
+            <ul>
+                <li>Sub Admin</li>
+                <li>가맹점 적립/차감 목록</li>
+            </ul>
+        </div>
+        <p class="page_info">가맹점 적립/차감 목록</p>
+
+        <form id="schFrm">
+            <div class="search_option">
+                <span class="input_group">
+                    <select id="schCond1" name="schCond1" style="width:100px;">
+                        <option value="name" th:selected="${params.schCond1} == 'name'">가맹점명</option>
+                        <option value="id" th:selected="${params.schCond1} == 'id'">id</option>
+                    </select>
+                    <input type="text" style="width:1000px;" id="schText" name="schText" placeholder="검색어" th:value="${params.schText}">
+                </span>
+                <button type="button" class="search_btn" th:onclick="javascript:fnSearch();">조회</button>
+            </div>
+        </form>
+
+        <div class="list_box">
+            <table class="list">
+                <colgroup>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">가맹점 명</th>
+                    <th scope="col">총 잔여 포인트</th>
+                    <th scope="col">포인트 적립</th>
+                    <th scope="col">등록일자</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="list:${agentList}">
+                    <td th:text="${list.agentName}"></td>
+                    <td th:text="${list.point}"></td>
+                    <td>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddPoint([[${list.agentCode}]], [[${list.agentName}]], [[${list.point}]])">적립</button>
+                    </td>
+                    <td th:text="${list.regDate}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <!-- content E -->
+
+</div>
+<!-- container E -->
+</body>
+<script th:src="@{/static/js/common.js}"></script>
+<script th:inline="javascript">
+
+    var selectTrSeq;
+
+    $( function() {
+    });
+
+    function fnSearch(){
+        $("#schFrm").submit();
+    }
+
+    function fnModalClose(id){
+        $("#"+id).hide();
+    }
+
+    function fnAddPoint(agentCode, agentName, point){
+        selectTrSeq = agentCode;
+
+        $("#addPointAgentName").val(agentName);
+        $("#totalPoint").val(point);
+        $("#add_point_modal").show();
+    }
+
+    function addPoint(){
+        var formData = new FormData();
+
+        formData.append("agentCode", selectTrSeq);
+        formData.append("addPoint", $("#addPoint").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/agent/sub/updateAgentAddPointAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+</script>
+
+</html>

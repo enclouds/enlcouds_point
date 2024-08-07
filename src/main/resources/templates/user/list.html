@@ -1114,6 +1114,8 @@
                 <button sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')"  type="button" class="add_btn" th:onclick="javascript:fnRegModal()">등록</button>
                 <button sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" type="button" class="add_jackpot_btn" th:onclick="javascript:fnRegJackpot([[${jackpotInfo.seq}]])">JackPot 적립</button>
                 <button sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')"  type="button" class="add_jackpot_view_btn" th:onclick="javascript:fnJackpotView([[${jackpotInfo.seq}]])">JackPot(새창)</button>
+
+                <p style="font-size: x-large;color: crimson;-webkit-user-modify: read-write-plaintext-only;" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" th:text="|   총 포인트 합 : ${pointSum}|"></p>
             </div>
         </form>
 
@@ -1655,7 +1657,9 @@
             success: function(response) {
                 // 성공 시 동작
                 alert(response.resultMsg);
-                fnSearch();
+                if(response.resultCode > -1){
+                    fnSearch();
+                }
             },
             error: function(error) {
                 // 실패 시 동작
@@ -1680,7 +1684,9 @@
             success: function(response) {
                 // 성공 시 동작
                 alert(response.resultMsg);
-                fnSearch();
+                if(response.resultCode > -1){
+                    fnSearch();
+                }
             },
             error: function(error) {
                 // 실패 시 동작

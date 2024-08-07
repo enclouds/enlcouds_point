@@ -58,6 +58,8 @@ public interface UserMapper {
 
     int selectDuplUser(UserDto userDto) throws Exception;
 
+    int selectDuplUser2(UserDto userDto) throws Exception;
+
     int insertUser(UserDto userDto) throws Exception;
 
     int updateUser(UserDto userDto) throws Exception;
@@ -193,5 +195,7 @@ public interface UserMapper {
     int insertCouponHistory(UserDto userDto) throws Exception;
 
     int updateAllUserWeekTicketDefAjax() throws Exception;
+
+    String selectPointSum() throws Exception;
 
 }

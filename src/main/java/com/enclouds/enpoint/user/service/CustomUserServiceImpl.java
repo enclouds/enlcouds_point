@@ -84,6 +84,11 @@ public class CustomUserServiceImpl implements CustomUserService{
     }
 
     @Override
+    public int selectDuplUser2(UserDto userDto) throws Exception {
+        return userMapper.selectDuplUser2(userDto);
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public int insertUser(UserDto userDto) throws Exception {
         try {
@@ -868,5 +873,10 @@ public class CustomUserServiceImpl implements CustomUserService{
     @Override
     public int updateUserMinusSumRank(UserDto userDto) throws Exception {
         return userMapper.updateUserMinusSumRank(userDto);
+    }
+
+    @Override
+    public String selectPointSum() throws Exception{
+        return userMapper.selectPointSum();
     }
 }

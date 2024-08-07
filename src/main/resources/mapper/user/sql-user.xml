@@ -172,6 +172,14 @@
 		and phone_num = #{phoneNum}
 	</select>
 
+	<select id="selectDuplUser2" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="int">
+		select count(*)
+		from p_user
+		where 1=1
+		and nick_name = #{nickName}
+		and agent_code = #{agentCode}
+	</select>
+
 	<insert id="insertUser" parameterType="com.enclouds.enpoint.user.dto.UserDto">
 		INSERT INTO p_user
 		( phone_num
@@ -1317,6 +1325,16 @@
 		UPDATE p_user
 		SET ticket = 0
 	</update>
+
+	<select id="selectPointSum" resultType="String">
+		SELECT format(sum(point), 0)
+		FROM p_user
+		where agent_code in (select agent_code
+							from p_agent pa
+							where pa.agent_gbn = 'AG'
+							and agent_code != 16
+							and agent_code != 23)
+	</select>
 
 </mapper>
 

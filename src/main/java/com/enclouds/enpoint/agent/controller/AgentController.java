@@ -70,6 +70,42 @@ public class AgentController {
         return mv;
     }
 
+    @RequestMapping(value = "/sub/list", method = RequestMethod.GET)
+    public ModelAndView agentSubList(HttpServletResponse response, @ModelAttribute AgentDto agentDto) throws Exception{
+        ModelAndView mv = new ModelAndView("agent/sub/list");
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDto userInfo = null;
+        String userId = "";
+
+        try {
+            if(principal != "anonymousUser") {
+                UserDetails userDetails = (UserDetails) principal;
+                userId = userDetails.getUsername();
+                userInfo = userService.getUserInfo(userId);
+
+                if(agentDto.getSchCond1() == null){
+                    agentDto.setSchCond1("name");
+                }
+
+                List<AgentDto> agentList = agentService.selectSubAdminAgentList(agentDto);
+                mv.addObject("agentList", agentList);
+
+            }else {
+                return new ModelAndView("redirect:/");
+            }
+        } catch (ClassCastException cce){
+            DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+            userId = auth2User.getName();
+            userInfo = userService.getUserInfo(userId);
+        }
+
+        mv.addObject("userInfo", userInfo);
+        mv.addObject("params", agentDto);
+
+        return mv;
+    }
+
     @PostMapping("/insertAgentAjax")
     public @ResponseBody
     Map<String, Object> insertAgentAjax(@ModelAttribute("agentDto") AgentDto agentDto) throws Exception{
@@ -202,6 +238,45 @@ public class AgentController {
                 } else {
                     result.put("resultCode", -1);
                     result.put("resultMsg", "적립에 실패 하였습니다.");
+                }
+            }
+        } catch (ClassCastException cce){
+            DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+            userId = auth2User.getName();
+            userInfo = userService.getUserInfo(userId);
+        }
+
+        return result;
+    }
+
+    @PostMapping("/sub/updateAgentAddPointAjax")
+    public @ResponseBody Map<String, Object> updateSubAdminAgentAddPointAjax(@ModelAttribute("agentDto") AgentDto agentDto) throws Exception{
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDto userInfo = null;
+        String userId = "";
+        int resultCode;
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            if (principal != "anonymousUser") {
+                UserDetails userDetails = (UserDetails) principal;
+                userId = userDetails.getUsername();
+                userInfo = userService.getUserInfo(userId);
+
+                agentDto.setAgentUpCode(userInfo.getAgentCode());
+                resultCode = agentService.updateSubAdminAgentAddPoint(agentDto);
+
+                if (resultCode > 0) {
+                    result.put("resultCode", 0);
+                    result.put("resultMsg", "정상적으로 적립 되었습니다.");
+                } else {
+                    if(resultCode < -1){
+                        result.put("resultCode", -2);
+                        result.put("resultMsg", "적립할 포인트가 부족합니다.");
+                    }else {
+                        result.put("resultCode", -1);
+                        result.put("resultMsg", "적립에 실패 하였습니다.");
+                    }
                 }
             }
         } catch (ClassCastException cce){
@@ -783,6 +858,67 @@ public class AgentController {
                 }
 
                 List<AgentDto> agentPointList = agentService.selectAgentPointList(agentDto);
+                mv.addObject("agentPointList", agentPointList);
+
+            }else {
+                return new ModelAndView("redirect:/");
+            }
+        } catch (ClassCastException cce){
+            DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+            userId = auth2User.getName();
+            userInfo = userService.getUserInfo(userId);
+        }
+
+        mv.addObject("userInfo", userInfo);
+        mv.addObject("params", agentDto);
+
+        return mv;
+    }
+
+    @RequestMapping(value = "/point/sub/list", method = RequestMethod.GET)
+    public ModelAndView userPointSubList(HttpServletResponse response, @ModelAttribute AgentDto agentDto) throws Exception{
+        ModelAndView mv = new ModelAndView("agent/point/sub/list");
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDto userInfo = null;
+        String userId = "";
+
+        try {
+            if(principal != "anonymousUser") {
+                UserDetails userDetails = (UserDetails) principal;
+                userId = userDetails.getUsername();
+                userInfo = userService.getUserInfo(userId);
+
+                mv.addObject("agentTotalList", agentService.selectSubAdminAgentList(agentDto));
+
+                agentDto.setAgentCode(userInfo.getAgentCode());
+
+                String startDateStr = DateUtils.addDay(DateUtils.getToday(), -7);
+                SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+                Date startDateDte = format.parse(startDateStr);
+                SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+                String startDate = format2.format(startDateDte);
+
+                if(StringUtils.isEmpty(agentDto.getSchStartDte())){
+                    agentDto.setSchStartDte(startDate);
+                }
+
+                Date todayDate = format.parse(DateUtils.getToday());
+                String today = format2.format(todayDate);
+
+                if(StringUtils.isEmpty(agentDto.getSchEndDte())){
+                    agentDto.setSchEndDte(today);
+                }
+
+                if(StringUtils.isEmpty(agentDto.getSchCond1())){
+                    agentDto.setSchCond1("");
+                }
+
+                if(StringUtils.isEmpty(agentDto.getSchCond2())){
+                    agentDto.setSchCond2("");
+                }
+
+                List<AgentDto> agentPointList = agentService.selectAgentSubPointList(agentDto);
                 mv.addObject("agentPointList", agentPointList);
 
             }else {

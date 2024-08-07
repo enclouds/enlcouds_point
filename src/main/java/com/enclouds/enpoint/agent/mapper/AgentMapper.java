@@ -11,6 +11,8 @@ public interface AgentMapper {
 
     List<AgentDto> selectAgentList(AgentDto agentDto) throws Exception;
 
+    List<AgentDto> selectSubAdminAgentList(AgentDto agentDto) throws Exception;
+
     List<AgentDto> selectAgentTotalList(AgentDto agentDto) throws Exception;
 
     int selectAgentListTotalCount(AgentDto agentDto) throws Exception;
@@ -25,6 +27,10 @@ public interface AgentMapper {
 
     int updateAgentAddPoint(AgentDto agentDto) throws Exception;
 
+    int selectSubAdminPoint() throws Exception;
+
+    int updateSubAgentMinusPoint(AgentDto agentDto) throws Exception;
+
     int updateAgentAddTicket(AgentDto agentDto) throws Exception;
 
     int updateAgentAddTicket2(AgentDto agentDto) throws Exception;
@@ -38,6 +44,8 @@ public interface AgentMapper {
     int insertAddAgentPoint(AgentDto agentDto) throws Exception;
 
     int insertAddTopAgentPoint(AgentDto agentDto) throws Exception;
+
+    int insertAddSubAgentPoint(AgentDto agentDto) throws Exception;
 
     int insertAddAgentTicket(AgentDto agentDto) throws Exception;
 
@@ -94,5 +102,9 @@ public interface AgentMapper {
     List<AgentDto> selectAgentPointList(AgentDto agentDto) throws Exception;
 
     int selectAgentPointListTotalCount(AgentDto agentDto) throws Exception;
+
+    List<AgentDto> selectAgentSubPointList(AgentDto agentDto) throws Exception;
+
+    int selectAgentSubPointListTotalCount(AgentDto agentDto) throws Exception;
 
 }
