@@ -66,7 +66,7 @@
                         <tr>
                             <th scope="row"><em class="required">*</em>전화번호</th>
                             <td>
-                                <input type="text" name="phoneNum" id="phoneNum">
+                                <input type="text" name="phoneNum" id="phoneNum" maxlength="11" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                             </td>
                         </tr>
                         <tr>

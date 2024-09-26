@@ -124,6 +124,30 @@ public class CustomUserServiceImpl implements CustomUserService{
 
             result = userMapper.insertUser(userDto);
 
+            //신규가입시 온라인 티켓 지급
+            if(result > 0){
+                PointDto preTicketDto = userMapper.getTotalTicket5(userDto);
+                AgentDto agentDto = new AgentDto();
+                agentDto.setAgentCode(userDto.getAgentCode());
+                AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
+
+                userDto.setAddTicket("1");
+                userDto.setDefTicket(agentInfo.getTicketInt5());
+                userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
+
+                result = userMapper.insertAddTicket5(userDto);
+
+                //해당 가맹점 티켓 차감
+                if(result > 0){
+                    AgentDto agentDto1 = new AgentDto();
+                    agentDto1.setAgentCode(userDto.getAgentCode());
+                    agentDto1.setMinusTicket(userDto.getAddTicket());
+
+                    agentService.updateAgentMinusTicket5(agentDto1);
+                }
+
+            }
+
             return result;
         }catch(Exception e){
             throw new RuntimeException(e);

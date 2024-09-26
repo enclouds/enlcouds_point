@@ -77,6 +77,9 @@ public class ApiServiceImpl implements ApiService{
 
         if(prePointDto != null){
             //적립
+            //부가세 10%제외
+            double point = Double.valueOf(userDto.getAddPoint()) / 1.1;
+            userDto.setAddPoint(String.format("%.0f", point));
             result = userMapper.updateUserAddPoint(userDto);
 
             if(result > 0){
@@ -88,7 +91,7 @@ public class ApiServiceImpl implements ApiService{
 
                 if(result > 0){
                     //외식쿠폰 적립
-                    Double coupon = Double.parseDouble(apiPreDto.getAddPoint()) / 10000;
+                    Double coupon = Double.parseDouble(userDto.getAddPoint()) / 10000;
                     userDto.setAddCouponPoint(coupon);
                     result = customUserService.updateUserAddCouponPoint(userDto);
 

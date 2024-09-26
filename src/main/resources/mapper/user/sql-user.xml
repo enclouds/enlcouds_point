@@ -188,7 +188,8 @@
 		, point
 		, reg_date
 		, memo
-		, agent_code)
+		, agent_code
+		, ticket5)
 		VALUES
 		( TRIM(#{phoneNum})
 		, #{nickName}
@@ -196,7 +197,8 @@
 		, #{point}
 		, NOW()
 		, #{memo}
-		, #{agentCode})
+		, #{agentCode}
+		, '1')
 	</insert>
 
 	<update id="updateUser" parameterType="com.enclouds.enpoint.user.dto.UserDto">
@@ -1002,6 +1004,8 @@
 		, CAST(rank_point AS signed integer) as intRankPoint
 		, CAST(rank_sum_point AS signed integer) as intRankSumPoint
 		, pu.agent_code
+		, pu.ticket
+		, pu.ticket3
 		FROM p_user pu, (SELECT @rownum:=0) TMP
 		WHERE 1=1
 		AND (rank_point > 0 or rank_sum_point > 0)
