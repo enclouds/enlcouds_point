@@ -656,6 +656,13 @@
 		and phone_num = #{phoneNum}
 	</select>
 
+	<select id="getTotalRank" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.RankDto">
+		select rank_point as privateDefRank
+		from p_user pu
+		where 1=1
+		and phone_num = #{phoneNum}
+	</select>
+
 	<select id="getTotalTicket2" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
 		select format(ticket2, 0) as ticket
 		, ticket2 as ticketInt
@@ -1338,6 +1345,37 @@
 							where pa.agent_gbn = 'AG'
 							and agent_code != 16
 							and agent_code != 23)
+	</select>
+
+	<insert id="insertAddRankPointHist" parameterType="com.enclouds.enpoint.user.dto.RankDto">
+		INSERT INTO p_rank_point
+		( rank_gbn
+		, rank
+		, reg_date
+		, phone_num
+		, agent_code
+		, private_def_rank)
+		VALUES
+		( #{rankGbn}
+		, #{rank}
+		, NOW()
+		, #{phoneNum}
+		, #{agentCode}
+		, #{privateDefRank})
+	</insert>
+
+	<select id="selectRankHistory" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.RankDto">
+		SELECT prp.rank_gbn
+		, prp.rank
+		, prp.private_def_rank
+		, date_format(prp.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		, ifnull(pa.agent_name, '') as agentName
+		FROM p_rank_point prp
+		left join p_agent pa on pa.agent_code = prp.agent_code
+		WHERE 1=1
+		AND prp.phone_num = #{phoneNum}
+		AND prp.reg_date BETWEEN DATE_ADD(NOW(), INTERVAL -3 MONTH) AND NOW()
+		ORDER BY prp.reg_date DESC
 	</select>
 
 </mapper>

@@ -2,6 +2,7 @@ package com.enclouds.enpoint.user.service;
 
 import com.enclouds.enpoint.user.dto.CouponDto;
 import com.enclouds.enpoint.user.dto.PointDto;
+import com.enclouds.enpoint.user.dto.RankDto;
 import com.enclouds.enpoint.user.dto.UserDto;
 import org.springframework.security.core.userdetails.User;
 
@@ -90,6 +91,8 @@ public interface CustomUserService {
     List<PointDto> selectTicketHistory5(UserDto userDto) throws Exception;
 
     List<CouponDto> selectCouponHistory(UserDto userDto) throws Exception;
+
+    List<RankDto> selectRankHistory(UserDto userDto) throws Exception;
 
     int updateUserAddCouponPoint(UserDto userDto) throws Exception;
 

@@ -2,6 +2,7 @@ package com.enclouds.enpoint.user.mapper;
 
 import com.enclouds.enpoint.user.dto.CouponDto;
 import com.enclouds.enpoint.user.dto.PointDto;
+import com.enclouds.enpoint.user.dto.RankDto;
 import com.enclouds.enpoint.user.dto.UserDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.security.core.userdetails.User;
@@ -70,6 +71,8 @@ public interface UserMapper {
 
     int updateUserAddRankPoint(UserDto userDto) throws Exception;
 
+    int insertAddRankPointHist(RankDto rankDto) throws Exception;
+
     int updateUserMinusRankPoint(UserDto userDto) throws Exception;
 
     int insertAddPoint(UserDto userDto) throws Exception;
@@ -118,7 +121,11 @@ public interface UserMapper {
 
     List<CouponDto> selectCouponHistory(UserDto userDto) throws Exception;
 
+    List<RankDto> selectRankHistory(UserDto userDto) throws Exception;
+
     PointDto getTotalPoint(UserDto userDto) throws Exception;
+
+    RankDto getTotalRank(UserDto userDto) throws Exception;
 
     PointDto getTotalTicket(UserDto userDto) throws Exception;
 

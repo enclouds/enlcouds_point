@@ -7,10 +7,7 @@ import com.enclouds.enpoint.cmm.util.DateUtils;
 import com.enclouds.enpoint.cmm.util.StringUtils;
 import com.enclouds.enpoint.jackpot.dto.JackpotDto;
 import com.enclouds.enpoint.jackpot.service.JackpotService;
-import com.enclouds.enpoint.user.dto.CouponDto;
-import com.enclouds.enpoint.user.dto.LoginDto;
-import com.enclouds.enpoint.user.dto.PointDto;
-import com.enclouds.enpoint.user.dto.UserDto;
+import com.enclouds.enpoint.user.dto.*;
 import com.enclouds.enpoint.user.service.CustomUserService;
 import com.enclouds.enpoint.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1337,6 +1334,33 @@ public class UserController {
             List<CouponDto> historyCouponList = customUserService.selectCouponHistory(userDto);
 
             result.put("historyCouponList", historyCouponList);
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      return result;
+   }
+
+   @PostMapping("/user/selectRankHistoryAjax")
+   public @ResponseBody Map<String, Object> selectRankHistoryAjax(@ModelAttribute("userDto") UserDto userDto) throws Exception{
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+
+      Map<String, Object> result = new HashMap<String, Object>();
+
+      try {
+         if (principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            List<RankDto> historyRankList = customUserService.selectRankHistory(userDto);
+
+            result.put("historyRankList", historyRankList);
          }
       } catch (ClassCastException cce){
          DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;

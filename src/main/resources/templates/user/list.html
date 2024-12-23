@@ -431,7 +431,7 @@
             </div>
             <div class="modal-body">
                 <div class="form_box">
-                    <p class="tb_tit">씨티 티켓 정보</p>
+                    <p class="tb_tit">월간 티켓 정보</p>
                     <table class="form">
                         <colgroup>
                             <col width="20%;">
@@ -531,7 +531,7 @@
             </div>
             <div class="modal-body">
                 <div class="form_box">
-                    <p class="tb_tit">온라인 티켓 정보</p>
+                    <p class="tb_tit">웰컴 티켓 정보</p>
                     <table class="form">
                         <colgroup>
                             <col width="20%;">
@@ -631,7 +631,7 @@
             </div>
             <div class="modal-body">
                 <div class="form_box">
-                    <p class="tb_tit">씨티 티켓 정보</p>
+                    <p class="tb_tit">월간 티켓 정보</p>
                     <table class="form">
                         <colgroup>
                             <col width="20%;">
@@ -731,7 +731,7 @@
             </div>
             <div class="modal-body">
                 <div class="form_box">
-                    <p class="tb_tit">온라인 티켓 정보</p>
+                    <p class="tb_tit">웰컴 티켓 정보</p>
                     <table class="form">
                         <colgroup>
                             <col width="20%;">
@@ -1078,6 +1078,42 @@
 </div>
 <!-- modal E -->
 
+<!-- modal S -->
+<div class="modal fade large" id="history_rank_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">승점 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box" style="height:400px;">
+                    <p class="tb_tit">승점 정보</p>
+                    <table class="form">
+                        <thead>
+                        <tr>
+                            <th scope="col">구분</th>
+                            <th scope="col">승점</th>
+                            <th scope="col">이전 승점</th>
+                            <th scope="col">일자</th>
+                            <th scope="col">처리 지점명</th>
+                        </tr>
+                        </thead>
+                        <tbody id="historyRankTbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('history_rank_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
 <!-- container S -->
 <div class="container">
     <!-- header S -->
@@ -1129,27 +1165,27 @@
                     <th scope="col" rowspan="2">지점</th>
                     <th sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VIEW')" scope="col" rowspan="2">전화번호</th>
                     <th scope="col" rowspan="2">전화번호</th>
-                    <th scope="col" rowspan="2">적립 총 포인트</th>
-                    <th scope="col" colspan="3" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >포인트 처리</th>
-                    <th scope="col" rowspan="2">외식 쿠폰</th>
-                    <th scope="col" colspan="3" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >외식 쿠폰 처리</th>
+                    <th scope="col" rowspan="2">포인트</th>
+                    <th scope="col" colspan="3" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >처리</th>
+                    <th scope="col" rowspan="2">쿠폰</th>
+                    <th scope="col" colspan="3" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >처리</th>
                     <th scope="col" colspan="2">승점</th>
-                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >승점 처리</th>
-                    <th scope="col" rowspan="2">총 프리 티켓</th>
-                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >프리 티켓 처리</th>
-                    <th scope="col" rowspan="2">프리 티켓 내역</th>
-                    <th scope="col" rowspan="2">총 주간 티켓</th>
-                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >주간 티켓 처리</th>
-                    <th scope="col" rowspan="2">주간 티켓 내역</th>
-                    <th scope="col" rowspan="2">총 씨티 티켓</th>
-                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >씨티 티켓 처리</th>
-                    <th scope="col" rowspan="2">씨티 티켓 내역</th>
-                    <th scope="col" rowspan="2">총 팀프로 티켓</th>
-                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >팀프로 티켓 처리</th>
-                    <th scope="col" rowspan="2">팀프로 티켓 내역</th>
-                    <th scope="col" rowspan="2">총 온라인 티켓</th>
-                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >온라인 티켓 처리</th>
-                    <th scope="col" rowspan="2">온라인 티켓 내역</th>
+                    <th scope="col" colspan="3" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >처리</th>
+                    <th scope="col" rowspan="2">프리T</th>
+                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >처리</th>
+                    <th scope="col" rowspan="2">내역</th>
+                    <th scope="col" rowspan="2">주간T</th>
+                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >처리</th>
+                    <th scope="col" rowspan="2">내역</th>
+                    <th scope="col" rowspan="2">월간T</th>
+                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >처리</th>
+                    <th scope="col" rowspan="2">내역</th>
+                    <th scope="col" rowspan="2">팀프로T</th>
+                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >처리</th>
+                    <th scope="col" rowspan="2">내역</th>
+                    <th scope="col" rowspan="2">웰컴T</th>
+                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >처리</th>
+                    <th scope="col" rowspan="2">내역</th>
                     <th scope="col" rowspan="2">메모</th>
                     <th scope="col" rowspan="2">등록 일자</th>
                     <th scope="col" rowspan="2">최근 방문 일자</th>
@@ -1166,6 +1202,7 @@
                     <th scope="col">누적 승점</th>
                     <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >적립</th>
                     <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >차감</th>
+                    <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >내역</th>
                     <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >적립</th>
                     <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >사용</th>
                     <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >적립</th>
@@ -1186,81 +1223,84 @@
                     <td sec:authorize="hasAnyRole('ROLE_AGENT', 'ROLE_VIEW')"><a href="javascript:callFunction();" th:text="${list.phoneNumMasking}" style="color:blue;" th:onclick="javascript:fnUptModalMas([[${list.phoneNumMasking}]], [[${list.phoneNum}]], [[${list.nickName}]], [[${list.memo}]], [[${list.point}]], [[${list.orgPoint}]], [[${list.agentCode}]])"></a></td>
                     <td th:text="${list.point}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddPoint([[${list.phoneNum}]], [[${list.nickName}]], [[${list.point}]])">적립(포인트)</button>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddPoint([[${list.phoneNum}]], [[${list.nickName}]], [[${list.point}]])">적립</button>
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn red" th:onclick="javascript:fnMinusPoint([[${list.phoneNum}]], [[${list.nickName}]], [[${list.point}]], [[${list.orgPoint}]])">차감(포인트)</button>
+                        <button type="button" class="tb_btn red" th:onclick="javascript:fnMinusPoint([[${list.phoneNum}]], [[${list.nickName}]], [[${list.point}]], [[${list.orgPoint}]])">차감</button>
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnPointHistory([[${list.phoneNum}]])">내역(포인트)</button>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnPointHistory([[${list.phoneNum}]])">내역</button>
                     </td>
                     <td th:text="${list.couponPoint}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddCouponPoint([[${list.phoneNum}]], [[${list.nickName}]], [[${list.couponPoint}]])">적립(쿠폰)</button>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddCouponPoint([[${list.phoneNum}]], [[${list.nickName}]], [[${list.couponPoint}]])">적립</button>
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn red" th:onclick="javascript:fnMinusCouponPoint([[${list.phoneNum}]], [[${list.nickName}]], [[${list.couponPoint}]], [[${list.orgCouponPoint}]])">차감(쿠폰)</button>
+                        <button type="button" class="tb_btn red" th:onclick="javascript:fnMinusCouponPoint([[${list.phoneNum}]], [[${list.nickName}]], [[${list.couponPoint}]], [[${list.orgCouponPoint}]])">차감</button>
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnCouponHistory([[${list.phoneNum}]])">내역(쿠폰)</button>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnCouponHistory([[${list.phoneNum}]])">내역</button>
                     </td>
                     <td th:text="${list.rankPoint}"></td>
                     <td th:text="${list.rankSumPoint}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddRankPoint([[${list.phoneNum}]], [[${list.nickName}]], [[${list.rankPoint}]])">적립(승점)</button>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddRankPoint([[${list.phoneNum}]], [[${list.nickName}]], [[${list.rankPoint}]])">적립</button>
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn red" th:onclick="javascript:fnMinusRankPoint([[${list.phoneNum}]], [[${list.nickName}]], [[${list.rankPoint}]])">차감(승점)</button>
+                        <button type="button" class="tb_btn red" th:onclick="javascript:fnMinusRankPoint([[${list.phoneNum}]], [[${list.nickName}]], [[${list.rankPoint}]])">차감</button>
+                    </td>
+                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnRankPointHistory([[${list.phoneNum}]])">내역</button>
                     </td>
                     <td th:text="${list.ticket2}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket2([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket2}]])">적립(프리티켓)</button>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket2([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket2}]])">적립</button>
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn red" th:if="${list.ticket2}>0" th:onclick="javascript:fnTicketUse2([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket2}]])">차감(프리티켓)</button>
+                        <button type="button" class="tb_btn red" th:if="${list.ticket2}>0" th:onclick="javascript:fnTicketUse2([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket2}]])">차감</button>
                     </td>
                     <td>
-                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory2([[${list.phoneNum}]])">내역(프리티켓)</button>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory2([[${list.phoneNum}]])">내역</button>
                     </td>
                     <td th:text="${list.ticket}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket}]])">적립(주간티켓)</button>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket}]])">적립</button>
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn red" th:if="${list.ticket}>0" th:onclick="javascript:fnTicketUse([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket}]])">차감(주간티켓)</button>
+                        <button type="button" class="tb_btn red" th:if="${list.ticket}>0" th:onclick="javascript:fnTicketUse([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket}]])">차감</button>
                     </td>
                     <td>
-                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory([[${list.phoneNum}]])">내역(주간티켓)</button>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory([[${list.phoneNum}]])">내역</button>
                     </td>
                     <td th:text="${list.ticket3}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket3([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket3}]])">적립(씨티티켓)</button>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket3([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket3}]])">적립</button>
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn red" th:if="${list.ticket3}>0" th:onclick="javascript:fnTicketUse3([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket3}]])">차감(씨티티켓)</button>
+                        <button type="button" class="tb_btn red" th:if="${list.ticket3}>0" th:onclick="javascript:fnTicketUse3([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket3}]])">차감</button>
                     </td>
                     <td>
-                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory3([[${list.phoneNum}]])">내역(씨티티켓)</button>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory3([[${list.phoneNum}]])">내역</button>
                     </td>
                     <td th:text="${list.ticket4}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket4([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket4}]])">적립(팀프로티켓)</button>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket4([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket4}]])">적립</button>
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn red" th:if="${list.ticket4}>0" th:onclick="javascript:fnTicketUse4([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket4}]])">차감(팀프로티켓)</button>
+                        <button type="button" class="tb_btn red" th:if="${list.ticket4}>0" th:onclick="javascript:fnTicketUse4([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket4}]])">차감</button>
                     </td>
                     <td>
-                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory4([[${list.phoneNum}]])">내역(팀프로티켓)</button>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory4([[${list.phoneNum}]])">내역</button>
                     </td>
                     <td th:text="${list.ticket5}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket5([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket5}]])">적립(온라인티켓)</button>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket5([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket5}]])">적립</button>
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn red" th:if="${list.ticket5}>0" th:onclick="javascript:fnTicketUse5([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket5}]])">차감(온라인티켓)</button>
+                        <button type="button" class="tb_btn red" th:if="${list.ticket5}>0" th:onclick="javascript:fnTicketUse5([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket5}]])">차감</button>
                     </td>
                     <td>
-                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory5([[${list.phoneNum}]])">내역(온라인티켓)</button>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory5([[${list.phoneNum}]])">내역</button>
                     </td>
                     <td>
                         <button type="button" class="tb_btn green" th:if="${list.memo} != null and ${list.memo} != ''" th:onclick="javascript:fnMemoPopup([[${list.memo}]])">메모</button>
@@ -1620,6 +1660,53 @@
                 }
 
                 $("#history_coupon_modal").show();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function fnRankPointHistory(phoneNum){
+        $("#historyRankTbody").empty();
+
+        var formData = new FormData();
+
+        formData.append("phoneNum", phoneNum);
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/user/selectRankHistoryAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                if(response.historyRankList != null){
+                    var appendStr = '';
+                    for(var i=0 ; i<response.historyRankList.length ; i++){
+                        var gbn = response.historyRankList[i]['rankGbn'];
+
+                        var gbnNm = "";
+                        if(gbn == 'ADD'){
+                            gbnNm = "적립";
+                        }else if(gbn == 'MINUS'){
+                            gbnNm = "차감";
+                        }
+
+                        var appendStr_01 = "<td>"+gbnNm+"</td>>";
+                        var appendStr_02 = "<td>"+response.historyRankList[i]['rank']+"</td>>";
+                        var appendStr_03 = "<td>"+response.historyRankList[i]['privateDefRank']+"</td>>";
+                        var appendStr_04 = "<td>"+response.historyRankList[i]['regDate']+"</td>>";
+                        var appendStr_05 = "<td>"+response.historyRankList[i]['agentName']+"</td>>";
+
+                        appendStr += "<tr>" + appendStr_01 + appendStr_02 + appendStr_03 + appendStr_04 + appendStr_05 + "</>tr>";
+                    }
+
+                    $("#historyRankTbody").append(appendStr);
+                }
+
+                $("#history_rank_modal").show();
             },
             error: function(error) {
                 // 실패 시 동작

@@ -6,6 +6,7 @@ import com.enclouds.enpoint.cmm.paging.PaginationInfo;
 import com.enclouds.enpoint.nurigo.KakaoDto;
 import com.enclouds.enpoint.user.dto.CouponDto;
 import com.enclouds.enpoint.user.dto.PointDto;
+import com.enclouds.enpoint.user.dto.RankDto;
 import com.enclouds.enpoint.user.dto.UserDto;
 import com.enclouds.enpoint.user.mapper.UserMapper;
 import net.nurigo.sdk.KakaoExampleController;
@@ -193,7 +194,7 @@ public class CustomUserServiceImpl implements CustomUserService{
                     PointDto pointDto = userMapper.getTotalPoint(userDto);
 
                     KakaoDto kakaoDto = new KakaoDto();
-                    kakaoDto.setTemplateId("KA01TP240508062419040Z64NKB9aSZi");
+                    kakaoDto.setTemplateId("KA01TP241219020324371IRqxVxK9p6J");
                     kakaoDto.setNickName(pointDto.getNickName());
                     kakaoDto.setRcvNum(userDto.getPhoneNum());
                     kakaoDto.setCouponPoint(String.valueOf(pointDto.getCouponPoint()));
@@ -522,8 +523,26 @@ public class CustomUserServiceImpl implements CustomUserService{
         }
     }
 
+    /**
+     * 승점 적립
+     *
+     * @param userDto
+     * @return
+     * @throws Exception
+     */
     @Override
     public int updateUserAddRankPoint(UserDto userDto) throws Exception {
+        RankDto rankDto = new RankDto();
+        rankDto.setAgentCode(userDto.getAgentCode());
+        rankDto.setRankGbn("ADD");
+        rankDto.setRank(Integer.parseInt(userDto.getAddRankPoint()));
+        rankDto.setPhoneNum(userDto.getPhoneNum());
+
+        RankDto preRankDto = userMapper.getTotalRank(userDto);
+        rankDto.setPrivateDefRank(preRankDto.getPrivateDefRank());
+
+        userMapper.insertAddRankPointHist(rankDto);
+
         return userMapper.updateUserAddRankPoint(userDto);
     }
 
@@ -572,8 +591,26 @@ public class CustomUserServiceImpl implements CustomUserService{
         return userMapper.useTicket3(userDto);
     }
 
+    /**
+     * 승점 차감
+     *
+     * @param userDto
+     * @return
+     * @throws Exception
+     */
     @Override
     public int updateUserMinusRankPoint(UserDto userDto) throws Exception {
+        RankDto rankDto = new RankDto();
+        rankDto.setAgentCode(userDto.getAgentCode());
+        rankDto.setRankGbn("MINUS");
+        rankDto.setRank(Integer.parseInt(userDto.getMinusRankPoint()));
+        rankDto.setPhoneNum(userDto.getPhoneNum());
+
+        RankDto preRankDto = userMapper.getTotalRank(userDto);
+        rankDto.setPrivateDefRank(preRankDto.getPrivateDefRank());
+
+        userMapper.insertAddRankPointHist(rankDto);
+
         return userMapper.updateUserMinusRankPoint(userDto);
     }
 
@@ -603,7 +640,7 @@ public class CustomUserServiceImpl implements CustomUserService{
                     PointDto pointDto2 = userMapper.getTotalPoint(userDto);
 
                     KakaoDto kakaoDto = new KakaoDto();
-                    kakaoDto.setTemplateId("KA01TP240508062443303DlQ00SPPCrQ");
+                    kakaoDto.setTemplateId("KA01TP241219020224105xGE9ug9SxpI");
                     kakaoDto.setNickName(pointDto2.getNickName());
                     kakaoDto.setRcvNum(userDto.getPhoneNum());
                     kakaoDto.setCouponPoint(String.valueOf(pointDto2.getCouponPoint()));
@@ -887,6 +924,11 @@ public class CustomUserServiceImpl implements CustomUserService{
     @Override
     public List<CouponDto> selectCouponHistory(UserDto userDto) throws Exception {
         return userMapper.selectCouponHistory(userDto);
+    }
+
+    @Override
+    public List<RankDto> selectRankHistory(UserDto userDto) throws Exception {
+        return userMapper.selectRankHistory(userDto);
     }
 
     @Override

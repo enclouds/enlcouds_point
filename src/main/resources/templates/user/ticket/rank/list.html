@@ -146,7 +146,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title center">씨티 티켓 정보</h1>
+                <h1 class="modal-title center">월간 티켓 정보</h1>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -167,13 +167,13 @@
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">총 씨티 티켓</th>
+                            <th scope="row">총 월간 티켓</th>
                             <td>
                                 <input type="text" name="totalMinusTicket3" id="totalMinusTicket3" readonly>
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">차감 씨티 티켓</th>
+                            <th scope="row">차감 월간 티켓</th>
                             <td>
                                 <input type="text" name="minusTicket3" id="minusTicket3" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                             </td>
@@ -246,7 +246,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title center">온라인 티켓 정보</h1>
+                <h1 class="modal-title center">웰컴 티켓 정보</h1>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -267,13 +267,13 @@
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">총 온라인 티켓</th>
+                            <th scope="row">총 웰컴 티켓</th>
                             <td>
                                 <input type="text" name="totalMinusTicket5" id="totalMinusTicket5" readonly>
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">차감 온라인 티켓</th>
+                            <th scope="row">차감 웰컴 티켓</th>
                             <td>
                                 <input type="text" name="minusTicket5" id="minusTicket5" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                             </td>
@@ -313,9 +313,9 @@
                     <select id="schCond1" name="schCond1" style="width:100px;">
                         <option value="ticket1" th:selected="${params.schCond1} == 'ticket1'">주간 티켓</option>
                         <option value="ticket2" th:selected="${params.schCond1} == 'ticket2'">프리 티켓</option>
-                        <option value="ticket3" th:selected="${params.schCond1} == 'ticket3'">씨티 티켓</option>
+                        <option value="ticket3" th:selected="${params.schCond1} == 'ticket3'">월간 티켓</option>
                         <option value="ticket4" th:selected="${params.schCond1} == 'ticket4'">팀프로 티켓</option>
-                        <option value="ticket5" th:selected="${params.schCond1} == 'ticket5'">온라인 티켓</option>
+                        <option value="ticket5" th:selected="${params.schCond1} == 'ticket5'">웰컴 티켓</option>
                     </select>
 
                     <select id="schCond2" name="schCond2" style="width:150px;">
@@ -342,20 +342,20 @@
                     <th scope="col">주간 티켓 차감</th>
                     <th scope="col">프리 티켓</th>
                     <th scope="col">프리 티켓 차감</th>
-                    <th scope="col">씨티 티켓</th>
-                    <th scope="col">씨티 티켓 차감</th>
+                    <th scope="col">월간 티켓</th>
+                    <th scope="col">월간 티켓 차감</th>
                     <th scope="col">팀프로 티켓</th>
                     <th scope="col">팀프로 티켓 차감</th>
-                    <th scope="col">온라인 티켓</th>
-                    <th scope="col">온라인 티켓 차감</th>
+                    <th scope="col">웰컴 티켓</th>
+                    <th scope="col">웰컴 티켓 차감</th>
                     <th sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" scope="col">전화번호</th>
                     <th sec:authorize="hasRole('ROLE_AGENT')" scope="col">전화번호</th>
                     <th scope="col">등록일자</th>
                     <th scope="col">주간 티켓 내역</th>
                     <th scope="col">프리 티켓 내역</th>
-                    <th scope="col">씨티 티켓 내역</th>
+                    <th scope="col">월간 티켓 내역</th>
                     <th scope="col">팀프로 티켓 내역</th>
-                    <th scope="col">온라인 티켓 내역</th>
+                    <th scope="col">웰컴 티켓 내역</th>
                     <th scope="col">최근 방문 일자</th>
                 </tr>
                 </thead>
@@ -365,41 +365,41 @@
                     <td th:text="${list.nickName}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
                     <td th:text="${list.ticketStr}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
                     <td>
-                        <button type="button" class="tb_btn red" th:if="${list.ticket}>0" th:onclick="javascript:fnMinusTicket([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket}]])">차감(주간 티켓)</button>
+                        <button type="button" class="tb_btn red" th:if="${list.ticket}>0" th:onclick="javascript:fnMinusTicket([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket}]])">차감</button>
                     </td>
                     <td th:text="${list.ticketStr2}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
                     <td>
-                        <button type="button" class="tb_btn red" th:if="${list.ticket2}>0" th:onclick="javascript:fnMinusTicket2([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket2}]])">차감(프리 티켓)</button>
+                        <button type="button" class="tb_btn red" th:if="${list.ticket2}>0" th:onclick="javascript:fnMinusTicket2([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket2}]])">차감</button>
                     </td>
                     <td th:text="${list.ticketStr3}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
                     <td>
-                        <button type="button" class="tb_btn red" th:if="${list.ticket3}>0" th:onclick="javascript:fnMinusTicket3([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket3}]])">차감(씨티 티켓)</button>
+                        <button type="button" class="tb_btn red" th:if="${list.ticket3}>0" th:onclick="javascript:fnMinusTicket3([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket3}]])">차감</button>
                     </td>
                     <td th:text="${list.ticketStr4}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
                     <td>
-                        <button type="button" class="tb_btn red" th:if="${list.ticket4}>0" th:onclick="javascript:fnMinusTicket4([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket4}]])">차감(팀프로 티켓)</button>
+                        <button type="button" class="tb_btn red" th:if="${list.ticket4}>0" th:onclick="javascript:fnMinusTicket4([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket4}]])">차감</button>
                     </td>
                     <td th:text="${list.ticketStr5}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
                     <td>
-                        <button type="button" class="tb_btn red" th:if="${list.ticket5}>0" th:onclick="javascript:fnMinusTicket5([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket5}]])">차감(온라인 티켓)</button>
+                        <button type="button" class="tb_btn red" th:if="${list.ticket5}>0" th:onclick="javascript:fnMinusTicket5([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket5}]])">차감</button>
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" th:text="${list.phoneNum}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
                     <td sec:authorize="hasRole('ROLE_AGENT')" th:text="${list.phoneNumMasking}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
                     <td th:text="${list.regDate}"></td>
                     <td>
-                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory([[${list.phoneNum}]])">내역(주간 티켓)</button>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory([[${list.phoneNum}]])">내역</button>
                     </td>
                     <td>
-                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory2([[${list.phoneNum}]])">내역(프리 티켓)</button>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory2([[${list.phoneNum}]])">내역</button>
                     </td>
                     <td>
-                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory3([[${list.phoneNum}]])">내역(씨티 티켓)</button>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory3([[${list.phoneNum}]])">내역</button>
                     </td>
                     <td>
-                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory4([[${list.phoneNum}]])">내역(팀프로 티켓)</button>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory4([[${list.phoneNum}]])">내역</button>
                     </td>
                     <td>
-                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory5([[${list.phoneNum}]])">내역(온라인 티켓)</button>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory5([[${list.phoneNum}]])">내역</button>
                     </td>
                     <td th:text="${list.maxDate}"></td>
                 </tr>
