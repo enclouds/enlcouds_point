@@ -28,6 +28,11 @@ public class GameServiceImpl implements GameService{
     }
 
     @Override
+    public List<GameDto> selectGameListByBlind(GameDto gameDto) throws Exception {
+        return gameMapper.selectGameListByBlind(gameDto);
+    }
+
+    @Override
     public List<GameDto> selectGameListTotal(GameDto gameDto) throws Exception {
         return gameMapper.selectGameListTotal(gameDto);
     }

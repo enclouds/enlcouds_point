@@ -15,6 +15,8 @@ public interface GameMapper {
 
     List<GameDto> selectGameList(GameDto gameDto) throws Exception;
 
+    List<GameDto> selectGameListByBlind(GameDto gameDto) throws Exception;
+
     List<GameDto> selectGameListTotal(GameDto gameDto) throws Exception;
 
     List<BlindDto> selectBlindList(BlindDto blindDto) throws Exception;

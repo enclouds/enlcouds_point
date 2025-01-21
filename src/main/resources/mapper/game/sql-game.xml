@@ -42,6 +42,18 @@
 		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
 	</select>
 
+	<select id="selectGameListByBlind" parameterType="com.enclouds.enpoint.game.dto.GameDto" resultType="com.enclouds.enpoint.game.dto.GameDto">
+		select seq
+		, game_name
+		, date_format(reg_date, '%Y-%m-%d') as regDate
+		, format(start_stack, 0) as start_stack
+		, format(rebuy_stack, 0) as rebuy_stack
+		, format(rebuy_stack2, 0) as rebuy_stack2
+		, format(max_entry, 0) as max_entry
+		from g_info gi
+		where 1=1
+	</select>
+
 	<select id="selectGameListTotal" parameterType="com.enclouds.enpoint.game.dto.GameDto" resultType="com.enclouds.enpoint.game.dto.GameDto">
 		select seq
 		, game_name

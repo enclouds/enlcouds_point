@@ -78,7 +78,7 @@ public class GameController {
 
         gameDto.setSchCond2("hunters");
 
-        List<GameDto> gameList = gameService.selectGameList(gameDto);
+        List<GameDto> gameList = gameService.selectGameListByBlind(gameDto);
         mv.addObject("gameList", gameList);
 
         return mv;
