@@ -1,9 +1,6 @@
 package com.enclouds.enpoint.user.mapper;
 
-import com.enclouds.enpoint.user.dto.CouponDto;
-import com.enclouds.enpoint.user.dto.PointDto;
-import com.enclouds.enpoint.user.dto.RankDto;
-import com.enclouds.enpoint.user.dto.UserDto;
+import com.enclouds.enpoint.user.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -204,5 +201,13 @@ public interface UserMapper {
     int updateAllUserWeekTicketDefAjax() throws Exception;
 
     String selectPointSum() throws Exception;
+
+    int selectPrice(TicketBuyDto ticketBuyDto) throws Exception;
+
+    int insertBuyTicketHistory(TicketBuyDto ticketBuyDto) throws Exception;
+
+    int selectTicketHistoryListTotalCount(TicketBuyDto ticketBuyDto) throws Exception;
+
+    List<TicketBuyDto> selectTicketHistoryList(TicketBuyDto ticketBuyDto) throws Exception;
 
 }

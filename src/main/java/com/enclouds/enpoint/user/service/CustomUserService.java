@@ -1,9 +1,6 @@
 package com.enclouds.enpoint.user.service;
 
-import com.enclouds.enpoint.user.dto.CouponDto;
-import com.enclouds.enpoint.user.dto.PointDto;
-import com.enclouds.enpoint.user.dto.RankDto;
-import com.enclouds.enpoint.user.dto.UserDto;
+import com.enclouds.enpoint.user.dto.*;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.List;
@@ -113,5 +110,9 @@ public interface CustomUserService {
     int updateUserMinusSumRank(UserDto userDto) throws Exception;
 
     String selectPointSum() throws Exception;
+
+    int ticketBuy(TicketBuyDto ticketBuyDto) throws Exception;
+
+    List<TicketBuyDto> selectTicketHistoryList(TicketBuyDto ticketBuyDto) throws Exception;
 
 }

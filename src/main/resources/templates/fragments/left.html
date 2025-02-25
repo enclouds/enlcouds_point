@@ -41,6 +41,9 @@
                         <button type="button" class="depth2" th:onclick="|location.href='@{/user/coupon/list}'|">외식쿠폰 적립/차감 목록</button>
                     </li>
                     <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_ADMIN_SUB')">
+                        <button type="button" class="depth2" th:onclick="|location.href='@{/user/ticket/history/list}'|">티켓 구매 목록</button>
+                    </li>
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_ADMIN_SUB')">
                         <button type="button" class="depth2" th:onclick="|location.href='@{/user/rank/list}'|">회원 Ranking</button>
                     </li>
                     <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_ADMIN_SUB')">

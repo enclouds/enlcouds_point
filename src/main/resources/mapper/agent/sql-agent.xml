@@ -467,6 +467,7 @@
 		left join p_agent pa on pap.agent_code = pa.agent_code
 		WHERE 1=1
 		AND pap.agent_code = #{agentCode}
+		AND pap.reg_date BETWEEN DATE_ADD(NOW(), INTERVAL -1 MONTH) AND NOW()
 		order by pap.reg_date desc
 	</select>
 
@@ -482,6 +483,7 @@
 		left join p_agent pa on pat.agent_code = pa.agent_code
 		WHERE 1=1
 		AND pat.agent_code = #{agentCode}
+		AND pat.reg_date BETWEEN DATE_ADD(NOW(), INTERVAL -1 MONTH) AND NOW()
 		order by pat.reg_date desc
 	</select>
 
@@ -497,6 +499,7 @@
 		left join p_agent pa on pat.agent_code = pa.agent_code
 		WHERE 1=1
 		AND pat.agent_code = #{agentCode}
+		AND pat.reg_date BETWEEN DATE_ADD(NOW(), INTERVAL -1 MONTH) AND NOW()
 		order by pat.reg_date desc
 	</select>
 
@@ -512,6 +515,7 @@
 		left join p_agent pa on pat.agent_code = pa.agent_code
 		WHERE 1=1
 		AND pat.agent_code = #{agentCode}
+		AND pat.reg_date BETWEEN DATE_ADD(NOW(), INTERVAL -1 MONTH) AND NOW()
 		order by pat.reg_date desc
 	</select>
 
@@ -527,6 +531,7 @@
 		left join p_agent pa on pat.agent_code = pa.agent_code
 		WHERE 1=1
 		AND pat.agent_code = #{agentCode}
+		AND pat.reg_date BETWEEN DATE_ADD(NOW(), INTERVAL -1 MONTH) AND NOW()
 		order by pat.reg_date desc
 	</select>
 
@@ -542,6 +547,7 @@
 		left join p_agent pa on pat.agent_code = pa.agent_code
 		WHERE 1=1
 		AND pat.agent_code = #{agentCode}
+		AND pat.reg_date BETWEEN DATE_ADD(NOW(), INTERVAL -1 MONTH) AND NOW()
 		order by pat.reg_date desc
 	</select>
 

@@ -1434,6 +1434,59 @@ public class UserController {
       return mv;
    }
 
+   @RequestMapping(value = "/user/ticket/history/list", method = RequestMethod.GET)
+   public ModelAndView userTicketHistoryList(HttpServletResponse response, @ModelAttribute TicketBuyDto ticketBuyDto) throws Exception{
+      ModelAndView mv = new ModelAndView("user/ticket/history/list");
+
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+
+      try {
+         if(principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            mv.addObject("agentTotalList", agentService.selectAgentTotalListAsAG());
+
+            ticketBuyDto.setAgentCode(userInfo.getAgentCode());
+
+            String startDateStr = DateUtils.addDay(DateUtils.getToday(), -7);
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+            Date startDateDte = format.parse(startDateStr);
+            SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd");
+            String startDate = format2.format(startDateDte);
+
+            if(StringUtils.isEmpty(ticketBuyDto.getSchStartDte())){
+               ticketBuyDto.setSchStartDte(startDate);
+            }
+
+            Date todayDate = format.parse(DateUtils.getToday());
+            String today = format2.format(todayDate);
+
+            if(StringUtils.isEmpty(ticketBuyDto.getSchEndDte())){
+               ticketBuyDto.setSchEndDte(today);
+            }
+
+            List<TicketBuyDto> userTicketHistoryList = customUserService.selectTicketHistoryList(ticketBuyDto);
+            mv.addObject("userTicketHistoryList", userTicketHistoryList);
+
+         }else {
+            return new ModelAndView("redirect:/");
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      mv.addObject("userInfo", userInfo);
+      mv.addObject("params", ticketBuyDto);
+
+      return mv;
+   }
+
    @RequestMapping(value = "/user/coupon/list", method = RequestMethod.GET)
    public ModelAndView userCouponList(HttpServletResponse response, @ModelAttribute CouponDto couponDto) throws Exception{
       ModelAndView mv = new ModelAndView("user/coupon/list");
@@ -1788,6 +1841,45 @@ public class UserController {
             } else {
                result.put("resultCode", -1);
                result.put("resultMsg", "차감에 실패 하였습니다.");
+            }
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      return result;
+   }
+
+   @PostMapping("/user/ticketBuyAjax")
+   public @ResponseBody Map<String, Object> ticketBuyAjax(@ModelAttribute("ticketBuyDto") TicketBuyDto ticketBuyDto) throws Exception{
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+      int resultCode;
+      Map<String, Object> result = new HashMap<String, Object>();
+
+      try {
+         if (principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            ticketBuyDto.setAgentCode(userInfo.getAgentCode());
+            ticketBuyDto.setPointInt(userInfo.getPointInt());
+
+            resultCode = customUserService.ticketBuy(ticketBuyDto);
+
+            if (resultCode < -1) {
+               result.put("resultCode", 0);
+               result.put("resultMsg", "구매금액이 보유 포인트보다 작습니다.");
+            } else if (resultCode > 0){
+               result.put("resultCode", 1);
+               result.put("resultMsg", "구매에 성공 하였습니다.");
+            } else {
+               result.put("resultCode", -1);
+               result.put("resultMsg", "구매에 실패 하였습니다.");
             }
          }
       } catch (ClassCastException cce){

@@ -1378,6 +1378,76 @@
 		ORDER BY prp.reg_date DESC
 	</select>
 
+	<select id="selectPrice" parameterType="com.enclouds.enpoint.user.dto.TicketBuyDto" resultType="int">
+		select buy_amt
+		from g_ticket
+		where 1=1
+		and code = #{ticketGbn}
+	</select>
+
+	<insert id="insertBuyTicketHistory" parameterType="com.enclouds.enpoint.user.dto.TicketBuyDto">
+		INSERT INTO p_agent_ticket_history
+		( agent_code
+		, buy_cnt
+		, reg_date
+		, ticket_gbn )
+		VALUES
+		( #{agentCode}
+		, #{buyCnt}
+		, NOW()
+		, #{ticketGbn} )
+	</insert>
+
+	<select id="selectTicketHistoryListTotalCount" parameterType="com.enclouds.enpoint.user.dto.TicketBuyDto" resultType="int">
+		SELECT count(*)
+		FROM p_agent_ticket_history
+		WHERE 1=1
+		<choose>
+			<when test='agentCode == 1'>
+			</when>
+			<otherwise>
+				AND agent_code = #{agentCode}
+			</otherwise>
+		</choose>
+
+		<![CDATA[
+			and reg_date >= concat(#{schStartDte}, ' 16:00:00')
+			and reg_date <= concat(date_add(#{schEndDte}, interval 1 day), ' 10:59:59')
+		]]>
+	</select>
+
+	<select id="selectTicketHistoryList" parameterType="com.enclouds.enpoint.user.dto.TicketBuyDto" resultType="com.enclouds.enpoint.user.dto.TicketBuyDto">
+		SELECT path2.seq
+		, path2.agent_code
+		, pa.agent_name
+		, path2.buy_cnt
+		, path2.buy_cnt * gt.buy_amt as totalAmt
+		, date_format(path2.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		, gt.name as ticketGbnStr
+		from p_agent_ticket_history path2
+		left join g_ticket gt on path2.ticket_gbn = gt.code
+		left join p_agent pa on path2.agent_code = pa.agent_code
+		WHERE 1=1
+
+		<choose>
+			<when test='agentCode == 1'>
+			</when>
+			<otherwise>
+				AND path2.agent_code = #{agentCode}
+			</otherwise>
+		</choose>
+
+		<![CDATA[
+			and path2.reg_date >= concat(#{schStartDte}, ' 16:00:00')
+			and path2.reg_date <= concat(date_add(#{schEndDte}, interval 1 day), ' 15:59:59')
+		]]>
+
+		order by path2.reg_date desc
+
+		LIMIT
+		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
+	</select>
+
 </mapper>
 
 

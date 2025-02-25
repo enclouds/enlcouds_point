@@ -1099,16 +1099,20 @@
             success: function(response) {
                 // 성공 시 동작
                 if(response.historyPointList != null){
+                    var arr = new Array();
                     var appendStr = '';
                     for(var i=0 ; i<response.historyPointList.length ; i++){
                         var appendStr_01 = "<td>"+response.historyPointList[i]['pointGbnNm']+"</td>>";
                         var appendStr_02 = "<td>"+response.historyPointList[i]['point']+"</td>>";
                         var appendStr_03 = "<td>"+response.historyPointList[i]['regDate']+"</td>>";
 
-                        appendStr += "<tr>" + appendStr_01 + appendStr_02 + appendStr_03 + "</>tr>";
+                        //appendStr += "<tr>" + appendStr_01 + appendStr_02 + appendStr_03 + "</>tr>";
+
+                        arr[i] = "<tr>" + appendStr_01 + appendStr_02 + appendStr_03 + "</>tr>";
                     }
 
-                    $("#historyTbody").append(appendStr);
+                    $('#historyTbody').html (arr.join (''));
+                    //$("#historyTbody").append(appendStr);
                 }
 
                 $("#history_point_modal").show();

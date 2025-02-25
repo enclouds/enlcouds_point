@@ -1,13 +1,11 @@
 package com.enclouds.enpoint.user.service;
 
 import com.enclouds.enpoint.agent.dto.AgentDto;
+import com.enclouds.enpoint.agent.mapper.AgentMapper;
 import com.enclouds.enpoint.agent.service.AgentService;
 import com.enclouds.enpoint.cmm.paging.PaginationInfo;
 import com.enclouds.enpoint.nurigo.KakaoDto;
-import com.enclouds.enpoint.user.dto.CouponDto;
-import com.enclouds.enpoint.user.dto.PointDto;
-import com.enclouds.enpoint.user.dto.RankDto;
-import com.enclouds.enpoint.user.dto.UserDto;
+import com.enclouds.enpoint.user.dto.*;
 import com.enclouds.enpoint.user.mapper.UserMapper;
 import net.nurigo.sdk.KakaoExampleController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +22,9 @@ public class CustomUserServiceImpl implements CustomUserService{
 
     @Autowired
     private AgentService agentService;
+
+    @Autowired
+    private AgentMapper agentMapper;
 
     @Override
     public List<UserDto> selectCustomUserList(UserDto userDto) throws Exception {
@@ -945,4 +946,58 @@ public class CustomUserServiceImpl implements CustomUserService{
     public String selectPointSum() throws Exception{
         return userMapper.selectPointSum();
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int ticketBuy(TicketBuyDto ticketBuyDto) throws Exception {
+        int price = userMapper.selectPrice(ticketBuyDto);
+        int totalAmt = price * ticketBuyDto.getBuyCnt();
+        int result = 0;
+
+        //보유포인트가 구매금액보다 작으면 구매 실패
+        if(totalAmt > ticketBuyDto.getPointInt()){
+            result = -2;
+        }else {
+            //포인트 차감
+            AgentDto agentDto = new AgentDto();
+            agentDto.setAgentCode(ticketBuyDto.getAgentCode());
+            agentDto.setMinusPoint(String.valueOf(totalAmt));
+            result = agentMapper.updateAgentMinusPoint(agentDto);
+            result = agentMapper.insertMinusAgentPoint(agentDto);
+
+            if(result > 0){
+                //티켓 적립
+                if(ticketBuyDto.getTicketGbn().equals("ticket")){
+                    agentDto.setAddTicket(String.valueOf(ticketBuyDto.getBuyCnt()));
+                    agentMapper.updateAgentAddTicket(agentDto);
+                    agentMapper.insertAddAgentTicket(agentDto);
+                } else if(ticketBuyDto.getTicketGbn().equals("ticket3")){
+                    agentDto.setAddTicket(String.valueOf(ticketBuyDto.getBuyCnt()));
+                    agentMapper.updateAgentAddTicket3(agentDto);
+                    agentMapper.insertAddAgentTicket3(agentDto);
+                } else if(ticketBuyDto.getTicketGbn().equals("ticket4")){
+                    agentDto.setAddTicket(String.valueOf(ticketBuyDto.getBuyCnt()));
+                    agentMapper.updateAgentAddTicket4(agentDto);
+                    agentMapper.insertAddAgentTicket4(agentDto);
+                }
+
+                //내역 생성
+                result = userMapper.insertBuyTicketHistory(ticketBuyDto);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<TicketBuyDto> selectTicketHistoryList(TicketBuyDto ticketBuyDto) throws Exception{
+        int userTicketHistoryTotalCount = userMapper.selectTicketHistoryListTotalCount(ticketBuyDto);
+
+        PaginationInfo paginationInfo = new PaginationInfo(ticketBuyDto);
+        paginationInfo.setTotalRecordCount(userTicketHistoryTotalCount);
+        ticketBuyDto.setPaginationInfo(paginationInfo);
+
+        return userMapper.selectTicketHistoryList(ticketBuyDto);
+    }
+
 }
