@@ -223,6 +223,13 @@
 		from g_ticket
 	</select>
 
+	<update id="addKpChip" parameterType="com.enclouds.enpoint.api.dto.ApiDto">
+		UPDATE p_user
+		SET kp_point = #{kpPoint}
+		WHERE 1=1
+		AND phone_num = #{phoneNum}
+	</update>
+
 </mapper>
 
 

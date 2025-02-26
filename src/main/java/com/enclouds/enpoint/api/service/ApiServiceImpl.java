@@ -355,4 +355,9 @@ public class ApiServiceImpl implements ApiService{
         return apiMapper.getTicketList();
     }
 
+    @Override
+    public int addKpChip(ApiDto apiDto) throws Exception {
+        return apiMapper.addKpChip(apiDto);
+    }
+
 }

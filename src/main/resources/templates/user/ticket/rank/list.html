@@ -246,7 +246,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title center">웰컴 티켓 정보</h1>
+                <h1 class="modal-title center">KLPT 시드권 정보</h1>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -267,13 +267,13 @@
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">총 웰컴 티켓</th>
+                            <th scope="row">총 KLPT 시드권 티켓</th>
                             <td>
                                 <input type="text" name="totalMinusTicket5" id="totalMinusTicket5" readonly>
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">차감 웰컴 티켓</th>
+                            <th scope="row">차감 KLPT 시드권 티켓</th>
                             <td>
                                 <input type="text" name="minusTicket5" id="minusTicket5" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                             </td>
@@ -315,7 +315,7 @@
                         <option value="ticket2" th:selected="${params.schCond1} == 'ticket2'">프리 티켓</option>
                         <option value="ticket3" th:selected="${params.schCond1} == 'ticket3'">월간 티켓</option>
                         <option value="ticket4" th:selected="${params.schCond1} == 'ticket4'">팀프로 티켓</option>
-                        <option value="ticket5" th:selected="${params.schCond1} == 'ticket5'">웰컴 티켓</option>
+                        <option value="ticket5" th:selected="${params.schCond1} == 'ticket5'">KLPT 시드권</option>
                     </select>
 
                     <select id="schCond2" name="schCond2" style="width:150px;">
@@ -327,6 +327,7 @@
                 </span>
                 <button type="button" class="search_btn" th:onclick="javascript:fnSearch();">조회</button>
                 <button type="button" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" class="reset_btn" th:onclick="javascript:fnWeekTicketDef();">주간티켓 초기화</button>
+                <button type="button" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" class="reset_btn" th:onclick="javascript:fnMonthTicketDef();">월간티켓 초기화</button>
             </div>
         </form>
 
@@ -338,6 +339,7 @@
                 <tr>
                     <th scope="col">RANKING</th>
                     <th scope="col">별명</th>
+                    <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VIEW')">포인트</th>
                     <th scope="col">주간 티켓</th>
                     <th scope="col">주간 티켓 차감</th>
                     <th scope="col">프리 티켓</th>
@@ -346,8 +348,8 @@
                     <th scope="col">월간 티켓 차감</th>
                     <th scope="col">팀프로 티켓</th>
                     <th scope="col">팀프로 티켓 차감</th>
-                    <th scope="col">웰컴 티켓</th>
-                    <th scope="col">웰컴 티켓 차감</th>
+                    <th scope="col">KLPT 시드권</th>
+                    <th scope="col">KLPT 시드권 차감</th>
                     <th sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" scope="col">전화번호</th>
                     <th sec:authorize="hasRole('ROLE_AGENT')" scope="col">전화번호</th>
                     <th scope="col">등록일자</th>
@@ -355,7 +357,7 @@
                     <th scope="col">프리 티켓 내역</th>
                     <th scope="col">월간 티켓 내역</th>
                     <th scope="col">팀프로 티켓 내역</th>
-                    <th scope="col">웰컴 티켓 내역</th>
+                    <th scope="col">KLPT 시드권 내역</th>
                     <th scope="col">최근 방문 일자</th>
                 </tr>
                 </thead>
@@ -363,6 +365,7 @@
                 <tr th:each="list:${userTicketRankList}">
                     <td th:text="${list.ranking}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: coral;font-size: medium;' : ''"></td>
                     <td th:text="${list.nickName}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
+                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VIEW')" th:text="${list.point}" style="text-align: end;"></td>
                     <td th:text="${list.ticketStr}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
                     <td>
                         <button type="button" class="tb_btn red" th:if="${list.ticket}>0" th:onclick="javascript:fnMinusTicket([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket}]])">차감</button>
@@ -855,6 +858,26 @@
                 processData:false,
                 type: "POST",
                 url: "/user/updateAllUserWeekTicketDefAjax",
+                success: function(response) {
+                    // 성공 시 동작
+                    alert(response.resultMsg);
+                    window.location.reload();
+                },
+                error: function(error) {
+                    // 실패 시 동작
+                }
+            });
+        }
+    }
+
+    function fnMonthTicketDef(){
+        var msg = "전체 월간 티켓을 초기화 하시겠습니까?";
+        if(confirm(msg)){
+            $.ajax({
+                contentType:false,
+                processData:false,
+                type: "POST",
+                url: "/user/updateAllUserMonthTicketDefAjax",
                 success: function(response) {
                     // 성공 시 동작
                     alert(response.resultMsg);

@@ -15,5 +15,6 @@ public class ApiDto {
     private String addWinPoint;
     private String schCond1;
     private String addJackpot;
+    private String kpPoint;
 
 }

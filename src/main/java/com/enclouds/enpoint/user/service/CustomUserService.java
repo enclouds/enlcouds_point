@@ -99,6 +99,8 @@ public interface CustomUserService {
 
     int updateAllUserWeekTicketDefAjax() throws Exception;
 
+    int updateAllUserMonthTicketDefAjax() throws Exception;
+
     int updateAllUserRankMoveAjax() throws Exception;
 
     int updateAllUserWeekRankDefAjax() throws Exception;

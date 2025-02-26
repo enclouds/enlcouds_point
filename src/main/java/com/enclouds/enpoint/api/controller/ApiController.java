@@ -328,4 +328,22 @@ public class ApiController {
         return apiAgentListDto;
     }
 
+    @RequestMapping(method = RequestMethod.POST, path = "/addKpChip")
+    @ResponseBody
+    public ApiRtnDto addKpChip(@RequestBody ApiDto apiDto) throws Exception{
+
+        int result = apiService.addKpChip(apiDto);
+
+        ApiRtnDto apiRtnDto = new ApiRtnDto();
+        if(result > 0){
+            apiRtnDto.setResultCode("0000");
+            apiRtnDto.setResultMsg("정상");
+        }else {
+            apiRtnDto.setResultCode("E004");
+            apiRtnDto.setResultMsg("킹스포커 포인트 갱신에 실패 하였습니다.");
+        }
+
+        return apiRtnDto;
+    }
+
 }

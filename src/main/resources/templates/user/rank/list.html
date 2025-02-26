@@ -397,6 +397,7 @@
                 <tr>
                     <th scope="col" rowspan="2">RANKING</th>
                     <th scope="col" rowspan="2">별명</th>
+                    <th scope="col" rowspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VIEW')">포인트</th>
                     <th scope="col" colspan="2">승점</th>
                     <th scope="col" colspan="2">누적 승점 처리</th>
                     <th scope="col" rowspan="2">총 주간 티켓</th>
@@ -425,6 +426,7 @@
                 <tr th:each="list:${userRankList}">
                     <td th:text="${list.ranking}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: coral;font-size: medium;' : ''"></td>
                     <td th:text="${list.nickName}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: blueviolet;font-size: medium;' : ''"></td>
+                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VIEW')" th:text="${list.point}" style="text-align: end;"></td>
                     <td th:text="${list.rankPointStr}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
                     <td th:text="${list.rankSumPointStr}" th:styleappend="${list.ranking} < 11 ? 'font-weight: bold;color: red;font-size: medium;' : ''"></td>
                     <td>

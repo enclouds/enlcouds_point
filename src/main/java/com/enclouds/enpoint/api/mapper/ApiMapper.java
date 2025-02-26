@@ -37,4 +37,6 @@ public interface ApiMapper {
 
     List<ApiTicketDto> getTicketList() throws Exception;
 
+    int addKpChip(ApiDto apiDto) throws Exception;
+
 }

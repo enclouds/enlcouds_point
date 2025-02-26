@@ -200,6 +200,8 @@ public interface UserMapper {
 
     int updateAllUserWeekTicketDefAjax() throws Exception;
 
+    int updateAllUserMonthTicketDefAjax() throws Exception;
+
     String selectPointSum() throws Exception;
 
     int selectPrice(TicketBuyDto ticketBuyDto) throws Exception;

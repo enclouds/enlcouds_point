@@ -368,14 +368,14 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title center">웰컴 티켓 정보</h1>
+                <h1 class="modal-title center">KLPT 시드권 정보</h1>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form_box">
-                    <p class="tb_tit">웰컴 티켓 정보</p>
+                    <p class="tb_tit">KLPT 시드권 정보</p>
                     <table class="form">
                         <colgroup>
                             <col width="20%;">
@@ -668,14 +668,14 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title center">웰컴 티켓 정보</h1>
+                <h1 class="modal-title center">KLPT 시드권 정보</h1>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form_box">
-                    <p class="tb_tit">웰컴 티켓 정보</p>
+                    <p class="tb_tit">KLPT 시드권 정보</p>
                     <table class="form">
                         <colgroup>
                             <col width="20%;">
@@ -831,8 +831,8 @@
                     <th scope="col" colspan="3">월간 티켓</th>
                     <th scope="col" rowspan="2">총 잔여 팀프로 티켓</th>
                     <th scope="col" colspan="3">팀프로 티켓</th>
-                    <th scope="col" rowspan="2">총 잔여 웰컴 티켓</th>
-                    <th scope="col" colspan="3">웰컴 티켓</th>
+                    <th scope="col" rowspan="2">총 잔여 KLPT 시드권</th>
+                    <th scope="col" colspan="3">KLPT 시드권</th>
                     <th scope="col" rowspan="2">메모</th>
                     <th scope="col" rowspan="2">등록일자</th>
                 </tr>
@@ -863,7 +863,7 @@
                     <td><a href="javascript:callFunction();" th:text="${list.agentName}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.agentCode}]], [[${list.agentName}]], [[${list.memo}]], [[${list.passwordStr}]])"></a></td>
                     <td th:text="${list.id}"></td>
                     <td th:text="${list.passwordStr}"></td>
-                    <td th:text="${list.point}"></td>
+                    <td th:text="${list.point}" style="text-align: end;"></td>
                     <td>
                         <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddPoint([[${list.agentCode}]], [[${list.agentName}]], [[${list.point}]])">적립</button>
                     </td>

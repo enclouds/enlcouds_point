@@ -134,7 +134,7 @@
                                 <select id="ticketGbn" name="ticketGbn">
                                     <option value="ticket">주간티켓</option>
                                     <option value="ticket3">월간티켓</option>
-                                    <option value="ticket4">팀프로티켓</option>
+                                    <option value="ticket5">KLPT 시드권</option>
                                 </select>
                             </td>
                         </tr>
@@ -579,7 +579,7 @@
             </div>
             <div class="modal-body">
                 <div class="form_box">
-                    <p class="tb_tit">웰컴 티켓 정보</p>
+                    <p class="tb_tit">KLPT 시드권 정보</p>
                     <table class="form">
                         <colgroup>
                             <col width="20%;">
@@ -779,7 +779,7 @@
             </div>
             <div class="modal-body">
                 <div class="form_box">
-                    <p class="tb_tit">웰컴 티켓 정보</p>
+                    <p class="tb_tit">KLPT 시드권 정보</p>
                     <table class="form">
                         <colgroup>
                             <col width="20%;">
@@ -1232,7 +1232,7 @@
                     <th scope="col" rowspan="2">팀프로T</th>
                     <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >처리</th>
                     <th scope="col" rowspan="2">내역</th>
-                    <th scope="col" rowspan="2">웰컴T</th>
+                    <th scope="col" rowspan="2">KLPT 시드권</th>
                     <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >처리</th>
                     <th scope="col" rowspan="2">내역</th>
                     <th scope="col" rowspan="2">메모</th>
@@ -1270,7 +1270,7 @@
                     <td th:text="${list.agentName}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VIEW')"><a href="javascript:callFunction();" th:text="${list.phoneNum}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.phoneNumMasking}]], [[${list.phoneNum}]], [[${list.nickName}]], [[${list.memo}]], [[${list.point}]], [[${list.orgPoint}]], [[${list.agentCode}]])"></a></td>
                     <td sec:authorize="hasAnyRole('ROLE_AGENT', 'ROLE_VIEW')"><a href="javascript:callFunction();" th:text="${list.phoneNumMasking}" style="color:blue;" th:onclick="javascript:fnUptModalMas([[${list.phoneNumMasking}]], [[${list.phoneNum}]], [[${list.nickName}]], [[${list.memo}]], [[${list.point}]], [[${list.orgPoint}]], [[${list.agentCode}]])"></a></td>
-                    <td th:text="${list.point}"></td>
+                    <td th:text="${list.point}" style="text-align: end;"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
                         <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddPoint([[${list.phoneNum}]], [[${list.nickName}]], [[${list.point}]])">적립</button>
                     </td>

@@ -127,7 +127,7 @@ public class CustomUserServiceImpl implements CustomUserService{
             result = userMapper.insertUser(userDto);
 
             //신규가입시 온라인 티켓 지급
-            if(result > 0){
+            /*if(result > 0){
                 PointDto preTicketDto = userMapper.getTotalTicket5(userDto);
                 AgentDto agentDto = new AgentDto();
                 agentDto.setAgentCode(userDto.getAgentCode());
@@ -148,7 +148,7 @@ public class CustomUserServiceImpl implements CustomUserService{
                     agentService.updateAgentMinusTicket5(agentDto1);
                 }
 
-            }
+            }*/
 
             return result;
         }catch(Exception e){
@@ -864,6 +864,11 @@ public class CustomUserServiceImpl implements CustomUserService{
     }
 
     @Override
+    public int updateAllUserMonthTicketDefAjax() throws Exception {
+        return userMapper.updateAllUserMonthTicketDefAjax();
+    }
+
+    @Override
     public int updateAllUserWeekRankDefAjax() throws Exception {
         return userMapper.updateAllUserWeekRankDefAjax();
     }
@@ -975,10 +980,10 @@ public class CustomUserServiceImpl implements CustomUserService{
                     agentDto.setAddTicket(String.valueOf(ticketBuyDto.getBuyCnt()));
                     agentMapper.updateAgentAddTicket3(agentDto);
                     agentMapper.insertAddAgentTicket3(agentDto);
-                } else if(ticketBuyDto.getTicketGbn().equals("ticket4")){
+                } else if(ticketBuyDto.getTicketGbn().equals("ticket5")){
                     agentDto.setAddTicket(String.valueOf(ticketBuyDto.getBuyCnt()));
-                    agentMapper.updateAgentAddTicket4(agentDto);
-                    agentMapper.insertAddAgentTicket4(agentDto);
+                    agentMapper.updateAgentAddTicket5(agentDto);
+                    agentMapper.insertAddAgentTicket5(agentDto);
                 }
 
                 //내역 생성

@@ -12,11 +12,11 @@
             <div class="top_info">
                 <p class="name">
                     <em style="font-size: smaller;color:cyan;" th:text="|${userInfo.agentName}님 ${userInfo.point}P|"></em></br>
-                    <em style="font-size: smaller;color:yellow;" th:text="|주간티켓 : ${userInfo.ticket}장|"></em></br>
-                    <em style="font-size: smaller;color:deepskyblue;" th:text="|프리티켓 : ${userInfo.ticket2}장|"></em></br>
-                    <em style="font-size: smaller;color:chartreuse;" th:text="|시티티켓 : ${userInfo.ticket3}장|"></em></br>
-                    <em style="font-size: smaller;color:red;" th:text="|팀프로티켓 : ${userInfo.ticket4}장|"></em></br>
-                    <em style="font-size: smaller;color:coral;" th:text="|온라인티켓 : ${userInfo.ticket5}장|"></em>
+                    <em style="font-size: smaller;color:yellow;" th:text="|주간 티켓 : ${userInfo.ticket}장|"></em></br>
+                    <em style="font-size: smaller;color:deepskyblue;" th:text="|프리 티켓 : ${userInfo.ticket2}장|"></em></br>
+                    <em style="font-size: smaller;color:chartreuse;" th:text="|월간 티켓 : ${userInfo.ticket3}장|"></em></br>
+                    <em style="font-size: smaller;color:red;" th:text="|팀프로 티켓 : ${userInfo.ticket4}장|"></em></br>
+                    <em style="font-size: smaller;color:coral;" th:text="|KLPT 시드권 : ${userInfo.ticket5}장|"></em>
                 </p>
                 <span class="btn_group">
                     <button type="button" class="btn_logout" th:onclick="|location.href='@{/logout}'|">로그아웃</button>

@@ -932,6 +932,39 @@ public class UserController {
       return result;
    }
 
+   @PostMapping("/user/updateAllUserMonthTicketDefAjax")
+   public @ResponseBody Map<String, Object> updateAllUserMonthTicketDefAjax() throws Exception{
+      Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      UserDto userInfo = null;
+      String userId = "";
+      int resultCode;
+      Map<String, Object> result = new HashMap<String, Object>();
+
+      try {
+         if (principal != "anonymousUser") {
+            UserDetails userDetails = (UserDetails) principal;
+            userId = userDetails.getUsername();
+            userInfo = userService.getUserInfo(userId);
+
+            resultCode = customUserService.updateAllUserMonthTicketDefAjax();
+
+            if (resultCode > 0) {
+               result.put("resultCode", 0);
+               result.put("resultMsg", "정상적으로 초기화 되었습니다.");
+            } else {
+               result.put("resultCode", -1);
+               result.put("resultMsg", "초기화에 실패 하였습니다.");
+            }
+         }
+      } catch (ClassCastException cce){
+         DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+         userId = auth2User.getName();
+         userInfo = userService.getUserInfo(userId);
+      }
+
+      return result;
+   }
+
    @PostMapping("/user/updateAllUserRankDefAjax")
    public @ResponseBody Map<String, Object> updateAllUserRankDefAjax() throws Exception{
       Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();

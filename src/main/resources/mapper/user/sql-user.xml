@@ -189,7 +189,7 @@
 		, reg_date
 		, memo
 		, agent_code
-		, ticket5)
+		, ticket3)
 		VALUES
 		( TRIM(#{phoneNum})
 		, #{nickName}
@@ -1003,6 +1003,7 @@
 		when length(phone_num) = 11 then concat(concat(SUBSTR(phone_num, 1 ,4), '***'), SUBSTR(phone_num, 8 ,11))
 		end as phone_num_masking
 		, rank_point
+		, format(pu.point, 0) as point
 		, format(rank_point, 0) as rank_point_str
 		, rank_sum_point
 		, format(rank_sum_point, 0) as rank_sum_point_str
@@ -1105,6 +1106,12 @@
 	<update id="updateAllUserWeekTicketDefAjax">
 		UPDATE p_user
 		SET ticket = 0
+		WHERE 1=1
+	</update>
+
+	<update id="updateAllUserMonthTicketDefAjax">
+		UPDATE p_user
+		SET ticket3 = 0
 		WHERE 1=1
 	</update>
 
@@ -1289,6 +1296,7 @@
 		, format(ticket3, 0) as ticket_str3
 		, format(ticket4, 0) as ticket_str4
 		, format(ticket5, 0) as ticket_str5
+		, format(pu.point, 0) as point
 		, pu.agent_code
 		FROM p_user pu,  (SELECT @rownum:=0) TMP
 		WHERE 1=1
