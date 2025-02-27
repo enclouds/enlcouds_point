@@ -6,8 +6,103 @@
 
 <body>
 
+<!-- modal S -->
+<div class="modal fade small" id="ticket_buy_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">티켓 구매 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">티켓 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row"><em class="required">*</em>구매 티켓 종류</th>
+                            <td>
+                                <select id="ticketGbn" name="ticketGbn">
+                                    <option value="ticket">주간티켓</option>
+                                    <option value="ticket3">월간티켓</option>
+                                    <option value="ticket5">KLPT 시드권</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><em class="required">*</em>수량</th>
+                            <td>
+                                <input type="number" name="buyCnt" id="buyCnt" th:value="0">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:ticketBuy();">구매</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('ticket_buy_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="ticket_sell_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">티켓 환불 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">티켓 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row"><em class="required">*</em>환불 티켓 종류</th>
+                            <td>
+                                <select id="ticketSellGbn" name="ticketSellGbn">
+                                    <option value="ticket5">KLPT 시드권</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><em class="required">*</em>수량</th>
+                            <td>
+                                <input type="number" name="sellCnt" id="sellCnt" th:value="0">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:ticketSell();">환불</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('ticket_sell_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
 <!-- container S -->
 <div class="container">
+    <input type="hidden" name="ticket5" id="ticket5" th:value="${userInfo.ticket5}">
     <!-- header S -->
     <div th:replace="/fragments/left.html :: fragment-left('m2', '/user/ticket/history/list')"></div>
     <!-- header E -->
@@ -36,6 +131,8 @@
                 </span>
 
                 <button type="button" class="search_btn" th:onclick="javascript:fnSearch();">조회</button>
+                <button sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')"  type="button" class="change_btn" th:onclick="javascript:fnBuyTicketModal()">티켓구매</button>
+                <button sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')"  type="button" class="change_btn" th:onclick="javascript:fnSellTicketModal()">티켓환불</button>
             </div>
         </form>
 
@@ -47,6 +144,7 @@
                 <tr>
                     <th scope="col">구매 지점</th>
                     <th scope="col">티켓 종류</th>
+                    <th scope="col">티켓 구분</th>
                     <th scope="col">구매 수량</th>
                     <th scope="col">구매 금액</th>
                     <th scope="col">구매 일자</th>
@@ -56,6 +154,7 @@
                 <tr th:each="list:${userTicketHistoryList}">
                     <td style="min-width:1px; white-space:nowrap; text-align:center;color:;" th:text="${list.agentName}"></td>
                     <td style="min-width:1px; white-space:nowrap; text-align:center;color:;" th:text="${list.ticketGbnStr}"></td>
+                    <td style="min-width:1px; white-space:nowrap; text-align:center;color:;" th:text="${list.gbn}"></td>
                     <td th:text="${#numbers.formatInteger(list.buyCnt, 0, 'COMMA')}"></td>
                     <td th:text="${#numbers.formatInteger(list.totalAmt, 0, 'COMMA')}"></td>
                     <td th:text="${list.regDate}"></td>
@@ -100,6 +199,98 @@
 
     function fnSearch(){
         $("#schFrm").submit();
+    }
+
+    function fnModalClose(id){
+        $("#"+id).hide();
+    }
+
+    function fnBuyTicketModal(){
+        $("#ticket_buy_modal").show();
+    }
+
+    function fnSellTicketModal(){
+        $("#ticket_sell_modal").show();
+    }
+
+    function ticketBuy(){
+        var formData = new FormData();
+
+        if($("#buyCnt").val() == ''){
+            alert("티켓수량은 필수 입니다.");
+            $("#buyCnt").focus();
+            return;
+        }else {
+            if($("#buyCnt").val() < 1){
+                alert("티켓수량은 0보다 커야 합니다.");
+                $("#buyCnt").focus();
+                return;
+            }
+        }
+
+        formData.append("buyCnt", $("#buyCnt").val());
+        formData.append("ticketGbn", $("#ticketGbn").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/user/ticketBuyAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                if(response.resultCode > -1){
+                    fnSearch();
+                }
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function ticketSell(){
+        var formData = new FormData();
+
+        if($("#sellCnt").val() == ''){
+            alert("환불 수량은 필수 입니다.");
+            $("#sellCnt").focus();
+            return;
+        }else {
+            if($("#sellCnt").val() < 1){
+                alert("환불 수량은 0보다 커야 합니다.");
+                $("#sellCnt").focus();
+                return;
+            }else {
+                if($("#ticket5").val() < $("#sellCnt").val()){
+                    alert("환불 수량이 보유 수량보다 많습니다.");
+                    $("#sellCnt").focus();
+                    return;
+                }else {
+                    formData.append("sellCnt", $("#sellCnt").val());
+                    formData.append("ticketSellGbn", $("#ticketSellGbn").val());
+
+                    $.ajax({
+                        contentType:false,
+                        processData:false,
+                        type: "POST",
+                        url: "/user/ticketSellAjax",
+                        data: formData,
+                        success: function(response) {
+                            // 성공 시 동작
+                            alert(response.resultMsg);
+                            if(response.resultCode > -1){
+                                fnSearch();
+                            }
+                        },
+                        error: function(error) {
+                            // 실패 시 동작
+                        }
+                    });
+                }
+            }
+        }
     }
 
 </script>

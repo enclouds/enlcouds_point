@@ -117,4 +117,6 @@ public interface CustomUserService {
 
     List<TicketBuyDto> selectTicketHistoryList(TicketBuyDto ticketBuyDto) throws Exception;
 
+    int ticketSell(TicketBuyDto ticketBuyDto) throws Exception;
+
 }

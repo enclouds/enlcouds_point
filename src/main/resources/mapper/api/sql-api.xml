@@ -226,10 +226,9 @@
 	<update id="addKpChip" parameterType="com.enclouds.enpoint.api.dto.ApiDto">
 		UPDATE p_user
 		SET kp_point = #{kpPoint}
+		, kp_use_yn = 'Y'
 		WHERE 1=1
 		AND phone_num = #{phoneNum}
 	</update>
 
 </mapper>
-
-

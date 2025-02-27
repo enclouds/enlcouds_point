@@ -747,7 +747,14 @@ public class CustomUserServiceImpl implements CustomUserService{
         userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
         userMapper.insertMinusTicketAsCnt5(userDto);
 
-        return userMapper.useTicketAsCnt5(userDto);
+        int result = userMapper.useTicketAsCnt5(userDto);
+
+        if(result > 0){
+            //KLPT 티켓 차감은 가맹점으로 환불 처리
+            agentDto.setAddTicket(userDto.getMinusTicket());
+            result = agentService.updateAgentAddTicket5(agentDto);
+        }
+        return result;
     }
 
     @Override
@@ -1003,6 +1010,36 @@ public class CustomUserServiceImpl implements CustomUserService{
         ticketBuyDto.setPaginationInfo(paginationInfo);
 
         return userMapper.selectTicketHistoryList(ticketBuyDto);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int ticketSell(TicketBuyDto ticketBuyDto) throws Exception {
+        ticketBuyDto.setTicketGbn(ticketBuyDto.getTicketSellGbn());
+        int price = userMapper.selectPrice(ticketBuyDto);
+        int totalAmt = price * ticketBuyDto.getSellCnt();
+        int result = 0;
+
+        //포인트 증가
+        AgentDto agentDto = new AgentDto();
+        agentDto.setAgentCode(ticketBuyDto.getAgentCode());
+        agentDto.setAddPoint(String.valueOf(totalAmt));
+        result = agentMapper.updateAgentAddPoint(agentDto);
+        result = agentMapper.insertAddAgentPoint(agentDto);
+
+        if(result > 0){
+            //티켓 차감
+            if(ticketBuyDto.getTicketSellGbn().equals("ticket5")){
+                agentDto.setMinusTicket(String.valueOf(ticketBuyDto.getSellCnt()));
+                agentMapper.updateAgentMinusTicket5(agentDto);
+                agentMapper.insertMinusAgentTicket5(agentDto);
+            }
+
+            //내역 생성
+            result = userMapper.insertSellTicketHistory(ticketBuyDto);
+        }
+
+        return result;
     }
 
 }

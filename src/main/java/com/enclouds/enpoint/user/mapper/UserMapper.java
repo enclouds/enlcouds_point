@@ -212,4 +212,6 @@ public interface UserMapper {
 
     List<TicketBuyDto> selectTicketHistoryList(TicketBuyDto ticketBuyDto) throws Exception;
 
+    int insertSellTicketHistory(TicketBuyDto ticketBuyDto) throws Exception;
+
 }
