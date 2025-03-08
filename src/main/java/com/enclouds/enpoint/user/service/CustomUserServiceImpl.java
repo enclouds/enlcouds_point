@@ -480,7 +480,7 @@ public class CustomUserServiceImpl implements CustomUserService{
             agentDto.setAgentCode(userDto.getAgentCode());
             AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
 
-            if(agentInfo.getTicketInt4() < Integer.parseInt(userDto.getAddTicket())){
+            if(agentInfo.getTicketInt5() < Integer.parseInt(userDto.getAddTicket())){
                 result = -2;
                 return  result;
             }

@@ -19,6 +19,8 @@ public class UserDto extends CommonDto {
     private Integer agentUpCode;
     private String agentGbn;
     private String point;
+    private String kpPoint;
+    private String kpUseYn;
     private String ticket;
     private String ticket2;
     private String ticket3;

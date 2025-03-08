@@ -65,6 +65,8 @@
 		, nick_name
 		, user_gbn
 		, format(pu.point, 0) as point
+		, format(pu.kp_point, 0) as kpPoint
+		, kp_use_yn as kpUseYn
 		, pu.point as org_point
 		, format(pu.ticket, 0) as ticket
 		, format(pu.ticket2, 0) as ticket2
