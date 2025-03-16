@@ -195,7 +195,7 @@ public class CustomUserServiceImpl implements CustomUserService{
                     PointDto pointDto = userMapper.getTotalPoint(userDto);
 
                     KakaoDto kakaoDto = new KakaoDto();
-                    kakaoDto.setTemplateId("KA01TP241219020324371IRqxVxK9p6J");
+                    kakaoDto.setTemplateId("KA01TP250309223401715US4RDxP1qyv");
                     kakaoDto.setNickName(pointDto.getNickName());
                     kakaoDto.setRcvNum(userDto.getPhoneNum());
                     kakaoDto.setCouponPoint(String.valueOf(pointDto.getCouponPoint()));
@@ -641,7 +641,7 @@ public class CustomUserServiceImpl implements CustomUserService{
                     PointDto pointDto2 = userMapper.getTotalPoint(userDto);
 
                     KakaoDto kakaoDto = new KakaoDto();
-                    kakaoDto.setTemplateId("KA01TP241219020224105xGE9ug9SxpI");
+                    kakaoDto.setTemplateId("KA01TP250309223458599ffvAchTj6Dp");
                     kakaoDto.setNickName(pointDto2.getNickName());
                     kakaoDto.setRcvNum(userDto.getPhoneNum());
                     kakaoDto.setCouponPoint(String.valueOf(pointDto2.getCouponPoint()));
@@ -677,11 +677,17 @@ public class CustomUserServiceImpl implements CustomUserService{
 
     @Override
     public int updateUserMinusTicket(UserDto userDto) throws Exception {
+        int result = 0;
+
         AgentDto agentDto = new AgentDto();
         agentDto.setAgentCode(userDto.getAgentCode());
         AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
 
         PointDto preTicketDto = userMapper.getTotalTicket(userDto);
+
+        if(Integer.parseInt(preTicketDto.getTicket()) < Integer.parseInt(userDto.getMinusTicket())){
+            return result = -2;
+        }
 
         userDto.setDefTicket(agentInfo.getTicketInt());
         userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
@@ -692,11 +698,17 @@ public class CustomUserServiceImpl implements CustomUserService{
 
     @Override
     public int updateUserMinusTicket2(UserDto userDto) throws Exception {
+        int result = 0;
+
         AgentDto agentDto = new AgentDto();
         agentDto.setAgentCode(userDto.getAgentCode());
         AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
 
         PointDto preTicketDto = userMapper.getTotalTicket2(userDto);
+
+        if(Integer.parseInt(preTicketDto.getTicket()) < Integer.parseInt(userDto.getMinusTicket())){
+            return result = -2;
+        }
 
         userDto.setDefTicket(agentInfo.getTicketInt2());
         userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
@@ -707,11 +719,17 @@ public class CustomUserServiceImpl implements CustomUserService{
 
     @Override
     public int updateUserMinusTicket3(UserDto userDto) throws Exception {
+        int result = 0;
+
         AgentDto agentDto = new AgentDto();
         agentDto.setAgentCode(userDto.getAgentCode());
         AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
 
         PointDto preTicketDto = userMapper.getTotalTicket3(userDto);
+
+        if(Integer.parseInt(preTicketDto.getTicket()) < Integer.parseInt(userDto.getMinusTicket())){
+            return result = -2;
+        }
 
         userDto.setDefTicket(agentInfo.getTicketInt3());
         userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
@@ -722,11 +740,17 @@ public class CustomUserServiceImpl implements CustomUserService{
 
     @Override
     public int updateUserMinusTicket4(UserDto userDto) throws Exception {
+        int result = 0;
+
         AgentDto agentDto = new AgentDto();
         agentDto.setAgentCode(userDto.getAgentCode());
         AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
 
         PointDto preTicketDto = userMapper.getTotalTicket4(userDto);
+
+        if(Integer.parseInt(preTicketDto.getTicket()) < Integer.parseInt(userDto.getMinusTicket())){
+            return result = -2;
+        }
 
         userDto.setDefTicket(agentInfo.getTicketInt4());
         userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
@@ -737,17 +761,23 @@ public class CustomUserServiceImpl implements CustomUserService{
 
     @Override
     public int updateUserMinusTicket5(UserDto userDto) throws Exception {
+        int result = 0;
+
         AgentDto agentDto = new AgentDto();
         agentDto.setAgentCode(userDto.getAgentCode());
         AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
 
         PointDto preTicketDto = userMapper.getTotalTicket5(userDto);
 
+        if(Integer.parseInt(preTicketDto.getTicket()) < Integer.parseInt(userDto.getMinusTicket())){
+            return result = -2;
+        }
+
         userDto.setDefTicket(agentInfo.getTicketInt5());
         userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
         userMapper.insertMinusTicketAsCnt5(userDto);
 
-        int result = userMapper.useTicketAsCnt5(userDto);
+        result = userMapper.useTicketAsCnt5(userDto);
 
         if(result > 0){
             //KLPT 티켓 차감은 가맹점으로 환불 처리

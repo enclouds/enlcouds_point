@@ -2226,6 +2226,11 @@
     }
 
     function fnTicketUse2(phoneNum, nickName, ticket){
+        if(ticket < 1){
+            alert("사용할 티켓이 없습니다.");
+            return;
+        }
+
         selectTrSeq = phoneNum;
 
         $("#minusTicketNickName2").val(nickName);
@@ -2267,6 +2272,11 @@
     }
 
     function fnTicketUse3(phoneNum, nickName, ticket){
+        if(ticket < 1){
+            alert("사용할 티켓이 없습니다.");
+            return;
+        }
+
         selectTrSeq = phoneNum;
 
         $("#minusTicketNickName3").val(nickName);
@@ -2277,6 +2287,11 @@
     }
 
     function fnTicketUse4(phoneNum, nickName, ticket){
+        if(ticket < 1){
+            alert("사용할 티켓이 없습니다.");
+            return;
+        }
+
         selectTrSeq = phoneNum;
 
         $("#minusTicketNickName4").val(nickName);
@@ -2287,6 +2302,11 @@
     }
 
     function fnTicketUse5(phoneNum, nickName, ticket){
+        if(ticket < 1){
+            alert("사용할 티켓이 없습니다.");
+            return;
+        }
+
         selectTrSeq = phoneNum;
 
         $("#minusTicketNickName5").val(nickName);

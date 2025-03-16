@@ -1060,8 +1060,13 @@ public class UserController {
                result.put("resultCode", 0);
                result.put("resultMsg", "정상적으로 차감 되었습니다.");
             } else {
-               result.put("resultCode", -1);
-               result.put("resultMsg", "차감에 실패 하였습니다.");
+               if(resultCode == -2){
+                  result.put("resultCode", -2);
+                  result.put("resultMsg", "차감할 수량이 현재 보유량보다 작습니다.");
+               }else {
+                  result.put("resultCode", -1);
+                  result.put("resultMsg", "차감에 실패 하였습니다.");
+               }
             }
          }
       } catch (ClassCastException cce){
@@ -1095,8 +1100,13 @@ public class UserController {
                result.put("resultCode", 0);
                result.put("resultMsg", "정상적으로 차감 되었습니다.");
             } else {
-               result.put("resultCode", -1);
-               result.put("resultMsg", "차감에 실패 하였습니다.");
+               if(resultCode == -2){
+                  result.put("resultCode", -2);
+                  result.put("resultMsg", "차감할 수량이 현재 보유량보다 작습니다.");
+               }else {
+                  result.put("resultCode", -1);
+                  result.put("resultMsg", "차감에 실패 하였습니다.");
+               }
             }
          }
       } catch (ClassCastException cce){
@@ -1130,8 +1140,13 @@ public class UserController {
                result.put("resultCode", 0);
                result.put("resultMsg", "정상적으로 차감 되었습니다.");
             } else {
-               result.put("resultCode", -1);
-               result.put("resultMsg", "차감에 실패 하였습니다.");
+               if(resultCode == -2){
+                  result.put("resultCode", -2);
+                  result.put("resultMsg", "차감할 수량이 현재 보유량보다 작습니다.");
+               }else {
+                  result.put("resultCode", -1);
+                  result.put("resultMsg", "차감에 실패 하였습니다.");
+               }
             }
          }
       } catch (ClassCastException cce){
@@ -1165,8 +1180,13 @@ public class UserController {
                result.put("resultCode", 0);
                result.put("resultMsg", "정상적으로 차감 되었습니다.");
             } else {
-               result.put("resultCode", -1);
-               result.put("resultMsg", "차감에 실패 하였습니다.");
+               if(resultCode == -2){
+                  result.put("resultCode", -2);
+                  result.put("resultMsg", "차감할 수량이 현재 보유량보다 작습니다.");
+               }else {
+                  result.put("resultCode", -1);
+                  result.put("resultMsg", "차감에 실패 하였습니다.");
+               }
             }
          }
       } catch (ClassCastException cce){
@@ -1200,8 +1220,13 @@ public class UserController {
                result.put("resultCode", 0);
                result.put("resultMsg", "정상적으로 차감 되었습니다.");
             } else {
-               result.put("resultCode", -1);
-               result.put("resultMsg", "차감에 실패 하였습니다.");
+               if(resultCode == -2){
+                  result.put("resultCode", -2);
+                  result.put("resultMsg", "차감할 수량이 현재 보유량보다 작습니다.");
+               }else {
+                  result.put("resultCode", -1);
+                  result.put("resultMsg", "차감에 실패 하였습니다.");
+               }
             }
          }
       } catch (ClassCastException cce){
