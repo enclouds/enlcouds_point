@@ -65,6 +65,22 @@ public class CustomUserServiceImpl implements CustomUserService{
     }
 
     @Override
+    public List<TicketBuyDto> selectUserTicketList(TicketBuyDto ticketBuyDto) throws Exception {
+        int userTicketTotalCount = userMapper.selectUserTicketListTotalCount(ticketBuyDto);
+
+        PaginationInfo paginationInfo = new PaginationInfo(ticketBuyDto);
+        paginationInfo.setTotalRecordCount(userTicketTotalCount);
+        ticketBuyDto.setPaginationInfo(paginationInfo);
+
+        return userMapper.selectUserTicketList(ticketBuyDto);
+    }
+
+    @Override
+    public TicketBuyDto selectUserTicketTotal(TicketBuyDto ticketBuyDto) throws Exception {
+        return userMapper.selectUserTicketTotal(ticketBuyDto);
+    }
+
+    @Override
     public List<CouponDto> selectUserCouponList(CouponDto couponDto) throws Exception {
         int userCouponTotalCount = userMapper.selectUserCouponListTotalCount(couponDto);
 

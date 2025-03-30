@@ -44,13 +44,19 @@ public interface UserMapper {
 
     List<PointDto> selectUserPointList(PointDto pointDto) throws Exception;
 
+    List<TicketBuyDto> selectUserTicketList(TicketBuyDto ticketBuyDto) throws Exception;
+
     List<CouponDto> selectUserCouponList(CouponDto couponDto) throws Exception;
 
     PointDto selectUserPointTotal(PointDto pointDto) throws Exception;
 
     CouponDto selectUserCouponTotal(CouponDto couponDto) throws Exception;
 
+    TicketBuyDto selectUserTicketTotal(TicketBuyDto ticketBuyDto) throws Exception;
+
     int selectUserPointListTotalCount(PointDto pointDto) throws Exception;
+
+    int selectUserTicketListTotalCount(TicketBuyDto ticketBuyDto) throws Exception;
 
     int selectUserCouponListTotalCount(CouponDto couponDto) throws Exception;
 

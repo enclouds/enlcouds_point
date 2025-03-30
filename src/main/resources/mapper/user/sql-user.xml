@@ -765,6 +765,62 @@
 		]]>
 	</select>
 
+	<select id="selectUserTicketListTotalCount" parameterType="com.enclouds.enpoint.user.dto.TicketBuyDto" resultType="int">
+		SELECT count(*)
+		from (
+		select *, 'ticket1' AS ticketKind
+		from p_ticket pt
+		union all
+		select *, 'ticket2' AS ticketKind
+		from p_ticket2 pt
+		union all
+		select *, 'ticket3' AS ticketKind
+		from p_ticket3 pt
+		union all
+		select *, 'ticket4' AS ticketKind
+		from p_ticket4 pt
+		union all
+		select *, 'ticket5' AS ticketKind
+		from p_ticket5 pt
+		) TICKET
+		WHERE 1=1
+
+		<choose>
+			<when test='agentCode == 1'>
+				<if test="schCond1 != ''">
+					AND TICKET.agent_code = #{schCond1}
+				</if>
+			</when>
+			<otherwise>
+				AND TICKET.agent_code = #{agentCode}
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test="schCond2 == 'minus'">
+				AND TICKET.ticket_gbn = 'MINUS'
+				AND TICKET.ticket = #{schText}
+			</when>
+			<when test="schCond2 == 'add'">
+				AND TICKET.ticket_gbn = 'ADD'
+				AND TICKET.ticket = #{schText}
+			</when>
+		</choose>
+
+		<choose>
+			<when test="schCond3 == ''">
+			</when>
+			<otherwise>
+				AND TICKET.ticketKind = #{schCond3}
+			</otherwise>
+		</choose>
+
+		<![CDATA[
+			and reg_date >= concat(#{schStartDte}, ' 16:00:00')
+			and reg_date <= concat(date_add(#{schEndDte}, interval 1 day), ' 10:59:59')
+		]]>
+	</select>
+
 	<select id="selectUserPointList" parameterType="com.enclouds.enpoint.user.dto.PointDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
 		SELECT pp.seq
 		, pa.agent_name
@@ -817,7 +873,7 @@
 		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
 	</select>
 
-	<select id="selectUserCouponList" parameterType="com.enclouds.enpoint.user.dto.CouponDto" resultType="com.enclouds.enpoint.user.dto.CouponDto">
+	<select id="selectUserCouponList" parameterType="com.enclouds.enpoint.user.dto.TicketBuyDto" resultType="com.enclouds.enpoint.user.dto.TicketBuyDto">
 		select seq
 		, pa.agent_name
 		, pch .agent_code
@@ -866,6 +922,87 @@
 		]]>
 
 		order by pch.reg_date desc
+
+		LIMIT
+		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
+	</select>
+
+	<select id="selectUserTicketList" parameterType="com.enclouds.enpoint.user.dto.TicketBuyDto" resultType="com.enclouds.enpoint.user.dto.TicketBuyDto">
+		SELECT seq
+		, TICKET.agent_code
+		, case when TICKET.ticket_gbn = 'ADD' then '적립' else '차감' end as ticketGbnNm
+		, case when TICKET.ticket_gbn = 'ADD' then TICKET.ticket  else 0 end as addTicket
+		, case when TICKET.ticket_gbn = 'MINUS' then TICKET.ticket * -1 else 0 end as minusTicket
+		, case when TICKET.ticketKind = 'ticket1' then '주간티켓'
+		when TICKET.ticketKind = 'ticket2' then '프리티켓'
+		when TICKET.ticketKind = 'ticket3' then '월간티켓'
+		when TICKET.ticketKind = 'ticket4' then '팀프로티켓'
+		when TICKET.ticketKind = 'ticket5' then 'KLPT 티켓' else '' end as ticketKindNm
+		, date_format(TICKET.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+		, TICKET.phone_num
+		, case when length(TICKET.phone_num ) = 10 then concat(concat(SUBSTR(TICKET.phone_num , 1 ,3), '***'), SUBSTR(TICKET.phone_num , 7 ,10))
+		when length(TICKET.phone_num ) = 11 then concat(concat(SUBSTR(TICKET.phone_num , 1 ,4), '***'), SUBSTR(TICKET.phone_num , 8 ,11))
+		end as phone_num_masking
+		, pu.nick_name
+		, TICKET.private_def_ticket as preTicketCnt
+		from (
+		select *, 'ticket1' AS ticketKind
+		from p_ticket pt
+		union all
+		select *, 'ticket2' AS ticketKind
+		from p_ticket2 pt
+		union all
+		select *, 'ticket3' AS ticketKind
+		from p_ticket3 pt
+		union all
+		select *, 'ticket4' AS ticketKind
+		from p_ticket4 pt
+		union all
+		select *, 'ticket5' AS ticketKind
+		from p_ticket5 pt
+		) TICKET
+		LEFT JOIN p_agent pa on pa.agent_code = TICKET.agent_code
+		LEFT JOIN p_user pu on pu.phone_num = TICKET.phone_num
+		WHERE 1=1
+		AND TICKET.agent_code is not null
+		AND TICKET.agent_code != ''
+
+		<choose>
+			<when test='agentCode == 1'>
+				<if test="schCond1 != ''">
+					AND TICKET.agent_code = #{schCond1}
+				</if>
+			</when>
+			<otherwise>
+				AND TICKET.agent_code = #{agentCode}
+			</otherwise>
+		</choose>
+
+		<choose>
+			<when test="schCond2 == 'minus'">
+				AND TICKET.ticket_gbn = 'MINUS'
+				AND TICKET.ticket = #{schText}
+			</when>
+			<when test="schCond2 == 'add'">
+				AND TICKET.ticket_gbn = 'ADD'
+				AND TICKET.ticket = #{schText}
+			</when>
+		</choose>
+
+		<choose>
+			<when test="schCond3 == ''">
+			</when>
+			<otherwise>
+				AND TICKET.ticketKind = #{schCond3}
+			</otherwise>
+		</choose>
+
+		<![CDATA[
+			and TICKET.reg_date >= concat(#{schStartDte}, ' 16:00:00')
+			and TICKET.reg_date <= concat(date_add(#{schEndDte}, interval 1 day), ' 15:59:59')
+		]]>
+
+		order by TICKET.reg_date desc
 
 		LIMIT
 		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
@@ -1416,6 +1553,9 @@
 		WHERE 1=1
 		<choose>
 			<when test='agentCode == 1'>
+				<if test="schCond1 != ''">
+					AND agent_code = #{schCond1}
+				</if>
 			</when>
 			<otherwise>
 				AND agent_code = #{agentCode}
@@ -1447,6 +1587,9 @@
 
 		<choose>
 			<when test='agentCode == 1'>
+				<if test="schCond1 != ''">
+					AND path2.agent_code = #{schCond1}
+				</if>
 			</when>
 			<otherwise>
 				AND path2.agent_code = #{agentCode}

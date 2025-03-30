@@ -18,5 +18,16 @@ public class TicketBuyDto extends CommonDto {
     private Integer totalAmt;
     private String ticketGbnStr;
     private String gbn;
+    private String nickName;
+    private String phoneNum;
+    private String phoneNumMasking;
+    private int totalMinusTicket;
+    private int totalAddTicket;
+    private String preTicketCnt;
+
+    private double minusTicket;
+    private double addTicket;
+    private String ticketGbnNm;
+    private String ticketKindNm;
 
 }

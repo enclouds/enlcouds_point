@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+
+<body>
+
+<!-- container S -->
+<div class="container">
+    <!-- header S -->
+    <div th:replace="/fragments/left.html :: fragment-left('m2', '/user/coupon/list')"></div>
+    <!-- header E -->
+
+    <!-- content S -->
+    <div class="content">
+        <div class="con_top">
+            <ul>
+                <li>회원관리</li>
+                <li>티켓 적립/차감 목록</li>
+            </ul>
+        </div>
+        <p class="page_info">티켓 적립/차감 목록</p>
+
+        <form id="schFrm">
+            <div class="search_option">
+                <select id="schCond1" name="schCond1" style="width:150px;" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_ADMIN_SUB')">
+                    <option value="">전체</option>
+                    <option th:each="list:${agentTotalList}" th:value="${list.agentCode}" th:text="${list.agentName}" th:selected="${list.agentCode} == ${params.schCond1}"></option>
+                </select>
+
+                <select id="schCond3" name="schCond3" style="width:150px;" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_ADMIN_SUB')">
+                    <option value="" th:selected="${params.schCond3} == ''">전체</option>
+                    <option value="ticket1" th:selected="${params.schCond3} == 'ticket1'">주간티켓</option>
+                    <option value="ticket2" th:selected="${params.schCond3} == 'ticket2'">프리티켓</option>
+                    <option value="ticket3" th:selected="${params.schCond3} == 'ticket3'">월간티켓</option>
+                    <option value="ticket4" th:selected="${params.schCond3} == 'ticket4'">팀프로티켓</option>
+                    <option value="ticket5" th:selected="${params.schCond3} == 'ticket5'">KLPT티켓</option>
+                </select>
+
+                <span class="datepicker_group">
+                      <input type="text" id="schStartDte" name="schStartDte" class="datepicker" placeholder="시작일" th:value="${params.schStartDte}">
+                      <em>~</em>
+                      <input type="text" id="schEndDte" name="schEndDte" class="datepicker" placeholder="종료일" th:value="${params.schEndDte}">
+                </span>
+
+                <select id="schCond2" name="schCond2" style="width:150px;margin-left: 1rem;">
+                    <option value="" th:selected="${params.schCond2} == ''">전체</option>
+                    <option value="add" th:selected="${params.schCond2} == 'add'">적립</option>
+                    <option value="minus" th:selected="${params.schCond2} == 'minus'">차감</option>
+                </select>
+
+                <input type="text" style="width:1000px;" id="schText" name="schText" placeholder="티켓 검색" th:value="${params.schText}" onkeyup="if(window.event.keyCode==13){fnSearch()}">
+
+                <button type="button" class="search_btn" th:onclick="javascript:fnSearch();">조회</button>
+            </div>
+        </form>
+
+        <div class="list_box">
+            <table class="list">
+                <colgroup>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">별명</th>
+                    <th sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" scope="col">전화번호</th>
+                    <th sec:authorize="hasRole('ROLE_AGENT')" scope="col">전화번호</th>
+                    <th scope="col">티켓종류</th>
+                    <th scope="col">적립</th>
+                    <th scope="col">차감</th>
+                    <th scope="col">이전 티켓장수</th>
+                    <th scope="col">등록일자</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="list:${userTicketList}">
+                    <td th:text="${list.nickName}"></td>
+                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" th:text="${list.phoneNum}"></td>
+                    <td sec:authorize="hasRole('ROLE_AGENT')" th:text="${list.phoneNumMasking}"></td>
+                    <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${list.ticketKindNm}"></td>
+                    <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatDecimal(list.addTicket, 1, 1)}"></td>
+                    <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatDecimal(list.minusTicket, 1, 1)}"></td>
+                    <td style="min-width:1px; white-space:nowrap; text-align:right;color:;" th:text="${#numbers.formatDecimal(list.preTicketCnt, 1, 1)}"></td>
+                    <td th:text="${list.regDate}"></td>
+                </tr>
+                </tbody>
+                <!--<tfoot>
+                <th colspan="2">합계</th>
+                <th style="min-width:1px; white-space:nowrap; text-align:right;color:;"><b th:text="${#numbers.formatInteger(totalPoint.totalAddPoint, 0, 'COMMA')}" /></th>
+                <th style="min-width:1px; white-space:nowrap; text-align:right;color:;"><b th:text="${#numbers.formatInteger(totalPoint.totalMinusPoint, 0, 'COMMA')}" /></th>
+                <th colspan="3"></th>
+                </tfoot>-->
+            </table>
+        </div>
+
+        <!-- pagination -->
+        <div class="paging" title="페이지">
+
+            <th:block layout:fragment="paging">
+                <nav th:replace="/fragments/pagination.html :: fragment-pagination"></nav>
+            </th:block>
+
+            <th:block layout:fragment="script">
+                <script th:inline="javascript">
+						/*<![CDATA[*/
+
+						function movePage(uri, queryString) {
+							location.href = uri + queryString;
+						}
+
+						/*]]>*/
+					</script>
+            </th:block>
+
+        </div>
+        <!-- /pagination -->
+
+    </div>
+    <!-- content E -->
+
+</div>
+<!-- container E -->
+</body>
+<script th:src="@{/static/js/common.js}"></script>
+<script th:inline="javascript">
+
+    $( function() {
+    });
+
+    function fnSearch(){
+        $("#schFrm").submit();
+    }
+
+</script>
+
+</html>
