@@ -1075,7 +1075,15 @@ public class CustomUserServiceImpl implements CustomUserService{
 
         if(result > 0){
             //티켓 차감
-            if(ticketBuyDto.getTicketSellGbn().equals("ticket5")){
+            if(ticketBuyDto.getTicketGbn().equals("ticket")){
+                agentDto.setMinusTicket(String.valueOf(ticketBuyDto.getSellCnt()));
+                agentMapper.updateAgentMinusTicket(agentDto);
+                agentMapper.insertMinusAgentTicket(agentDto);
+            } else if(ticketBuyDto.getTicketGbn().equals("ticket3")){
+                agentDto.setMinusTicket(String.valueOf(ticketBuyDto.getSellCnt()));
+                agentMapper.updateAgentMinusTicket3(agentDto);
+                agentMapper.insertMinusAgentTicket3(agentDto);
+            } else if(ticketBuyDto.getTicketGbn().equals("ticket5")){
                 agentDto.setMinusTicket(String.valueOf(ticketBuyDto.getSellCnt()));
                 agentMapper.updateAgentMinusTicket5(agentDto);
                 agentMapper.insertMinusAgentTicket5(agentDto);

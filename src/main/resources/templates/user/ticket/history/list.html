@@ -77,6 +77,8 @@
                             <th scope="row"><em class="required">*</em>환불 티켓 종류</th>
                             <td>
                                 <select id="ticketSellGbn" name="ticketSellGbn">
+                                    <option value="ticket">주간티켓</option>
+                                    <option value="ticket3">월간티켓</option>
                                     <option value="ticket5">KLPT 시드권</option>
                                 </select>
                             </td>
@@ -102,6 +104,8 @@
 
 <!-- container S -->
 <div class="container">
+    <input type="hidden" name="ticket" id="ticket" th:value="${userInfo.ticket}">
+    <input type="hidden" name="ticket3" id="ticket3" th:value="${userInfo.ticket3}">
     <input type="hidden" name="ticket5" id="ticket5" th:value="${userInfo.ticket5}">
     <!-- header S -->
     <div th:replace="/fragments/left.html :: fragment-left('m2', '/user/ticket/history/list')"></div>
@@ -263,32 +267,46 @@
                 $("#sellCnt").focus();
                 return;
             }else {
-                if($("#ticket5").val() < $("#sellCnt").val()){
-                    alert("환불 수량이 보유 수량보다 많습니다.");
-                    $("#sellCnt").focus();
-                    return;
-                }else {
-                    formData.append("sellCnt", $("#sellCnt").val());
-                    formData.append("ticketSellGbn", $("#ticketSellGbn").val());
-
-                    $.ajax({
-                        contentType:false,
-                        processData:false,
-                        type: "POST",
-                        url: "/user/ticketSellAjax",
-                        data: formData,
-                        success: function(response) {
-                            // 성공 시 동작
-                            alert(response.resultMsg);
-                            if(response.resultCode > -1){
-                                fnSearch();
-                            }
-                        },
-                        error: function(error) {
-                            // 실패 시 동작
-                        }
-                    });
+                if($("#ticketSellGbn").val() == 'ticket'){
+                    if($("#ticket").val() < $("#sellCnt").val()){
+                        alert("환불 수량이 보유 수량보다 많습니다.");
+                        $("#sellCnt").focus();
+                        return false;
+                    }
+                } else if($("#ticketSellGbn").val() == 'ticket3'){
+                    if($("#ticket3").val() < $("#sellCnt").val()){
+                        alert("환불 수량이 보유 수량보다 많습니다.");
+                        $("#sellCnt").focus();
+                        return false;
+                    }
+                } else if($("#ticketSellGbn").val() == 'ticket5'){
+                    if($("#ticket5").val() < $("#sellCnt").val()){
+                        alert("환불 수량이 보유 수량보다 많습니다.");
+                        $("#sellCnt").focus();
+                        return false;
+                    }
                 }
+
+                formData.append("sellCnt", $("#sellCnt").val());
+                formData.append("ticketSellGbn", $("#ticketSellGbn").val());
+
+                $.ajax({
+                    contentType:false,
+                    processData:false,
+                    type: "POST",
+                    url: "/user/ticketSellAjax",
+                    data: formData,
+                    success: function(response) {
+                        // 성공 시 동작
+                        alert(response.resultMsg);
+                        if(response.resultCode > -1){
+                            fnSearch();
+                        }
+                    },
+                    error: function(error) {
+                        // 실패 시 동작
+                    }
+                });
             }
         }
     }

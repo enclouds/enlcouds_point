@@ -873,7 +873,7 @@
 		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
 	</select>
 
-	<select id="selectUserCouponList" parameterType="com.enclouds.enpoint.user.dto.TicketBuyDto" resultType="com.enclouds.enpoint.user.dto.TicketBuyDto">
+	<select id="selectUserCouponList" parameterType="com.enclouds.enpoint.user.dto.CouponDto" resultType="com.enclouds.enpoint.user.dto.CouponDto">
 		select seq
 		, pa.agent_name
 		, pch .agent_code
