@@ -40,4 +40,6 @@ public interface ApiService {
 
     int addKpChip(ApiDto apiDto) throws Exception;
 
+    List<ApiTicketAsPriceDto> ticketChangePrice() throws Exception;
+
 }

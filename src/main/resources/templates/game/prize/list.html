@@ -32,9 +32,21 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th scope="row">Prize Title</th>
+                                <td>
+                                    <input type="text" name="prizeTitle" id="prizeTitle">
+                                </td>
+                            </tr>
+                            <tr>
                                 <th scope="row"><em class="required">*</em>Prize</th>
                                 <td>
                                     <input type="text" name="prize" id="prize">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">추가 Prize</th>
+                                <td>
+                                    <input type="text" name="addPrize" id="addPrize">
                                 </td>
                             </tr>
                         </tbody>
@@ -76,9 +88,21 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th scope="row">Prize Title</th>
+                                <td>
+                                    <input type="text" name="uptPrizeTitle" id="uptPrizeTitle">
+                                </td>
+                            </tr>
+                            <tr>
                                 <th scope="row"><em class="required">*</em>Prize</th>
                                 <td>
                                     <input type="text" name="uptPrize" id="uptPrize">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">추가 Prize</th>
+                                <td>
+                                    <input type="text" name="uptAddPrize" id="uptAddPrize">
                                 </td>
                             </tr>
                         </tbody>
@@ -128,14 +152,18 @@
                 </colgroup>
                 <thead>
                 <tr>
-                    <th scope="col">rank</th>
+                    <th scope="col">순번</th>
+                    <th scope="col">Prize Title</th>
                     <th scope="col">prize</th>
+                    <th scope="col">추가 prize</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="list:${prizeList}">
-                    <td><a href="javascript:callFunction();" th:text="${list.rank}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.seq}]], [[${list.rank}]], [[${list.prize}]])"></a></td>
+                    <td><a href="javascript:callFunction();" th:text="${list.rank}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.seq}]], [[${list.rank}]], [[${list.prizeTitle}]], [[${list.prize}]], [[${list.addPrize}]])"></a></td>
+                    <td th:text="${list.prizeTitle}"></td>
                     <td th:text="${#numbers.formatInteger(list.prize, 0, 'COMMA')}"></td>
+                    <td th:text="${list.addPrize}"></td>
                 </tr>
                 </tbody>
             </table>
@@ -169,11 +197,13 @@
         $("#reg_modal").show();
     }
 
-    function fnUptModal(seq, rank, prize){
+    function fnUptModal(seq, rank, prizeTitle, prize, addPrize){
         selectTrSeq = seq;
 
         $("#uptRank").val(rank);
         $("#uptPrize").val(prize);
+        $("#uptPrizeTitle").val(prizeTitle);
+        $("#uptAddPrize").val(addPrize);
         $("#upt_modal").show();
     }
 
@@ -194,7 +224,9 @@
 
         formData.append("gameSeq", $("#gameSeq").val());
         formData.append("rank", $("#rank").val());
+        formData.append("prizeTitle", $("#prizeTitle").val());
         formData.append("prize", $("#prize").val());
+        formData.append("addPrize", $("#addPrize").val());
 
         $.ajax({
             contentType:false,
@@ -231,7 +263,9 @@
 
         formData.append("seq", selectTrSeq);
         formData.append("rank", $("#uptRank").val());
+        formData.append("prizeTitle", $("#uptPrizeTitle").val());
         formData.append("prize", $("#uptPrize").val());
+        formData.append("addPrize", $("#uptAddPrize").val());
 
         $.ajax({
             contentType:false,

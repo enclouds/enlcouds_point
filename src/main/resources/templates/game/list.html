@@ -49,6 +49,12 @@
                                     <input type="text" name="maxEntry" id="maxEntry">
                                 </td>
                             </tr>
+                            <tr>
+                                <th scope="row">시작 시간</th>
+                                <td>
+                                    <input type="datetime-local" style="height: 30px;" name="startTime" id="startTime">
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -103,6 +109,12 @@
                             <th scope="row">Max Entry</th>
                             <td>
                                 <input type="text" name="uptMaxEntry" id="uptMaxEntry">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">시작 시간</th>
+                            <td>
+                                <input type="datetime-local" style="height: 30px;" name="uptStartTime" id="uptStartTime">
                             </td>
                         </tr>
                         </tbody>
@@ -160,17 +172,19 @@
                     <th scope="col">Re-Entry stack</th>
                     <th scope="col">Max Entry</th>
                     <th scope="col">등록일자</th>
+                    <th scope="col">시작일자</th>
                     <th scope="col">View</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="list:${gameList}">
                     <td th:text="${list.seq}"></td>
-                    <td><a href="javascript:callFunction();" th:text="${list.gameName}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.seq}]], [[${list.gameName}]], [[${list.startStack}]], [[${list.rebuyStack}]], [[${list.maxEntry}]])"></a></td>
+                    <td><a href="javascript:callFunction();" th:text="${list.gameName}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.seq}]], [[${list.gameName}]], [[${list.startStack}]], [[${list.rebuyStack}]], [[${list.maxEntry}]], [[${list.startTime}]])"></a></td>
                     <td th:text="${list.startStack}"></td>
                     <td th:text="${list.rebuyStack}"></td>
                     <td th:text="${list.maxEntry}"></td>
                     <td th:text="${list.regDate}"></td>
+                    <td th:text="${list.startTime}"></td>
                     <td>
                         <button type="button" class="tb_btn green" th:onclick="javascript:playGame([[${list.seq}]]);">View</button>
                     </td>
@@ -227,13 +241,14 @@
         $("#reg_modal").show();
     }
 
-    function fnUptModal(seq, gameName, startStack, rebuyStack, maxEntry){
+    function fnUptModal(seq, gameName, startStack, rebuyStack, maxEntry, startTime){
         selectTrSeq = seq;
 
         $("#uptGameName").val(gameName);
         $("#uptStartStack").val(removeCommas(startStack));
         $("#uptRebuyStack").val(removeCommas(rebuyStack));
         $("#uptMaxEntry").val(removeCommas(maxEntry));
+        $("#uptStartTime").val(startTime);
         $("#upt_modal").show();
     }
 
@@ -256,6 +271,7 @@
         formData.append("startStack", $("#startStack").val());
         formData.append("rebuyStack", $("#rebuyStack").val());
         formData.append("maxEntry", $("#maxEntry").val());
+        formData.append("startTime", $("#startTime").val());
 
         $.ajax({
             contentType:false,
@@ -295,6 +311,7 @@
         formData.append("startStack", $("#uptStartStack").val());
         formData.append("rebuyStack", $("#uptRebuyStack").val());
         formData.append("maxEntry", $("#uptMaxEntry").val());
+        formData.append("startTime", $("#uptStartTime").val());
 
         $.ajax({
             contentType:false,

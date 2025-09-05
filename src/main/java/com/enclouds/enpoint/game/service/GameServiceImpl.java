@@ -59,6 +59,10 @@ public class GameServiceImpl implements GameService{
 
     @Override
     public int insertGame(GameDto gameDto) throws Exception {
+        if (gameDto.getStartTime() == null || gameDto.getStartTime().isEmpty()) {
+            gameDto.setStartTime(null);
+        }
+
         return gameMapper.insertGame(gameDto);
     }
 
@@ -74,6 +78,10 @@ public class GameServiceImpl implements GameService{
 
     @Override
     public int updateGame(GameDto gameDto) throws Exception {
+        if (gameDto.getStartTime() == null || gameDto.getStartTime().isEmpty()) {
+            gameDto.setStartTime(null);
+        }
+
         return gameMapper.updateGame(gameDto);
     }
 

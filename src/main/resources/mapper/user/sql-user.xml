@@ -80,7 +80,7 @@
 		, pu.ticket5 as org_ticket5
 		, date_format(pu.reg_date, '%Y-%m-%d') as regDate
 		, pu.memo
-		, date_format((select max(pp.reg_date) from p_point pp where pp.phone_num = pu.phone_num), '%Y-%m-%d %H:%m:%s') as maxDate
+		, date_format(visit_date, '%Y-%m-%d %H:%i:%s') as maxDate
 		, rank_point
 		, coupon_point as coupon_point
 		, coupon_point as org_coupon_point
@@ -119,7 +119,7 @@
 		, case when length(pu.phone_num) = 10 then concat(concat(SUBSTR(pu.phone_num, 1 ,3), '***'), SUBSTR(pu.phone_num, 7 ,10))
 		when length(pu.phone_num) = 11 then concat(concat(SUBSTR(pu.phone_num, 1 ,4), '***'), SUBSTR(pu.phone_num, 8 ,11))
 		end as phone_num_masking
-		, date_format((select max(pp.reg_date) from p_point pp where pp.phone_num = pu.phone_num), '%Y-%m-%d %H:%m:%s') as maxDate
+		, date_format(visit_date, '%Y-%m-%d %H:%i:%s') as maxDate
 		, pa.agent_name
 		FROM p_user pu
 		left join p_agent pa on pa.agent_code = pu.agent_code
@@ -148,7 +148,7 @@
 		SELECT count(*)
 		FROM (
 		SELECT pu.*
-		, date_format((select max(pp.reg_date) from p_point pp where pp.phone_num = pu.phone_num), '%Y-%m-%d %H:%m:%s') as maxDate
+		, date_format(visit_date, '%Y-%m-%d %H:%i:%s') as maxDate
 		FROM p_user pu
 		WHERE 1=1
 		<if test="schCond2 != ''">
@@ -936,7 +936,7 @@
 		, case when TICKET.ticketKind = 'ticket1' then '주간티켓'
 		when TICKET.ticketKind = 'ticket2' then '프리티켓'
 		when TICKET.ticketKind = 'ticket3' then '월간티켓'
-		when TICKET.ticketKind = 'ticket4' then '팀프로티켓'
+		when TICKET.ticketKind = 'ticket4' then 'KLPT 초대권'
 		when TICKET.ticketKind = 'ticket5' then 'KLPT 티켓' else '' end as ticketKindNm
 		, date_format(TICKET.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
 		, TICKET.phone_num
@@ -1494,6 +1494,16 @@
 							and agent_code != 23)
 	</select>
 
+	<select id="selectTicket5Sum" resultType="String">
+		SELECT format(sum(ticket5), 0)
+		FROM p_user
+		where agent_code in (select agent_code
+		from p_agent pa
+		where pa.agent_gbn = 'AG'
+		and agent_code != 16
+		and agent_code != 23)
+	</select>
+
 	<insert id="insertAddRankPointHist" parameterType="com.enclouds.enpoint.user.dto.RankDto">
 		INSERT INTO p_rank_point
 		( rank_gbn
@@ -1621,6 +1631,12 @@
 		, #{ticketSellGbn}
 		, 'MINUS' )
 	</insert>
+
+	<update id="updateVisitDate" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+		UPDATE p_user
+		SET visit_date = NOW()
+		WHERE phone_num = TRIM(#{phoneNum})
+	</update>
 
 </mapper>
 

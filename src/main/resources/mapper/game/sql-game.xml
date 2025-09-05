@@ -27,6 +27,7 @@
 		, format(rebuy_stack, 0) as rebuy_stack
 		, format(rebuy_stack2, 0) as rebuy_stack2
 		, format(max_entry, 0) as max_entry
+		, start_time
 		from g_info gi
 		where 1=1
 
@@ -82,6 +83,7 @@
 		, start_stack as startStackInt
 		, rebuy_stack as rebuyStackInt
 		, reg_user_id
+		, start_time
 		from g_info gi
 		where 1=1
 		and seq = #{seq}
@@ -122,6 +124,7 @@
 		, rebuy_stack
 		, rebuy_stack2
 		, max_entry
+		, start_time
 		, reg_user_id)
 		VALUES
 		( #{gameName}
@@ -130,6 +133,7 @@
 		, #{rebuyStack}
 		, #{rebuyStack2}
 		, #{maxEntry}
+		, #{startTime}
 		, #{regUserId})
 	</insert>
 
@@ -140,6 +144,7 @@
 		, rebuy_stack = #{rebuyStack}
 		, rebuy_stack2 = #{rebuyStack2}
 		, max_entry = #{maxEntry}
+		, start_time = #{startTime}
 		WHERE 1=1
 		AND seq = #{seq}
 	</update>
@@ -217,17 +222,23 @@
 		INSERT INTO g_prize
 		( game_seq
 		, rank
-		, prize)
+		, prize_title
+		, prize
+		, add_prize)
 		VALUES
 		( #{gameSeq}
 		, #{rank}
-		, #{prize})
+		, #{prizeTitle}
+		, #{prize}
+		, #{addPrize})
 	</insert>
 
 	<update id="updatePrize" parameterType="com.enclouds.enpoint.game.dto.PrizeDto">
 		UPDATE g_prize
 		SET rank = #{rank}
+		, prize_title = #{prizeTitle}
 		, prize = #{prize}
+		, add_prize = #{addPrize}
 		WHERE 1=1
 		AND seq = #{seq}
 	</update>

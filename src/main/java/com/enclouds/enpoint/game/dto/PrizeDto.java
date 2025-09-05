@@ -10,5 +10,7 @@ public class PrizeDto extends CommonDto {
     private Integer gameSeq;
     private Integer rank;
     private Integer prize;
+    private String addPrize;
+    private String prizeTitle;
 
 }

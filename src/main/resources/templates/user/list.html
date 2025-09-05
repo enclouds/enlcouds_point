@@ -481,7 +481,7 @@
             </div>
             <div class="modal-body">
                 <div class="form_box">
-                    <p class="tb_tit">팀프로 티켓 정보</p>
+                    <p class="tb_tit">K초대권 티켓 정보</p>
                     <table class="form">
                         <colgroup>
                             <col width="20%;">
@@ -681,7 +681,7 @@
             </div>
             <div class="modal-body">
                 <div class="form_box">
-                    <p class="tb_tit">팀프로 티켓 정보</p>
+                    <p class="tb_tit">K초대권 티켓 정보</p>
                     <table class="form">
                         <colgroup>
                             <col width="20%;">
@@ -1012,19 +1012,19 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title center">주간 티켓 내역 정보</h1>
+                <h1 class="modal-title center"><span id="ticketName1"></span> 티켓 내역 정보</h1>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form_box" style="height:400px;">
-                    <p class="tb_tit">주간 티켓 내역 정보</p>
+                    <p class="tb_tit"><span id="ticketName2"></span> 티켓 내역 정보</p>
                     <table class="form">
                         <thead>
                         <tr>
                             <th scope="col">적립구분</th>
-                            <th scope="col">주간티켓수량</th>
+                            <th scope="col"><span id="ticketName3"></span> 티켓수량</th>
                             <th scope="col">일자</th>
                             <th scope="col">처리자</th>
                         </tr>
@@ -1152,6 +1152,7 @@
                 <button sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')"  type="button" class="add_jackpot_view_btn" th:onclick="javascript:fnJackpotView([[${jackpotInfo.seq}]])">JackPot(새창)</button>
 
                 <p style="font-size: x-large;color: crimson;-webkit-user-modify: read-write-plaintext-only;" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" th:text="|   총 포인트 합 : ${pointSum}|"></p>
+                <p style="font-size: x-large;color: crimson;-webkit-user-modify: read-write-plaintext-only;" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" th:text="|   총 KLPT 티켓 합 : ${ticket5Sum}|"></p>
             </div>
         </form>
 
@@ -1169,6 +1170,9 @@
                     <th sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VIEW')" scope="col" rowspan="2">킹스포커 사용여부</th>
                     <th sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VIEW')" scope="col" rowspan="2">킹스포커 칩</th>
                     <th scope="col" colspan="3" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >처리</th>
+                    <th scope="col" rowspan="2">KLPT</th>
+                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >처리</th>
+                    <th scope="col" rowspan="2">내역</th>
                     <th scope="col" rowspan="2">쿠폰</th>
                     <th scope="col" colspan="3" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >처리</th>
                     <th scope="col" colspan="2">승점</th>
@@ -1182,10 +1186,7 @@
                     <th scope="col" rowspan="2">월간T</th>
                     <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >처리</th>
                     <th scope="col" rowspan="2">내역</th>
-                    <th scope="col" rowspan="2">팀프로T</th>
-                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >처리</th>
-                    <th scope="col" rowspan="2">내역</th>
-                    <th scope="col" rowspan="2">KLPT 시드권</th>
+                    <th scope="col" rowspan="2">K초대권</th>
                     <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >처리</th>
                     <th scope="col" rowspan="2">내역</th>
                     <th scope="col" rowspan="2">메모</th>
@@ -1198,15 +1199,15 @@
                     <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >차감</th>
                     <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >내역</th>
                     <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >적립</th>
-                    <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >차감</th>
-                    <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >내역</th>
-                    <th scope="col">주간 승점</th>
-                    <th scope="col">누적 승점</th>
-                    <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >적립</th>
-                    <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >차감</th>
-                    <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >내역</th>
-                    <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >적립</th>
                     <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >사용</th>
+                    <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >적립</th>
+                    <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >차감</th>
+                    <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >내역</th>
+                    <th scope="col">주간</th>
+                    <th scope="col">누적</th>
+                    <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >적립</th>
+                    <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >차감</th>
+                    <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >내역</th>
                     <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >적립</th>
                     <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >사용</th>
                     <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >적립</th>
@@ -1234,6 +1235,16 @@
                     </td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
                         <button type="button" class="tb_btn yellow" th:onclick="javascript:fnPointHistory([[${list.phoneNum}]])">내역</button>
+                    </td>
+                    <td th:text="${list.ticket5}"></td>
+                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket5([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket5}]])">적립</button>
+                    </td>
+                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
+                        <button type="button" class="tb_btn red" th:if="${list.ticket5}>0" th:onclick="javascript:fnTicketUse5([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket5}]])">차감</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory5([[${list.phoneNum}]])">내역</button>
                     </td>
                     <td th:text="${list.couponPoint}"></td>
                     <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
@@ -1295,16 +1306,6 @@
                     </td>
                     <td>
                         <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory4([[${list.phoneNum}]])">내역</button>
-                    </td>
-                    <td th:text="${list.ticket5}"></td>
-                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket5([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket5}]])">적립</button>
-                    </td>
-                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
-                        <button type="button" class="tb_btn red" th:if="${list.ticket5}>0" th:onclick="javascript:fnTicketUse5([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket5}]])">차감</button>
-                    </td>
-                    <td>
-                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory5([[${list.phoneNum}]])">내역</button>
                     </td>
                     <td>
                         <button type="button" class="tb_btn green" th:if="${list.memo} != null and ${list.memo} != ''" th:onclick="javascript:fnMemoPopup([[${list.memo}]])">메모</button>
@@ -2450,6 +2451,10 @@
                     }
 
                     $("#historyTbodyTicket").append(appendStr);
+
+                    $("#ticketName1").text("주간");
+                    $("#ticketName2").text("주간");
+                    $("#ticketName3").text("주간");
                 }
 
                 $("#history_ticket_modal").show();
@@ -2487,6 +2492,10 @@
                     }
 
                     $("#historyTbodyTicket").append(appendStr);
+
+                    $("#ticketName1").text("프리");
+                    $("#ticketName2").text("프리");
+                    $("#ticketName3").text("프리");
                 }
 
                 $("#history_ticket_modal").show();
@@ -2524,6 +2533,10 @@
                     }
 
                     $("#historyTbodyTicket").append(appendStr);
+
+                    $("#ticketName1").text("월간");
+                    $("#ticketName2").text("월간");
+                    $("#ticketName3").text("월간");
                 }
 
                 $("#history_ticket_modal").show();
@@ -2561,6 +2574,10 @@
                     }
 
                     $("#historyTbodyTicket").append(appendStr);
+
+                    $("#ticketName1").text("K초대권");
+                    $("#ticketName2").text("K초대권");
+                    $("#ticketName3").text("K초대권");
                 }
 
                 $("#history_ticket_modal").show();
@@ -2598,6 +2615,10 @@
                     }
 
                     $("#historyTbodyTicket").append(appendStr);
+
+                    $("#ticketName1").text("KLPT");
+                    $("#ticketName2").text("KLPT");
+                    $("#ticketName3").text("KLPT");
                 }
 
                 $("#history_ticket_modal").show();

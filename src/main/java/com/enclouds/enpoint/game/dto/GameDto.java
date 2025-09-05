@@ -16,5 +16,6 @@ public class GameDto extends CommonDto {
     private Integer startStackInt;
     private Integer rebuyStackInt;
     private String regUserId;
+    private String startTime;
 
 }

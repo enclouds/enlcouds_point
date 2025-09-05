@@ -95,7 +95,7 @@ public class UserController {
             userId = userDetails.getUsername();
             userInfo = userService.getUserInfo(userId);
 
-            if(userId.equals("raise")){
+            if(userId.equals("k_game") || userId.equals("raise")){
                return new ModelAndView("redirect:/game/list");
             }
 
@@ -130,6 +130,9 @@ public class UserController {
 
             String pointSum = customUserService.selectPointSum();
             mv.addObject("pointSum", pointSum);
+
+            String ticket5Sum = customUserService.selectTicket5Sum();
+            mv.addObject("ticket5Sum", ticket5Sum);
          }else {
             return new ModelAndView("redirect:/");
          }
@@ -159,7 +162,7 @@ public class UserController {
             userId = userDetails.getUsername();
             userInfo = userService.getUserInfo(userId);
 
-            if(userId.equals("raise")){
+            if(userId.equals("k_game") || userId.equals("raise")){
                return new ModelAndView("redirect:/game/list");
             }
 
@@ -1563,7 +1566,8 @@ public class UserController {
             userId = userDetails.getUsername();
             userInfo = userService.getUserInfo(userId);
 
-            mv.addObject("agentTotalList", agentService.selectAgentTotalListAsAG());
+            AgentDto agentDto = new AgentDto();
+            mv.addObject("agentTotalList", agentService.selectAgentTotalList(agentDto));
 
             ticketBuyDto.setAgentCode(userInfo.getAgentCode());
 

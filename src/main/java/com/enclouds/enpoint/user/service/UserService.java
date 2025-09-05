@@ -69,6 +69,8 @@ public class UserService implements UserDetailsService {
         }else if(username.equals("k_online")){
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN_SUB"));
             authorities.add(new SimpleGrantedAuthority("ROLE_AGENT"));
+        }else if(username.equals("k_game")){
+            authorities.add(new SimpleGrantedAuthority("ROLE_GAME"));
         }else {
             authorities.add(new SimpleGrantedAuthority("ROLE_AGENT"));
         }

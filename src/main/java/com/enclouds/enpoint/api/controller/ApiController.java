@@ -346,4 +346,28 @@ public class ApiController {
         return apiRtnDto;
     }
 
+    @RequestMapping(method = RequestMethod.POST, path = "/ticketChangePrice")
+    @ResponseBody
+    public ApiTicketChangePriceListDto ticketChangePrice() throws Exception{
+
+        List<ApiTicketAsPriceDto> ApiTicketAsPriceList = apiService.ticketChangePrice();
+
+        ApiTicketChangePriceListDto apiTicketChangePriceListDto = new ApiTicketChangePriceListDto();
+        if(ApiTicketAsPriceList != null){
+            if(ApiTicketAsPriceList.isEmpty()){
+                apiTicketChangePriceListDto.setResultCode("E001");
+                apiTicketChangePriceListDto.setResultMsg("조회된 정보가 없습니다.");
+            }else {
+                apiTicketChangePriceListDto.setTicketList(ApiTicketAsPriceList);
+                apiTicketChangePriceListDto.setResultCode("0000");
+                apiTicketChangePriceListDto.setResultMsg("정상");
+            }
+        }else {
+            apiTicketChangePriceListDto.setResultCode("E001");
+            apiTicketChangePriceListDto.setResultMsg("조회된 정보가 없습니다.");
+        }
+
+        return apiTicketChangePriceListDto;
+    }
+
 }

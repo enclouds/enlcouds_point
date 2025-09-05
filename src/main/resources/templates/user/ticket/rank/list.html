@@ -196,7 +196,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title center">팀프로 티켓 정보</h1>
+                <h1 class="modal-title center">K초대권 티켓 정보</h1>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -217,13 +217,13 @@
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">총 팀프로 티켓</th>
+                            <th scope="row">총 K초대권 티켓</th>
                             <td>
                                 <input type="text" name="totalMinusTicket4" id="totalMinusTicket4" readonly>
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">차감 팀프로 티켓</th>
+                            <th scope="row">차감 K초대권 티켓</th>
                             <td>
                                 <input type="text" name="minusTicket4" id="minusTicket4" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                             </td>
@@ -314,7 +314,7 @@
                         <option value="ticket1" th:selected="${params.schCond1} == 'ticket1'">주간 티켓</option>
                         <option value="ticket2" th:selected="${params.schCond1} == 'ticket2'">프리 티켓</option>
                         <option value="ticket3" th:selected="${params.schCond1} == 'ticket3'">월간 티켓</option>
-                        <option value="ticket4" th:selected="${params.schCond1} == 'ticket4'">팀프로 티켓</option>
+                        <option value="ticket4" th:selected="${params.schCond1} == 'ticket4'">K초대권 티켓</option>
                         <option value="ticket5" th:selected="${params.schCond1} == 'ticket5'">KLPT 시드권</option>
                     </select>
 
@@ -346,8 +346,8 @@
                     <th scope="col">프리 티켓 차감</th>
                     <th scope="col">월간 티켓</th>
                     <th scope="col">월간 티켓 차감</th>
-                    <th scope="col">팀프로 티켓</th>
-                    <th scope="col">팀프로 티켓 차감</th>
+                    <th scope="col">K초대권 티켓</th>
+                    <th scope="col">K초대권 티켓 차감</th>
                     <th scope="col">KLPT 시드권</th>
                     <th scope="col">KLPT 시드권 차감</th>
                     <th sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')" scope="col">전화번호</th>
@@ -356,7 +356,7 @@
                     <th scope="col">주간 티켓 내역</th>
                     <th scope="col">프리 티켓 내역</th>
                     <th scope="col">월간 티켓 내역</th>
-                    <th scope="col">팀프로 티켓 내역</th>
+                    <th scope="col">K초대권 티켓 내역</th>
                     <th scope="col">KLPT 시드권 내역</th>
                     <th scope="col">최근 방문 일자</th>
                 </tr>

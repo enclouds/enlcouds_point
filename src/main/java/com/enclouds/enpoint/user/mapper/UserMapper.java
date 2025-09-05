@@ -210,6 +210,8 @@ public interface UserMapper {
 
     String selectPointSum() throws Exception;
 
+    String selectTicket5Sum() throws Exception;
+
     int selectPrice(TicketBuyDto ticketBuyDto) throws Exception;
 
     int insertBuyTicketHistory(TicketBuyDto ticketBuyDto) throws Exception;
@@ -219,5 +221,7 @@ public interface UserMapper {
     List<TicketBuyDto> selectTicketHistoryList(TicketBuyDto ticketBuyDto) throws Exception;
 
     int insertSellTicketHistory(TicketBuyDto ticketBuyDto) throws Exception;
+
+    void updateVisitDate(UserDto userDto) throws Exception;
 
 }

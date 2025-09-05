@@ -360,4 +360,9 @@ public class ApiServiceImpl implements ApiService{
         return apiMapper.addKpChip(apiDto);
     }
 
+    @Override
+    public List<ApiTicketAsPriceDto> ticketChangePrice() throws Exception{
+        return apiMapper.getTicketChangePrice();
+    }
+
 }

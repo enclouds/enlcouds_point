@@ -141,6 +141,8 @@ public class CustomUserServiceImpl implements CustomUserService{
             }
 
             result = userMapper.insertUser(userDto);
+            //방문일자 업데이트
+            userMapper.updateVisitDate(userDto);
 
             //신규가입시 온라인 티켓 지급
             /*if(result > 0){
@@ -200,6 +202,8 @@ public class CustomUserServiceImpl implements CustomUserService{
 
             //총 포인트 증가
             result = userMapper.updateUserAddPoint(userDto);
+            //방문일자 업데이트
+            userMapper.updateVisitDate(userDto);
 
             //포인트 내역 생성
             if(result > 0){
@@ -211,7 +215,7 @@ public class CustomUserServiceImpl implements CustomUserService{
                     PointDto pointDto = userMapper.getTotalPoint(userDto);
 
                     KakaoDto kakaoDto = new KakaoDto();
-                    kakaoDto.setTemplateId("KA01TP250309223401715US4RDxP1qyv");
+                    kakaoDto.setTemplateId("KA01TP250616065621950ChywLjQor3r");
                     kakaoDto.setNickName(pointDto.getNickName());
                     kakaoDto.setRcvNum(userDto.getPhoneNum());
                     kakaoDto.setCouponPoint(String.valueOf(pointDto.getCouponPoint()));
@@ -249,6 +253,8 @@ public class CustomUserServiceImpl implements CustomUserService{
     public int updateUserAddCouponPoint(UserDto userDto) throws Exception {
         try {
             int result = userMapper.updateUserAddCouponPoint(userDto);
+            //방문일자 업데이트
+            userMapper.updateVisitDate(userDto);
 
             /**
              * 쿠폰 적립 후 히스토리 생성
@@ -283,6 +289,8 @@ public class CustomUserServiceImpl implements CustomUserService{
 
             //총 티켓 증가
             result = userMapper.updateUserAddTicket(userDto);
+            //방문일자 업데이트
+            userMapper.updateVisitDate(userDto);
 
             //티켓 내역 생성
             if(result > 0){
@@ -338,6 +346,8 @@ public class CustomUserServiceImpl implements CustomUserService{
 
             //총 티켓 증가
             result = userMapper.updateUserAddTicket2(userDto);
+            //방문일자 업데이트
+            userMapper.updateVisitDate(userDto);
 
             //티켓 내역 생성
             if(result > 0){
@@ -393,6 +403,8 @@ public class CustomUserServiceImpl implements CustomUserService{
 
             //총 티켓 증가
             result = userMapper.updateUserAddTicket3(userDto);
+            //방문일자 업데이트
+            userMapper.updateVisitDate(userDto);
 
             //티켓 내역 생성
             if(result > 0){
@@ -448,6 +460,8 @@ public class CustomUserServiceImpl implements CustomUserService{
 
             //총 티켓 증가
             result = userMapper.updateUserAddTicket4(userDto);
+            //방문일자 업데이트
+            userMapper.updateVisitDate(userDto);
 
             //티켓 내역 생성
             if(result > 0){
@@ -503,6 +517,8 @@ public class CustomUserServiceImpl implements CustomUserService{
 
             //총 티켓 증가
             result = userMapper.updateUserAddTicket5(userDto);
+            //방문일자 업데이트
+            userMapper.updateVisitDate(userDto);
 
             //티켓 내역 생성
             if(result > 0){
@@ -510,20 +526,28 @@ public class CustomUserServiceImpl implements CustomUserService{
                 userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
                 result = userMapper.insertAddTicket5(userDto);
 
-                /*if(result > 0){
+                if(result > 0){
                     //카카오톡 전송
                     PointDto pointDto = userMapper.getTotalPoint(userDto);
 
                     KakaoDto kakaoDto = new KakaoDto();
-                    kakaoDto.setTemplateId("KA01TP221011062400156k4kpTZGoW5f");
+                    kakaoDto.setTemplateId("KA01TP250616065621950ChywLjQor3r");
+                    kakaoDto.setNickName(pointDto.getNickName());
                     kakaoDto.setRcvNum(userDto.getPhoneNum());
-                    kakaoDto.setAddPoint(userDto.getAddPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
+                    kakaoDto.setCouponPoint(String.valueOf(pointDto.getCouponPoint()));
+                    kakaoDto.setTicket1(pointDto.getTicket1());
+                    kakaoDto.setTicket2(pointDto.getTicket2());
+                    kakaoDto.setTicket3(pointDto.getTicket3());
+                    kakaoDto.setTicket4(pointDto.getTicket4());
+                    kakaoDto.setTicket5(pointDto.getTicket5());
+                    kakaoDto.setAddPoint("KLPT " + userDto.getAddTicket() + "장");
                     kakaoDto.setTotalPoint(pointDto.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
                     kakaoDto.setStoreNm(pointDto.getAgentName());
+                    kakaoDto.setAgentTel(pointDto.getAgentTel());
 
                     KakaoExampleController kakaoExampleController = new KakaoExampleController();
                     kakaoExampleController.sendOneAta(kakaoDto);
-                }*/
+                }
 
                 //해당 가맹점 티켓 차감
                 if(result > 0){
@@ -574,6 +598,8 @@ public class CustomUserServiceImpl implements CustomUserService{
         userDto.setDefTicket(agentInfo.getTicketInt());
         userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
         userMapper.insertMinusTicket(userDto);
+        //방문일자 업데이트
+        userMapper.updateVisitDate(userDto);
 
         return userMapper.useTicket(userDto);
     }
@@ -589,6 +615,8 @@ public class CustomUserServiceImpl implements CustomUserService{
         userDto.setDefTicket(agentInfo.getTicketInt());
         userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
         userMapper.insertMinusTicket2(userDto);
+        //방문일자 업데이트
+        userMapper.updateVisitDate(userDto);
 
         return userMapper.useTicket2(userDto);
     }
@@ -604,6 +632,8 @@ public class CustomUserServiceImpl implements CustomUserService{
         userDto.setDefTicket(agentInfo.getTicketInt());
         userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
         userMapper.insertMinusTicket3(userDto);
+        //방문일자 업데이트
+        userMapper.updateVisitDate(userDto);
 
         return userMapper.useTicket3(userDto);
     }
@@ -646,6 +676,8 @@ public class CustomUserServiceImpl implements CustomUserService{
 
             //총 포인트 차감
             result = userMapper.updateUserMinusPoint(userDto);
+            //방문일자 업데이트
+            userMapper.updateVisitDate(userDto);
 
             //포인트 내역 생성
             if(result > 0){
@@ -657,7 +689,7 @@ public class CustomUserServiceImpl implements CustomUserService{
                     PointDto pointDto2 = userMapper.getTotalPoint(userDto);
 
                     KakaoDto kakaoDto = new KakaoDto();
-                    kakaoDto.setTemplateId("KA01TP250309223458599ffvAchTj6Dp");
+                    kakaoDto.setTemplateId("KA01TP2506160655126477tal2slzrSM");
                     kakaoDto.setNickName(pointDto2.getNickName());
                     kakaoDto.setRcvNum(userDto.getPhoneNum());
                     kakaoDto.setCouponPoint(String.valueOf(pointDto2.getCouponPoint()));
@@ -708,8 +740,18 @@ public class CustomUserServiceImpl implements CustomUserService{
         userDto.setDefTicket(agentInfo.getTicketInt());
         userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
         userMapper.insertMinusTicketAsCnt(userDto);
+        //방문일자 업데이트
+        userMapper.updateVisitDate(userDto);
 
-        return userMapper.useTicketAsCnt(userDto);
+        result = userMapper.useTicketAsCnt(userDto);
+
+        if(result > 0){
+            //주간티켓 차감은 가맹점으로 환불 처리
+            agentDto.setAddTicket(userDto.getMinusTicket());
+            result = agentService.updateAgentAddTicket(agentDto);
+        }
+
+        return result;
     }
 
     @Override
@@ -729,6 +771,8 @@ public class CustomUserServiceImpl implements CustomUserService{
         userDto.setDefTicket(agentInfo.getTicketInt2());
         userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
         userMapper.insertMinusTicketAsCnt2(userDto);
+        //방문일자 업데이트
+        userMapper.updateVisitDate(userDto);
 
         return userMapper.useTicketAsCnt2(userDto);
     }
@@ -750,8 +794,18 @@ public class CustomUserServiceImpl implements CustomUserService{
         userDto.setDefTicket(agentInfo.getTicketInt3());
         userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
         userMapper.insertMinusTicketAsCnt3(userDto);
+        //방문일자 업데이트
+        userMapper.updateVisitDate(userDto);
 
-        return userMapper.useTicketAsCnt3(userDto);
+        result = userMapper.useTicketAsCnt3(userDto);
+
+        //if(result > 0){
+            //월간 티켓 차감은 가맹점으로 환불 처리 하지 않고 소멸
+            //agentDto.setAddTicket(userDto.getMinusTicket());
+            //result = agentService.updateAgentAddTicket3(agentDto);
+        //}
+
+        return result;
     }
 
     @Override
@@ -771,8 +825,16 @@ public class CustomUserServiceImpl implements CustomUserService{
         userDto.setDefTicket(agentInfo.getTicketInt4());
         userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
         userMapper.insertMinusTicketAsCnt4(userDto);
+        //방문일자 업데이트
+        userMapper.updateVisitDate(userDto);
 
-        return userMapper.useTicketAsCnt4(userDto);
+        result = userMapper.useTicketAsCnt4(userDto);
+        if(result > 0){
+            //KLPT 초대권 차감은 가맹점으로 환불 처리
+            agentDto.setAddTicket(userDto.getMinusTicket());
+            result = agentService.updateAgentAddTicket4(agentDto);
+        }
+        return result;
     }
 
     @Override
@@ -792,8 +854,33 @@ public class CustomUserServiceImpl implements CustomUserService{
         userDto.setDefTicket(agentInfo.getTicketInt5());
         userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
         userMapper.insertMinusTicketAsCnt5(userDto);
+        //방문일자 업데이트
+        userMapper.updateVisitDate(userDto);
 
         result = userMapper.useTicketAsCnt5(userDto);
+
+        if(result > 0){
+
+            PointDto pointDto2 = userMapper.getTotalPoint(userDto);
+
+            KakaoDto kakaoDto = new KakaoDto();
+            kakaoDto.setTemplateId("KA01TP2506160655126477tal2slzrSM");
+            kakaoDto.setNickName(pointDto2.getNickName());
+            kakaoDto.setRcvNum(userDto.getPhoneNum());
+            kakaoDto.setCouponPoint(String.valueOf(pointDto2.getCouponPoint()));
+            kakaoDto.setTicket1(pointDto2.getTicket1());
+            kakaoDto.setTicket2(pointDto2.getTicket2());
+            kakaoDto.setTicket3(pointDto2.getTicket3());
+            kakaoDto.setTicket4(pointDto2.getTicket4());
+            kakaoDto.setTicket5(pointDto2.getTicket5());
+            kakaoDto.setMinusPoint("KLPT " + userDto.getMinusTicket() + "장");
+            kakaoDto.setTotalPoint(pointDto2.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
+            kakaoDto.setStoreNm(pointDto2.getAgentName());
+            kakaoDto.setAgentTel(pointDto2.getAgentTel());
+
+            KakaoExampleController kakaoExampleController = new KakaoExampleController();
+            kakaoExampleController.sendOneAta(kakaoDto);
+        }
 
         if(result > 0){
             //KLPT 티켓 차감은 가맹점으로 환불 처리
@@ -823,6 +910,8 @@ public class CustomUserServiceImpl implements CustomUserService{
 
             //총 포인트 차감
             result = userMapper.updateUserMinusCouponPoint(userDto);
+            //방문일자 업데이트
+            userMapper.updateVisitDate(userDto);
 
             if(result > 0){
                 userDto.setCouponGbn("MINUS");
@@ -1003,6 +1092,11 @@ public class CustomUserServiceImpl implements CustomUserService{
     @Override
     public String selectPointSum() throws Exception{
         return userMapper.selectPointSum();
+    }
+
+    @Override
+    public String selectTicket5Sum() throws Exception{
+        return userMapper.selectTicket5Sum();
     }
 
     @Override

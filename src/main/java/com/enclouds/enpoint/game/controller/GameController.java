@@ -52,6 +52,10 @@ public class GameController {
                     gameDto.setSchCond1("name");
                 }
 
+                if(userId.equals("k_game")){
+                    userId = "hunters";
+                }
+
                 gameDto.setSchCond2(userId);
 
                 List<GameDto> gameList = gameService.selectGameList(gameDto);
@@ -174,6 +178,10 @@ public class GameController {
                 userInfo = userService.getUserInfo(userId);
 
                 GameDto gameDto = new GameDto();
+                if(userId.equals("k_game")){
+                    userId = "hunters";
+                }
+
                 gameDto.setSchCond2(userId);
 
                 List<GameDto> gameList = gameService.selectGameListTotal(gameDto);
@@ -218,6 +226,10 @@ public class GameController {
                 userInfo = userService.getUserInfo(userId);
 
                 GameDto gameDto = new GameDto();
+                if(userId.equals("k_game")){
+                    userId = "hunters";
+                }
+
                 gameDto.setSchCond2(userId);
 
                 List<GameDto> gameList = gameService.selectGameListTotal(gameDto);

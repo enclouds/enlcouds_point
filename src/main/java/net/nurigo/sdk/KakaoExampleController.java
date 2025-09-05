@@ -45,7 +45,7 @@ public class KakaoExampleController {
      * 알림톡 한건 발송 예제
      */
     @PostMapping("/send-one-ata")
-    public SingleMessageSentResponse sendOneAta(KakaoDto kakaoDto) {
+    public SingleMessageSentResponse sendOneAta(KakaoDto kakaoDto) throws Exception{
         KakaoOption kakaoOption = new KakaoOption();
         kakaoOption.setDisableSms(true);
 
@@ -228,6 +228,89 @@ public class KakaoExampleController {
             variables.put("#{지점}", kakaoDto.getStoreNm());
             variables.put("#{담당자 전화번호}", kakaoDto.getAgentTel());
             kakaoOption.setVariables(variables);
+            //250619 변경 포인트 사용 V7.0
+        }else if(kakaoDto.getTemplateId().equals("KA01TP2506160655126477tal2slzrSM")){
+            HashMap<String, String> variables = new HashMap<>();
+            variables.put("#{닉네임}", kakaoDto.getNickName());
+            variables.put("#{상점명}", kakaoDto.getStoreNm());
+            variables.put("#{사용포인트}", kakaoDto.getMinusPoint());
+            variables.put("#{잔여포인트}", kakaoDto.getTotalPoint());
+            variables.put("#{COUPON_NM}", "주간티켓");
+            variables.put("#{COUPON}", kakaoDto.getTicket1());
+            variables.put("#{COUPON2_NM}", "프리티켓");
+            variables.put("#{COUPON2}", kakaoDto.getTicket2());
+            variables.put("#{COUPON3_NM}", "월간티켓");
+            variables.put("#{COUPON3}", kakaoDto.getTicket3());
+            variables.put("#{COUPON4_NM}", "K초대권");
+            variables.put("#{COUPON4}", kakaoDto.getTicket4());
+            variables.put("#{COUPON5_NM}", "KLPT티켓");
+            variables.put("#{COUPON5}", kakaoDto.getTicket5());
+            variables.put("#{외식쿠폰}", kakaoDto.getCouponPoint());
+            variables.put("#{지점}", kakaoDto.getStoreNm());
+            variables.put("#{담당자 전화번호}", kakaoDto.getAgentTel());
+            kakaoOption.setVariables(variables);
+            //250619 포인트 적립 V7.0
+        }else if(kakaoDto.getTemplateId().equals("KA01TP250616065621950ChywLjQor3r")){
+            HashMap<String, String> variables = new HashMap<>();
+            variables.put("#{닉네임}", kakaoDto.getNickName());
+            variables.put("#{상점명}", kakaoDto.getStoreNm());
+            variables.put("#{적립포인트}", kakaoDto.getAddPoint());
+            variables.put("#{잔여포인트}", kakaoDto.getTotalPoint());
+            variables.put("#{COUPON_NM}", "주간티켓");
+            variables.put("#{COUPON}", kakaoDto.getTicket1());
+            variables.put("#{COUPON2_NM}", "프리티켓");
+            variables.put("#{COUPON2}", kakaoDto.getTicket2());
+            variables.put("#{COUPON3_NM}", "월간티켓");
+            variables.put("#{COUPON3}", kakaoDto.getTicket3());
+            variables.put("#{COUPON4_NM}", "K초대권");
+            variables.put("#{COUPON4}", kakaoDto.getTicket4());
+            variables.put("#{COUPON5_NM}", "KLPT티켓");
+            variables.put("#{COUPON5}", kakaoDto.getTicket5());
+            variables.put("#{외식쿠폰}", kakaoDto.getCouponPoint());
+            variables.put("#{지점}", kakaoDto.getStoreNm());
+            variables.put("#{담당자 전화번호}", kakaoDto.getAgentTel());
+            kakaoOption.setVariables(variables);
+            //250802 포인트 적립 V8.0
+        }else if(kakaoDto.getTemplateId().equals("KA01TP250718035738792tH46idsueEi")){
+            HashMap<String, String> variables = new HashMap<>();
+            variables.put("#{닉네임}", kakaoDto.getNickName());
+            variables.put("#{상점명}", kakaoDto.getStoreNm());
+            variables.put("#{적립포인트}", kakaoDto.getAddPoint());
+            variables.put("#{잔여포인트}", kakaoDto.getTotalPoint());
+            variables.put("#{COUPON_NM}", "주간티켓");
+            variables.put("#{COUPON}", kakaoDto.getTicket1());
+            variables.put("#{COUPON2_NM}", "프리티켓");
+            variables.put("#{COUPON2}", kakaoDto.getTicket2());
+            variables.put("#{COUPON3_NM}", "월간티켓");
+            variables.put("#{COUPON3}", kakaoDto.getTicket3());
+            variables.put("#{COUPON4_NM}", "K초대권");
+            variables.put("#{COUPON4}", kakaoDto.getTicket4());
+            variables.put("#{COUPON5_NM}", "KLPT티켓");
+            variables.put("#{COUPON5}", kakaoDto.getTicket5());
+            variables.put("#{지점}", kakaoDto.getStoreNm());
+            variables.put("#{담당자 전화번호}", kakaoDto.getAgentTel());
+            kakaoOption.setVariables(variables);
+            //250802 포인트 사용 V8.0
+        }else if(kakaoDto.getTemplateId().equals("KA01TP250718035801166Xcs2U3M9zHd")){
+            HashMap<String, String> variables = new HashMap<>();
+            variables.put("#{닉네임}", kakaoDto.getNickName());
+            variables.put("#{상점명}", kakaoDto.getStoreNm());
+            variables.put("#{사용포인트}", kakaoDto.getMinusPoint());
+            variables.put("#{잔여포인트}", kakaoDto.getTotalPoint());
+            variables.put("#{COUPON_NM}", "주간티켓");
+            variables.put("#{COUPON}", kakaoDto.getTicket1());
+            variables.put("#{COUPON2_NM}", "프리티켓");
+            variables.put("#{COUPON2}", kakaoDto.getTicket2());
+            variables.put("#{COUPON3_NM}", "월간티켓");
+            variables.put("#{COUPON3}", kakaoDto.getTicket3());
+            variables.put("#{COUPON4_NM}", "K초대권");
+            variables.put("#{COUPON4}", kakaoDto.getTicket4());
+            variables.put("#{COUPON5_NM}", "KLPT티켓");
+            variables.put("#{COUPON5}", kakaoDto.getTicket5());
+            variables.put("#{지점}", kakaoDto.getStoreNm());
+            variables.put("#{담당자 전화번호}", kakaoDto.getAgentTel());
+            kakaoOption.setVariables(variables);
+            //250619 포인트 적립 V7.0
         }
 
         Message message = new Message();
@@ -235,9 +318,15 @@ public class KakaoExampleController {
         message.setTo(kakaoDto.getRcvNum());
         message.setKakaoOptions(kakaoOption);
 
-        SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
-        System.out.println(response);
-
+        //SingleMessageSentResponse response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
+        SingleMessageSentResponse response = null;
+        try {
+            response = this.messageService.sendOne(new SingleMessageSendingRequest(message));
+        } catch (Exception e) {
+            // 에러 로그 출력
+            System.err.println("메시지 전송 중 오류 발생: " + e.getMessage());
+            // 필요 시 e.printStackTrace(); 사용
+        }
         return response;
     }
 

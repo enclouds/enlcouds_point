@@ -117,6 +117,8 @@ public interface CustomUserService {
 
     String selectPointSum() throws Exception;
 
+    String selectTicket5Sum() throws Exception;
+
     int ticketBuy(TicketBuyDto ticketBuyDto) throws Exception;
 
     List<TicketBuyDto> selectTicketHistoryList(TicketBuyDto ticketBuyDto) throws Exception;

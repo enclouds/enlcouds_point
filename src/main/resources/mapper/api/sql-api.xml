@@ -231,4 +231,12 @@
 		AND phone_num = #{phoneNum}
 	</update>
 
+	<select id="getTicketChangePrice" resultType="com.enclouds.enpoint.api.dto.ApiTicketAsPriceDto">
+		select code AS ticket_gbn
+		, buy_amt AS point
+		from g_ticket
+		where 1=1
+		and kings_poker_yn = 'Y'
+	</select>
+
 </mapper>

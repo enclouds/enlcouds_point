@@ -9,7 +9,7 @@ public class PasswordTest {
 
     public static void main(String[] args) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        System.out.println(passwordEncoder.encode("cherina05$$"));
+        System.out.println(passwordEncoder.encode("rlacoflsk05$$"));
     }
 
 }

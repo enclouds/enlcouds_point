@@ -268,19 +268,19 @@
                 return;
             }else {
                 if($("#ticketSellGbn").val() == 'ticket'){
-                    if($("#ticket").val() < $("#sellCnt").val()){
+                    if(eval($("#ticket").val()) < eval($("#sellCnt").val())){
                         alert("환불 수량이 보유 수량보다 많습니다.");
                         $("#sellCnt").focus();
                         return false;
                     }
                 } else if($("#ticketSellGbn").val() == 'ticket3'){
-                    if($("#ticket3").val() < $("#sellCnt").val()){
+                    if(eval($("#ticket3").val()) < eval($("#sellCnt").val())){
                         alert("환불 수량이 보유 수량보다 많습니다.");
                         $("#sellCnt").focus();
                         return false;
                     }
                 } else if($("#ticketSellGbn").val() == 'ticket5'){
-                    if($("#ticket5").val() < $("#sellCnt").val()){
+                    if(eval($("#ticket5").val()) < eval($("#sellCnt").val())){
                         alert("환불 수량이 보유 수량보다 많습니다.");
                         $("#sellCnt").focus();
                         return false;
