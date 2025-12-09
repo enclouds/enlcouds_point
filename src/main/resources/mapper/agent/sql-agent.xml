@@ -75,7 +75,7 @@
 		from p_agent pa
 		where 1=1
 		and agent_gbn = 'AG'
-		and agent_code not in(16, 23)
+		and agent_code not in(23)
 
 		<if test="schCond1 == 'name'">
 			AND pa.agent_name like '%${schText}%'

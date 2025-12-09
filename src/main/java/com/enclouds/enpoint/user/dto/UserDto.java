@@ -87,4 +87,6 @@ public class UserDto extends CommonDto {
 
     private String couponGbn;
 
+    private String schPhoneNum;
+
 }

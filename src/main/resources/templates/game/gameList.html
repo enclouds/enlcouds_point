@@ -2,32 +2,113 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <div th:replace="/fragments/header.html :: fragment-header"></div>
+
+    <style>
+        #roomListModal {
+            display:none;
+            position:fixed;
+            left:50%;
+            top:50%;
+            transform:translate(-50%, -50%);
+            background:white;
+            padding:20px;
+            border:1px solid #ccc;
+            border-radius:8px;
+            width:300px;
+            height:300px;
+            overflow-y:auto;
+            z-index:9999;
+        }
+        #roomListModal ul li {
+            cursor:pointer;
+            padding:7px;
+            border-bottom:1px solid #eee;
+        }
+        #roomListModal ul li:hover {
+            background:#f5f5f5;
+        }
+    </style>
+
+    <script>
+        // ★ 특정 게임(seq)의 ROOM 리스트 표시
+        function openRoomList(seq) {
+
+            $("#roomList").empty();
+            $("#roomListModal").show();
+
+            $.get("/api/rooms?seq=" + seq, function (data) {
+
+                if (data.length === 0) {
+                    $("#roomList").append("<li>생성된 방 없음</li>");
+                    return;
+                }
+
+                data.forEach(roomId => {
+                    $("#roomList").append(`
+                        <li onclick="enterRoom(${seq}, '${roomId}')">
+                            ${roomId}
+                        </li>
+                    `);
+                });
+            });
+        }
+
+        // ★ 선택한 ROOM 으로 이동
+        function enterRoom(seq, roomId) {
+            // 바로 게임 페이지로 이동하면서 roomId 전달
+            location.href = "/game/play?seq=" + seq + "&room=" + roomId;
+        }
+
+        // 게임 시작
+        function playGame(seq){
+            location.href = "/game/play?seq=" + seq;
+        }
+    </script>
 </head>
-
-<script>
-
-    function playGame(seq){
-        location.href = "/game/play?seq="+seq;
-    }
-
-</script>
 
 <body>
 <div class="list_box">
     <table class="list">
         <thead>
+        <tr>
             <th>게임명</th>
             <th>시작</th>
+            <th>동기화 방</th>
+        </tr>
         </thead>
+
         <tbody>
-            <tr th:each="list:${gameList}">
-                <td th:text="${list.gameName}"></td>
-                <td>
-                    <button type="button" class="tb_btn blue" th:onclick="javascript:playGame([[${list.seq}]]);">시작</button>
-                </td>
-            </tr>
+        <tr th:each="list:${gameList}">
+            <td th:text="${list.gameName}"></td>
+
+            <!-- 시작 버튼 -->
+            <td>
+                <button type="button"
+                        class="tb_btn blue"
+                        th:onclick="|javascript:playGame(${list.seq});|">
+                    시작
+                </button>
+            </td>
+
+            <!-- 룸보기 버튼: seq 전달 -->
+            <td>
+                <button type="button"
+                        class="tb_btn blue"
+                        th:onclick="|javascript:openRoomList(${list.seq});|">
+                    룸보기
+                </button>
+            </td>
+        </tr>
         </tbody>
     </table>
 </div>
+
+<!-- 룸 목록 모달 -->
+<div id="roomListModal">
+    <h3>현재 ROOM</h3>
+    <ul id="roomList"></ul>
+    <button style="margin-top:10px;" onclick="$('#roomListModal').hide();">닫기</button>
+</div>
+
 </body>
 </html>

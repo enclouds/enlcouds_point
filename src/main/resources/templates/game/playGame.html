@@ -55,6 +55,28 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
 
+let stompClient;
+
+function connectWS(seq, roomId) {
+    const socket = new SockJS('/ws');
+    stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function () {
+
+        // 서버에게 방 JOIN 알림
+        stompClient.send(`/app/join/${seq}/${roomId}`, {}, {});
+
+        // 서버에서 오는 메시지 구독
+        stompClient.subscribe(`/topic/game/${seq}/${roomId}`, function(message) {
+            const event = JSON.parse(message.body);
+            applyBlindEvent(event);
+        });
+
+    });
+}
+
+
+
     var time = 0;
     var starFlag = true;
     var blindList = /*[[${blindList}]]*/;

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+
+<body>
+<div class="modal fade small" id="loading_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div id='my-spinner'>
+        <div>
+        <span>
+            <img src='//cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif'>
+        </span>
+        </div>
+    </div>
+</div>
+
+<!-- modal S -->
+<div class="modal fade large" id="reg_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">차감 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">회원정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row"><em class="required">*</em>전화번호</th>
+                            <td>
+                                <span name="phoneNum" id="phoneNum"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">닉네임</th>
+                            <td>
+                                <span name="nickName" id="nickName"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">온라인 예약</th>
+                            <td>
+                                <input type="checkbox" name="onlineCheck" id="onlineCheck" onclick="fnCheckOnline(this);" value="Y">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">차감 KLPT</th>
+                            <td>
+                                <input type="text" name="orgTicket5" id="orgTicket5" readonly style="background-color: bisque;">
+                                <input type="text" name="ticket5" id="ticket5" th:value="0">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">차감 초대권</th>
+                            <td>
+                                <input type="text" name="orgTicket4" id="orgTicket4" readonly style="background-color: bisque;">
+                                <input type="text" name="ticket4" id="ticket4" th:value="0">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">차감 프리티켓</th>
+                            <td>
+                                <input type="text" name="orgTicket2" id="orgTicket2" readonly style="background-color: bisque;">
+                                <input type="text" name="ticket3" id="ticket2" th:value="0">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:registration();">등록</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('reg_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- container S -->
+<div class="container">
+    <!-- content S -->
+    <div>
+        <div class="con_top">
+            <ul>
+                <li>회원관리</li>
+                <li>목록</li>
+            </ul>
+        </div>
+        <p class="page_info">회원 목록</p>
+
+        <form id="schFrm">
+            <input type="hidden" id="pointInt" name="pointInt" th:value="${userInfo.pointInt}">
+            <input type="hidden" id="schPhoneNum" name="schPhoneNum" >
+
+            <div class="search_option">
+                <span class="input_group">
+                    <select id="schCond1" name="schCond1" style="width:100px;">
+                        <option value="nick" th:selected="${params.schCond1} == 'nick'">별명</option>
+                        <option value="phone" th:selected="${params.schCond1} == 'phone'">전화번호</option>
+                    </select>
+
+                    <select id="schCond2" name="schCond2" style="width:150px;">
+                        <option value="">전체</option>
+                        <option th:each="list:${agentTotalList}" th:value="${list.agentCode}" th:text="${list.agentName}" th:selected="${list.agentCode} == ${params.schCond2}"></option>
+                    </select>
+
+                    <input type="text" style="width:1000px;" id="schText" name="schText" placeholder="검색어" th:value="${params.schText}" onkeyup="if(window.event.keyCode==13){fnSearch()}">
+                </span>
+                <button type="button" class="search_btn" th:onclick="javascript:fnSearch();">조회</button>
+            </div>
+        </form>
+
+        <div class="list_box">
+            <table class="list">
+                <colgroup>
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col" rowspan="2">별명</th>
+                        <th scope="col" rowspan="2">지점</th>
+                        <th scope="col" rowspan="2">전화번호</th>
+                        <th scope="col" rowspan="2">KLPT</th>
+                        <th scope="col" rowspan="2">프리T</th>
+                        <th scope="col" rowspan="2">K초대권</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr th:each="list:${userList}">
+                    <td><a href="javascript:callFunction();" th:text="${list.nickName}" style="color:blue;" th:onclick="javascript:fnRegistration([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket5}]], [[${list.ticket2}]], [[${list.ticket4}]])"></a></td>
+                    <td th:text="${list.agentName}"></td>
+                    <td th:text="${list.phoneNumMasking}"></td>
+                    <td th:text="${list.ticket5}"></td>
+                    <td th:text="${list.ticket2}"></td>
+                    <td th:text="${list.ticket4}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- pagination -->
+        <div class="paging" title="페이지">
+
+            <th:block layout:fragment="paging">
+                <nav th:replace="/fragments/pagination.html :: fragment-pagination"></nav>
+            </th:block>
+
+            <th:block layout:fragment="script">
+                <script th:inline="javascript">
+						/*<![CDATA[*/
+
+						function movePage(uri, queryString) {
+							location.href = uri + queryString;
+						}
+
+						/*]]>*/
+					</script>
+            </th:block>
+
+        </div>
+        <!-- /pagination -->
+
+    </div>
+    <!-- content E -->
+
+</div>
+<!-- container E -->
+</body>
+<script th:src="@{/static/js/common.js}"></script>
+<script th:inline="javascript">
+
+    var selectTrSeq;
+    var selectTicket5;
+    var selectTicket4;
+    var selectTicket2;
+
+    function callFunction() {
+        console.log('call function');
+    }
+
+    $( function() {
+    });
+
+    function fnSearch(){
+        $("#schFrm").submit();
+    }
+
+    function fnModalClose(id){
+        $("#"+id).hide();
+    }
+
+    function fnRegistration(phoneNum, nickName, ticket5, ticket2, ticket4){
+        selectTrSeq = phoneNum;
+        selectTicket5 = ticket5;
+        selectTicket4 = ticket4;
+        selectTicket2 = ticket2;
+
+        $("#phoneNum").text(phoneNum);
+        $("#nickName").text(nickName);
+        $("#orgTicket5").val(ticket5);
+        $("#orgTicket2").val(ticket2);
+        $("#orgTicket4").val(ticket4);
+        $("#reg_modal").show();
+    }
+
+    function registration(){
+
+        $("#loading_modal").show();
+
+        var ticket5 = $("#ticket5").val();
+        var ticket2 = $("#ticket2").val();
+        var ticket4 = $("#ticket4").val();
+        var isOnlineChecked = $("#onlineCheck").prop('checked');
+console.log(isOnlineChecked);
+        if(!isOnlineChecked){
+            if(eval(ticket5) == 0 && eval(ticket2) == 0 && eval(ticket4) == 0){
+                alert("차감할 티켓을 수량을 입력 해주세요.");
+                return false;
+            }
+
+            if(eval(selectTicket5) < eval(ticket5)){
+                alert("가지고 있는 KLPT 수량보다 많습니다.");
+                return false;
+            }
+
+            if(eval(selectTicket4) < eval(ticket4)){
+                alert("가지고 있는 초대권 수량보다 많습니다.");
+                return false;
+            }
+
+            if(eval(selectTicket2) < eval(ticket2)){
+                alert("가지고 있는 프리티켓 수량보다 많습니다.");
+                return false;
+            }
+        }
+
+        window.opener.registration(selectTrSeq, ticket5, ticket2, ticket4, isOnlineChecked);
+        window.close();
+    }
+
+    function fnCheckOnline(checkbox){
+        const isChecked = checkbox.checked;
+        const targetInputs = $("#ticket5, #ticket4, #ticket2");
+
+        if(isChecked){
+            targetInputs.prop('readonly', true);
+            targetInputs.css('background-color', 'bisque');
+        }else {
+            targetInputs.prop('readonly', false);
+            targetInputs.css('background-color', '#ffffff');
+        }
+    }
+
+</script>
+
+</html>

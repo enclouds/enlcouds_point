@@ -542,15 +542,17 @@
 		, case when point_gbn = 'ADD' then '적립' when 'HUMAN' then '휴먼' else '차감' end as pointGbnNm
 		, case when point_gbn = 'ADD' then format(pp.point, 0) else format(pp.point * -1, 0) end as point
 		, date_format(pp.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
-		, phone_num
+		, pp.phone_num
 		, pp.agent_code
 		, pa.agent_name
 		, format(pp.private_def_point, 0) as privateDefPointStr
+        , pu.nick_name
 		FROM p_point pp
 		left join p_agent pa on pp.agent_code = pa.agent_code
-		WHERE 1=1
-		AND phone_num = #{phoneNum}
-		AND pp.reg_date BETWEEN DATE_ADD(NOW(), INTERVAL -3 MONTH) AND NOW()
+        left join p_user pu on pu.phone_num = pp.phone_num
+        WHERE 1=1
+		AND pp.phone_num = #{phoneNum}
+		AND pp.reg_date BETWEEN DATE_ADD(NOW(), INTERVAL -6 MONTH) AND NOW()
 		order by pp.reg_date desc
 	</select>
 

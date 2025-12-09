@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.enclouds.enpoint.tournament.mapper.TournamentMapper">
+
+	<select id="selectTournamentListTotalCount" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto" resultType="int">
+		select count(*)
+		from t_info ti
+		where 1=1
+
+		<if test="schCond1 == 'name'">
+			AND ti.tournament_name like '%${schText}%'
+		</if>
+
+	</select>
+
+	<select id="selectTournamentList" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto" resultType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+		select seq
+		, tournament_name
+		, date_format(reg_date, '%Y-%m-%d') as regDate
+        , start_date
+		from t_info ti
+		where 1=1
+
+        <if test="schCond1 == 'name'">
+            AND ti.tournament_name like '%${schText}%'
+        </if>
+
+        ORDER BY reg_date DESC
+
+		LIMIT
+		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
+	</select>
+
+    <select id="selectTournamentRegList" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto" resultType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+        SELECT (@rnum := @rnum + 1) AS rnum
+        , tru.seq
+        , tru.reg_phone_num
+        , pu.nick_name
+        , tru.reg_date
+        , tru.info_desc
+        , ti.tournament_name
+        , ti.start_date
+        , tru.entry_count
+        FROM t_reg_user tru
+        LEFT JOIN p_user pu ON pu.phone_num = tru.reg_phone_num
+        LEFT JOIN t_info ti ON ti.seq = tru.tournament_seq
+        , (SELECT @rnum := 0) AS r
+        WHERE 1=1
+        AND tournament_seq = #{tournamentSeq}
+        ORDER BY tru.seq ASC
+    </select>
+
+    <select id="selectPrintInfo" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto" resultType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+        select 'KINGS LOUNGE' AS title
+        , ti.tournament_name
+        , tru.info_desc
+        , pu.nick_name
+        , DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%s') AS reg_date
+        , tru.entry_count
+        , ( SELECT COUNT(*)
+            FROM t_reg_user tru2
+            WHERE 1=1
+            AND tru2.tournament_seq = tru.tournament_seq ) AS total_entry_count
+        from t_reg_user tru
+        left join t_info ti on ti.seq = tru.tournament_seq
+        left join p_user pu on pu.phone_num = tru.reg_phone_num
+        where tru.seq = #{seq}
+    </select>
+
+	<insert id="insertTournament" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+		INSERT INTO t_info
+		( tournament_name
+		, reg_date
+		, start_date
+		, reg_id )
+		VALUES
+		( #{tournamentName}
+		, NOW()
+        , #{startDate}
+		, #{regId})
+	</insert>
+
+    <select id="selectLastInsertId" resultType="long">
+        SELECT LAST_INSERT_ID()
+    </select>
+
+	<update id="updateTournament" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+		UPDATE t_info
+		SET tournament_name = #{tournamentName}
+		, start_date = #{startDate}
+		WHERE 1=1
+		AND seq = #{seq}
+	</update>
+
+    <delete id="deleteTournamentRegInfo" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+        DELETE FROM t_reg_user
+        WHERE 1=1
+        AND tournament_seq = #{seq}
+    </delete>
+
+	<delete id="deleteTournament" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+		DELETE FROM t_info
+		WHERE 1=1
+		AND seq = #{seq}
+	</delete>
+
+    <select id="registrationCount" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto" resultType="int">
+        SELECT COUNT(*) + 1 AS entry_count
+        FROM t_reg_user
+        WHERE 1=1
+        AND tournament_seq = #{tournamentSeq}
+        AND reg_phone_num = #{phoneNum}
+    </select>
+
+    <insert id="registration" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+        INSERT INTO t_reg_user
+        ( tournament_seq
+        , reg_phone_num
+        , reg_date
+        , reg_user_id
+        , info_desc
+        , entry_count)
+        VALUES
+        ( #{tournamentSeq}
+        , #{phoneNum}
+        , NOW()
+        , #{regId}
+        , #{infoDesc}
+        , #{entryCount})
+    </insert>
+
+</mapper>
+
+

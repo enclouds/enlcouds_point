@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+
+<body>
+
+<!-- container S -->
+<div class="container">
+    <input type="hidden" id="tournamentSeq" name="tournamentSeq" th:value="${params.tournamentSeq}">
+    <!-- content S -->
+    <div>
+        <div class="con_top">
+            <ul>
+                <li>대회 관리</li>
+                <li>레지스트레이션 목록</li>
+            </ul>
+        </div>
+        <p class="page_info">레지스트레이션 목록</p>
+
+        <form id="schFrm">
+            <div class="search_option">
+                <button type="button" class="add_btn" th:onclick="javascript:fnRegModal()">등록</button>
+                <button type="button" class="add_btn" id="printButton" style="display:none;">출력</button>
+            </div>
+        </form>
+
+        <div class="list_box">
+            <table class="list">
+                <colgroup>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">Register No.</th>
+                    <th scope="col">핸드폰 번호</th>
+                    <th scope="col">닉네임</th>
+                    <th scope="col">레지 시간</th>
+                    <th scope="col">Entry</th>
+                    <th scope="col">사용 티켓</th>
+                    <th scope="col">출력</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="list:${tournamentRegList}">
+                    <td th:text="${list.rnum}"></td>
+                    <td th:text="${list.regPhoneNum}"></td>
+                    <td th:text="${list.nickName}"></td>
+                    <td th:text="${list.regDate}"></td>
+                    <td th:text="${list.entryCount}"></td>
+                    <td th:text="${list.infoDesc}"></td>
+                    <td>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnPrint([[${list.seq}]])">출력</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- content E -->
+
+</div>
+<!-- container E -->
+</body>
+<script th:src="@{/static/js/common.js}"></script>
+<script th:inline="javascript">
+
+    var selectTrSeq;
+
+    $( function() {
+        $("#gameSeq").change(function(){
+            location.href = "/game/blind/list?gameSeq="+$(this).val();
+        })
+    });
+
+    function fnSearch(){
+        $("#schFrm").submit();
+    }
+
+    function fnModalClose(id){
+        $("#"+id).hide();
+    }
+
+    function fnRegModal(){
+        var url = "/user/list/popup";
+        window.open(url, "userList", "width=1200,height=600,scrollbars=yes,resizable=yes");
+    }
+
+    function registration(phoneNum, ticket5, ticket2, ticket4, onlineChecked) {
+
+        $("#loading_modal").show();
+
+        var formData = new FormData();
+        formData.append("tournamentSeq", $("#tournamentSeq").val());
+        formData.append("phoneNum", phoneNum);
+        formData.append("ticket5", ticket5);
+        formData.append("ticket2", ticket2);
+        formData.append("ticket4", ticket4);
+        formData.append("onlineChecked", onlineChecked);
+
+        $.ajax({
+            contentType: false,
+            processData: false,
+            type: "POST",
+            url: "/tournament/registrationAjax",
+            data: formData,
+            success: function(response) {
+                alert(response.resultMsg);
+                location.reload();
+            },
+            error: function(err) {
+                console.error("등록 실패:", err);
+            }
+        });
+    }
+
+    function fnPrint(seq){
+        $.ajax({
+            type: "POST",
+            url: "/tournament/buyin/print",
+            contentType: "application/json",
+            data: JSON.stringify({
+                seq: seq
+            }),
+            success: function(escpos) {
+                console.log("ESC/POS 문자열:", escpos);
+                promptUsbPrint(escpos);
+            },
+            error: function(err) {
+                console.error("ESC/POS 생성 실패:", err);
+            }
+        });
+    }
+
+    async function promptUsbPrint(base64Esc) {
+        try {
+            // USB 프린터 선택
+            const device = await navigator.usb.requestDevice({
+                filters: [{ vendorId: 0x1504 }] // 프린터 벤더 ID
+            });
+
+            await device.open();
+            if (!device.configuration) await device.selectConfiguration(1);
+            await device.claimInterface(0); // 인터페이스 번호 확인
+
+            // Base64 → Uint8Array 변환
+            const escBytes = Uint8Array.from(atob(base64Esc), c => c.charCodeAt(0));
+
+            // 전송 (엔드포인트 번호 확인 필요)
+            await device.transferOut(2, escBytes);
+            console.log("✅ USB 출력 완료");
+            alert("프린트 완료!");
+
+            await device.close();
+        } catch (err) {
+            console.error("❌ USB 출력 오류:", err);
+            alert("USB 프린트 실패. 프린터 연결과 브라우저 권한 확인 필요.");
+        }
+    }
+
+    function callFunction() {
+        console.log('call function');
+    }
+
+</script>
+
+</html>

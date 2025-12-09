@@ -10,6 +10,10 @@ import com.enclouds.enpoint.jackpot.service.JackpotService;
 import com.enclouds.enpoint.user.dto.*;
 import com.enclouds.enpoint.user.service.CustomUserService;
 import com.enclouds.enpoint.user.service.UserService;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -25,6 +29,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.text.DecimalFormat;
 
 /**
  * 사용자 정보 Controller
@@ -95,7 +100,7 @@ public class UserController {
             userId = userDetails.getUsername();
             userInfo = userService.getUserInfo(userId);
 
-            if(userId.equals("k_game") || userId.equals("raise")){
+            if(userId.equals("raise")){
                return new ModelAndView("redirect:/game/list");
             }
 
@@ -147,6 +152,37 @@ public class UserController {
 
       return mv;
    }
+
+    @RequestMapping(value = "/user/list/popup", method = RequestMethod.GET)
+    public ModelAndView userListPopup(HttpServletResponse response, @ModelAttribute UserDto userDto) throws Exception{
+        ModelAndView mv = new ModelAndView("user/listPopup");
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDto userInfo = null;
+        String userId = "";
+
+        try {
+            if(principal != "anonymousUser") {
+                UserDetails userDetails = (UserDetails) principal;
+                userId = userDetails.getUsername();
+                userInfo = userService.getUserInfo(userId);
+
+                List<UserDto> userList = customUserService.selectCustomUserList(userDto);
+                mv.addObject("userList", userList);
+            }else {
+                return new ModelAndView("redirect:/");
+            }
+        } catch (ClassCastException cce){
+            DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+            userId = auth2User.getName();
+            userInfo = userService.getUserInfo(userId);
+        }
+
+        mv.addObject("userInfo", userInfo);
+        mv.addObject("params", userDto);
+
+        return mv;
+    }
 
    @RequestMapping(value = "/user/visit/list", method = RequestMethod.GET)
    public ModelAndView userVisitList(HttpServletResponse response, @ModelAttribute UserDto userDto) throws Exception{
@@ -1377,6 +1413,68 @@ public class UserController {
 
       return result;
    }
+
+    @GetMapping(value = "/user/point/list/buildNDownload")
+    public void userPointListBuildNDownload(HttpServletResponse response, @ModelAttribute("userDto") UserDto userDto) throws Exception{
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDto userInfo = null;
+        String userId = "";
+
+        try {
+            if (principal != "anonymousUser") {
+                UserDetails userDetails = (UserDetails) principal;
+                userId = userDetails.getUsername();
+                userInfo = userService.getUserInfo(userId);
+
+                userDto.setPhoneNum(userDto.getSchPhoneNum());
+                List<PointDto> historyPointList = customUserService.selectPointHistory(userDto);
+
+                if(!historyPointList.isEmpty()){
+                    String fileName = "포인트내역_"+historyPointList.get(0).getNickName()+"_"+System.currentTimeMillis();
+                    response.setHeader("Content-disposition", "attachment; filename="+new String(fileName.getBytes("utf-8"),"8859_1") +".xlsx");
+
+                    Workbook workbook = new XSSFWorkbook();
+                    DecimalFormat decimalFormat = new DecimalFormat("###,###");
+
+                    Sheet sheet = workbook.createSheet("포인트내역");
+                    Row header = sheet.createRow(0);
+
+                    header.createCell(0).setCellValue("적립구분");
+                    header.createCell(1).setCellValue("포인트");
+                    header.createCell(2).setCellValue("이전포인트");
+                    header.createCell(3).setCellValue("일자");
+                    header.createCell(4).setCellValue("처리자");
+
+                    int rowNum = 1;
+                    for (int i = 0; i < historyPointList.size(); i++) {
+                        PointDto dto = historyPointList.get(i);
+                        Row row = sheet.createRow(rowNum++);
+                        String gbn = dto.getPointGbn();
+                        String gbnNm = "";
+                        if(gbn.equals("ADD")){
+                            gbnNm = "적립";
+                        }else if(gbn.equals("MINUS")){
+                            gbnNm = "차감";
+                        }else if(gbn.equals("HUMAN")){
+                            gbnNm = "휴먼";
+                        }
+
+                        row.createCell(0).setCellValue(gbnNm);
+                        row.createCell(1).setCellValue(dto.getPoint());
+                        row.createCell(2).setCellValue(dto.getPrivateDefPoint());
+                        row.createCell(3).setCellValue(dto.getRegDate());
+                        row.createCell(4).setCellValue(dto.getAgentName());
+                    }
+
+                    workbook.write(response.getOutputStream());
+                }
+            }
+        } catch (ClassCastException cce){
+            DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+            userId = auth2User.getName();
+            userInfo = userService.getUserInfo(userId);
+        }
+    }
 
    @PostMapping("/user/selectCouponHistoryAjax")
    public @ResponseBody Map<String, Object> selectCouponHistoryAjax(@ModelAttribute("userDto") UserDto userDto) throws Exception{

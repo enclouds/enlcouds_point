@@ -1000,6 +1000,7 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:fnExcelExport('point');">Excel</button>
                 <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('history_point_modal');">닫기</button>
             </div>
         </div>
@@ -1132,6 +1133,8 @@
 
         <form id="schFrm">
             <input type="hidden" id="pointInt" name="pointInt" th:value="${userInfo.pointInt}">
+            <input type="hidden" id="schPhoneNum" name="schPhoneNum" >
+
             <div class="search_option">
                 <span class="input_group">
                     <select id="schCond1" name="schCond1" style="width:100px;">
@@ -1578,7 +1581,9 @@
         }
     }
 
+    var schPhoneNum = "";
     function fnPointHistory(phoneNum){
+        schPhoneNum = phoneNum;
         $("#historyTbody").empty();
 
         var formData = new FormData();
@@ -2627,6 +2632,12 @@
                 // 실패 시 동작
             }
         });
+    }
+
+    function fnExcelExport(gbn){
+        $("#schPhoneNum").val(schPhoneNum);
+        $("#schFrm").attr("action", "/user/point/list/buildNDownload");
+        $("#schFrm").submit();
     }
 
 </script>

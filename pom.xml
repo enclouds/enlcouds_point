@@ -14,7 +14,8 @@
     <groupId>org.enclouds</groupId>
     <artifactId>enpoint</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
+    <!-- <packaging>war</packaging> -->
     <name>enpoint</name>
     <description>ENPOINT</description>
 
@@ -31,8 +32,8 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-            <!-- 개발시 제거 -->
-            <scope>provided</scope>
+            <!-- 개발시 제거
+            <scope>provided</scope> -->
         </dependency>
 
         <dependency>
@@ -179,6 +180,18 @@
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
             <version>4.9.3</version>
+        </dependency>
+
+        <!-- Spring WebSocket -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency>
+
+        <!-- Spring MVC (SockJS, STOMP 포함) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
     </dependencies>
