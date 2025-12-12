@@ -32,6 +32,12 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th scope="row"><em class="required">*</em>티켓 사용 장수</th>
+                                <td>
+                                    <input type="number" style="height: 30px;" name="ticketCnt" id="ticketCnt">
+                                </td>
+                            </tr>
+                            <tr>
                                 <th scope="row"><em class="required">*</em>대회 시작 시간</th>
                                 <td>
                                     <input type="datetime-local" style="height: 30px;" name="startDate" id="startDate">
@@ -76,6 +82,12 @@
                             </td>
                         </tr>
                         <tr>
+                            <th scope="row"><em class="required">*</em>티켓 사용 장수</th>
+                            <td>
+                                <input type="number" style="height: 30px;" name="uptTicketCnt" id="uptTicketCnt">
+                            </td>
+                        </tr>
+                        <tr>
                             <th scope="row"><em class="required">*</em>시작 시간</th>
                             <td>
                                 <input type="datetime-local" style="height: 30px;" name="uptStartDate" id="uptStartDate">
@@ -89,6 +101,47 @@
                 <button type="button" class="btn blue btn-primary" th:onclick="javascript:uptTournament();">저장</button>
                 <button type="button" class="btn red btn-primary" th:onclick="javascript:delTournament();">삭제</button>
                 <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('upt_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade large" id="memo_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center" id="">메모</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="modal-body">
+                    <div class="form_box">
+                        <p class="tb_tit">메모 정보</p>
+                        <table class="form">
+                            <colgroup>
+                                <col width="20%;">
+                                <col width="80%;">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th scope="row">메모</th>
+                                <td>
+                                    <textarea name="memo" id="memo"></textarea>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:uptMemo();">저장</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('memo_modal');">닫기</button>
             </div>
         </div>
     </div>
@@ -134,20 +187,30 @@
                 <tr>
                     <th scope="col">code</th>
                     <th scope="col">토너먼트 명</th>
+                    <th scope="col">토너먼트 이용 Ticket 장수</th>
                     <th scope="col">등록일자</th>
                     <th scope="col">대회시작일시</th>
-                    <th scope="col">Register</th>
+                    <th scope="col">등록 인원</th>
+                    <th scope="col">상금</th>
+                    <th scope="col">메모</th>
                     <th scope="col">Excel</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="list:${tournamentList}">
                     <td th:text="${list.seq}"></td>
-                    <td><a href="javascript:callFunction();" th:text="${list.tournamentName}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.seq}]], [[${list.tournamentName}]], [[${list.startDate}]])"></a></td>
+                    <td><a href="javascript:callFunction();" th:text="${list.tournamentName}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.seq}]], [[${list.tournamentName}]], [[${list.startDate}]], [[${list.ticketCnt}]])"></a></td>
+                    <td th:text="${list.ticketCnt}"></td>
                     <td th:text="${list.regDate}"></td>
                     <td th:text="${list.startDate}"></td>
                     <td>
                         <button type="button" class="tb_btn green" th:onclick="javascript:fnRegUserForm([[${list.seq}]]);">View</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnPrizeForm([[${list.seq}]]);">Prize</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnMemo([[${list.seq}]], [[${list.memo}]]);">Memo</button>
                     </td>
                     <td>
                         <button type="button" class="tb_btn green" th:onclick="javascript:fnExcelExport([[${list.seq}]]);">Excel</button>
@@ -205,11 +268,12 @@
         $("#reg_modal").show();
     }
 
-    function fnUptModal(seq, tournamentName, startDate){
+    function fnUptModal(seq, tournamentName, startDate, ticketCnt){
         selectTrSeq = seq;
 
         $("#uptTournamentName").val(tournamentName);
         $("#uptStartDate").val(startDate);
+        $("#uptTicketCnt").val(ticketCnt);
 
         $("#upt_modal").show();
     }
@@ -217,6 +281,17 @@
     function fnRegUserForm(seq){
         var url = "/tournament/tournamentRegList?tournamentSeq="+seq;
         window.open(url, "regInfo"+seq, "width=1200,height=800,scrollbars=yes,resizable=yes");
+    }
+
+    function fnPrizeForm(seq){
+        var url = "/tournament/tournamentPrizeList?tournamentSeq="+seq;
+        window.open(url, "regInfo"+seq, "width=1200,height=800,scrollbars=yes,resizable=yes");
+    }
+
+    function fnMemo(seq, memo){
+        selectTrSeq = seq;
+        $("#memo").val(memo);
+        $("#memo_modal").show();
     }
 
     function fnExcelExport(seq){
@@ -234,6 +309,12 @@
             return;
         }
 
+        if($("#ticketCnt").val() == ''){
+            alert("티켓 사용 장수는 필수 입니다.");
+            $("#ticketCnt").focus();
+            return;
+        }
+
         if($("#startDate").val() == ''){
             alert("대회 시작 시간 은 필수 입니다.");
             $("#startDate").focus();
@@ -242,6 +323,7 @@
 
         formData.append("tournamentName", $("#tournamentName").val());
         formData.append("startDate", $("#startDate").val());
+        formData.append("ticketCnt", $("#ticketCnt").val());
 
         $.ajax({
             contentType:false,
@@ -269,6 +351,12 @@
             return;
         }
 
+        if($("#uptTicketCnt").val() == ''){
+            alert("티켓 사용 장수는 필수 입니다.");
+            $("#uptTicketCnt").focus();
+            return;
+        }
+
         if($("#uptStartDate").val() == ''){
             alert("대회 시작 시간 은 필수 입니다.");
             $("#uptStartDate").focus();
@@ -278,12 +366,42 @@
         formData.append("seq", selectTrSeq);
         formData.append("tournamentName", $("#uptTournamentName").val());
         formData.append("startDate", $("#uptStartDate").val());
+        formData.append("ticketCnt", $("#uptTicketCnt").val());
 
         $.ajax({
             contentType:false,
             processData:false,
             type: "POST",
             url: "/tournament/updateTournamentAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function uptMemo(){
+        var formData = new FormData();
+
+        if($("#memo").val() == ''){
+            alert("메모가 입력되지 않았습니다.");
+            $("#memo").focus();
+            return;
+        }
+
+        formData.append("seq", selectTrSeq);
+        formData.append("memo", $("#memo").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/tournament/updateMemoAjax",
             data: formData,
             success: function(response) {
                 // 성공 시 동작

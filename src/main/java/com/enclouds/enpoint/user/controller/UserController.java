@@ -184,6 +184,37 @@ public class UserController {
         return mv;
     }
 
+    @RequestMapping(value = "/user/list/popupPrize", method = RequestMethod.GET)
+    public ModelAndView userListPopupPrize(HttpServletResponse response, @ModelAttribute UserDto userDto) throws Exception{
+        ModelAndView mv = new ModelAndView("user/listPopupPrize");
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDto userInfo = null;
+        String userId = "";
+
+        try {
+            if(principal != "anonymousUser") {
+                UserDetails userDetails = (UserDetails) principal;
+                userId = userDetails.getUsername();
+                userInfo = userService.getUserInfo(userId);
+
+                List<UserDto> userList = customUserService.selectCustomUserList(userDto);
+                mv.addObject("userList", userList);
+            }else {
+                return new ModelAndView("redirect:/");
+            }
+        } catch (ClassCastException cce){
+            DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+            userId = auth2User.getName();
+            userInfo = userService.getUserInfo(userId);
+        }
+
+        mv.addObject("userInfo", userInfo);
+        mv.addObject("params", userDto);
+
+        return mv;
+    }
+
    @RequestMapping(value = "/user/visit/list", method = RequestMethod.GET)
    public ModelAndView userVisitList(HttpServletResponse response, @ModelAttribute UserDto userDto) throws Exception{
       ModelAndView mv = new ModelAndView("user/visit/list");

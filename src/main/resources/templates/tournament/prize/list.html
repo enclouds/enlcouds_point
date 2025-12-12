@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+
+<body>
+
+<!-- modal S -->
+<div class="modal fade large" id="upt_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">프라이즈 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">프라이즈정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">전화번호</th>
+                            <td>
+                                <span name="phoneNum" id="phoneNum"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">닉네임</th>
+                            <td>
+                                <span name="nickName" id="nickName"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">등수</th>
+                            <td>
+                                <input type="number" name="rankNum" id="rankNum" th:value="0">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">이름</th>
+                            <td>
+                                <input type="text" name="regName" id="regName">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">주민번호</th>
+                            <td>
+                                <input type="text" name="regId" id="regId">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">계좌번호(은행명)</th>
+                            <td>
+                                <input type="text" name="bankNum" id="bankNum">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">시상금액</th>
+                            <td>
+                                <input type="number" name="prize" id="prize">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">추가시상 초대원 장수</th>
+                            <td>
+                                <input type="number" name="addPrize" id="addPrize">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:fnRegPrizeUpdate();">저장</button>
+                <button type="button" class="btn red btn-danger" th:onclick="javascript:fnRegPrizeDelete();">삭제</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('upt_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- container S -->
+<div class="container">
+
+    <!-- content S -->
+    <div>
+        <div class="con_top">
+            <ul>
+                <li>대회 관리</li>
+                <li>시상 목록</li>
+            </ul>
+        </div>
+        <p class="page_info">시상 목록</p>
+
+        <form id="schFrm">
+            <input type="hidden" id="tournamentSeq" name="tournamentSeq" th:value="${params.tournamentSeq}">
+
+            <div class="search_option">
+                <button type="button" class="add_btn" th:onclick="javascript:fnRegModal()">등록</button>
+                <button type="button" class="download_btn" th:onclick="javascript:fnExcelExport()">출력</button>
+            </div>
+        </form>
+
+        <div class="list_box">
+            <table class="list">
+                <colgroup>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">등수</th>
+                    <th scope="col">이름</th>
+                    <th scope="col">닉네임</th>
+                    <th scope="col">지점</th>
+                    <th scope="col">전화번호</th>
+                    <th scope="col">주민번호</th>
+                    <th scope="col">계좌번호</th>
+                    <th scope="col">상금</th>
+                    <th scope="col">추가 시상(초대권)</th>
+                    <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')">지급</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="list:${tournamentPrizeList}">
+                    <td th:text="${list.rankNum}"></td>
+                    <td th:text="${list.regName}"></td>
+                    <td>
+                        <a href="javascript:callFunction();" th:text="${list.nickName}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.seq}]], [[${list.phoneNum}]], [[${list.nickName}]], [[${list.rankNum}]], [[${list.regName}]], [[${list.regId}]], [[${list.bankNum}]], [[${list.prize}]], [[${list.addPrize}]], [[${list.addPrizeYn}]])"></a>
+                    </td>
+                    <td th:text="${list.agentName}"></td>
+                    <td th:text="${list.phoneNum}"></td>
+                    <td th:text="${list.regId}"></td>
+                    <td th:text="${list.bankNum}"></td>
+                    <td th:text="${list.prizeStr}"></td>
+                    <td th:text="${list.addPrizeStr}"></td>
+                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')">
+                        <button type="button" class="tb_btn blue" th:if="${list.addPrizeYn} == 'N'" th:onclick="javascript:fnPrize([[${list.seq}]], [[${list.phoneNum}]], [[${list.addPrize}]])">지급 처리</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- content E -->
+
+</div>
+<!-- container E -->
+</body>
+<script th:src="@{/static/js/common.js}"></script>
+<script th:inline="javascript">
+
+    var selectTrSeq;
+
+    $( function() {
+        $("#gameSeq").change(function(){
+            location.href = "/game/blind/list?gameSeq="+$(this).val();
+        })
+    });
+
+    function fnSearch(){
+        $("#schFrm").submit();
+    }
+
+    function fnModalClose(id){
+        $("#"+id).hide();
+    }
+
+    function fnRegModal(){
+        var url = "/user/list/popupPrize";
+        window.open(url, "userPrizeList", "width=1200,height=600,scrollbars=yes,resizable=yes");
+    }
+
+    function prizeInsert(phoneNum, rankNum, regName, regId, bankNum, prize, addPrize) {
+        $("#loading_modal").show();
+
+        var formData = new FormData();
+        formData.append("tournamentSeq", $("#tournamentSeq").val());
+        formData.append("phoneNum", phoneNum);
+        formData.append("rankNum", rankNum);
+        formData.append("regName", regName);
+        formData.append("regId", regId);
+        formData.append("bankNum", bankNum);
+        formData.append("prize", prize);
+        formData.append("addPrize", addPrize);
+
+        $.ajax({
+            contentType: false,
+            processData: false,
+            type: "POST",
+            url: "/tournament/prizeInsertAjax",
+            data: formData,
+            success: function(response) {
+                alert(response.resultMsg);
+                location.reload();
+            },
+            error: function(err) {
+                console.error("등록 실패:", err);
+            }
+        });
+    }
+
+    function fnUptModal(seq, phoneNum, nickName, rankNum, regName, regId, bankNum, prize, addPrize, addPrizeYn){
+        if(addPrizeYn == "Y"){
+            alert("지급 처리된 정보는 수정 할 수 없습니다.");
+            return false;
+        }
+
+        selectTrSeq = seq;
+
+        $("#phoneNum").text(phoneNum);
+        $("#nickName").text(nickName);
+        $("#rankNum").val(rankNum);
+        $("#regName").val(regName);
+        $("#regId").val(regId);
+        $("#bankNum").val(bankNum);
+        $("#prize").val(prize);
+        $("#addPrize").val(addPrize);
+
+        $("#upt_modal").show();
+    }
+
+    function fnRegPrizeUpdate(){
+        var formData = new FormData();
+
+        formData.append("seq", selectTrSeq);
+        formData.append("rankNum", $("#rankNum").val());
+        formData.append("regName", $("#regName").val());
+        formData.append("regId", $("#regId").val());
+        formData.append("bankNum", $("#bankNum").val());
+        formData.append("prize", eval($("#prize").val()));
+        formData.append("addPrize", eval($("#addPrize").val()));
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/tournament/updatePrizeAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                location.reload();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function fnRegPrizeDelete(){
+        var formData = new FormData();
+
+        formData.append("seq", selectTrSeq);
+
+        if(confirm("삭제 하시겠습니까?")){
+            $.ajax({
+                contentType:false,
+                processData:false,
+                type: "POST",
+                url: "/tournament/deletePrizeAjax",
+                data: formData,
+                success: function(response) {
+                    // 성공 시 동작
+                    alert(response.resultMsg);
+                    location.reload();
+                },
+                error: function(error) {
+                    // 실패 시 동작
+                }
+            });
+        }
+    }
+
+    function fnPrize(seq, phoneNum, addPrize){
+        var formData = new FormData();
+
+        formData.append("seq", seq);
+        formData.append("regPhoneNum", phoneNum);
+        formData.append("addPrize", addPrize);
+
+        if(confirm("지급 처리 하시겠습니까?")){
+            $.ajax({
+                contentType:false,
+                processData:false,
+                type: "POST",
+                url: "/tournament/updateAddPrizeAjax",
+                data: formData,
+                success: function(response) {
+                    // 성공 시 동작
+                    alert(response.resultMsg);
+                    location.reload();
+                },
+                error: function(error) {
+                    // 실패 시 동작
+                }
+            });
+        }
+    }
+
+    function fnExcelExport(){
+        $("#schFrm").attr("action", "/tournament/prize/list/buildNDownload");
+        $("#schFrm").submit();
+    }
+
+    function callFunction() {
+        console.log('call function');
+    }
+
+</script>
+
+</html>

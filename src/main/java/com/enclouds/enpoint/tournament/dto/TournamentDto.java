@@ -15,6 +15,7 @@ public class TournamentDto extends CommonDto {
     private String regPhoneNum;
     private String nickName;
     private String regId;
+    private String regUserId;
     private String regDate;
     private String startDate;
     private String ticket5;
@@ -25,5 +26,25 @@ public class TournamentDto extends CommonDto {
     private int entryCount;
     private int totalEntryCount;
     private String onlineChecked;
+    private int klptCnt;
+    private int inviCnt;
+    private int freeCnt;
+    private int ticketCnt;
+
+    private int totalKlptCnt;
+    private int totalInviCnt;
+    private int totalFreeCnt;
+
+    private String regName;
+    private String agentName;
+    private String bankNum;
+    private int prize;
+    private int addPrize;
+    private String prizeStr;
+    private String addPrizeStr;
+    private int rankNum;
+    private String addPrizeYn;
+
+    private String memo;
 
 }

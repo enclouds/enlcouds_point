@@ -16,22 +16,45 @@
 	</select>
 
 	<select id="selectTournamentList" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto" resultType="com.enclouds.enpoint.tournament.dto.TournamentDto">
-		select seq
-		, tournament_name
-		, date_format(reg_date, '%Y-%m-%d') as regDate
-        , start_date
+		select ti.seq
+		, ti.tournament_name
+		, date_format(ti.reg_date, '%Y-%m-%d') as regDate
+        , ti.start_date
+        , ti.ticket_cnt
+        , tpm.memo
 		from t_info ti
+        left join t_prize_memo tpm on tpm.tournament_seq = ti.seq
 		where 1=1
 
         <if test="schCond1 == 'name'">
             AND ti.tournament_name like '%${schText}%'
         </if>
 
-        ORDER BY reg_date DESC
+        ORDER BY ti.reg_date DESC
 
 		LIMIT
 		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
 	</select>
+
+    <select id="selectTournamentInfo" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto" resultType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+        select seq
+        , tournament_name
+        , date_format(reg_date, '%Y-%m-%d') as regDate
+        , start_date
+        , ticket_cnt
+        from t_info ti
+        where 1=1
+        and ti.seq = #{tournamentSeq}
+    </select>
+
+    <select id="selectTournamentRegTotalCnt" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto" resultType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+        SELECT SUM(IFNULL(tru.klpt_cnt, 0)) AS totalKlptCnt
+        , SUM(IFNULL(tru.invi_cnt, 0)) AS totalInviCnt
+        , SUM(IFNULL(tru.free_cnt, 0)) AS totalFreeCnt
+        FROM t_reg_user tru
+        WHERE tru.tournament_seq = #{tournamentSeq}
+    </select>
+
 
     <select id="selectTournamentRegList" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto" resultType="com.enclouds.enpoint.tournament.dto.TournamentDto">
         SELECT (@rnum := @rnum + 1) AS rnum
@@ -50,6 +73,33 @@
         WHERE 1=1
         AND tournament_seq = #{tournamentSeq}
         ORDER BY tru.seq ASC
+    </select>
+
+    <select id="selectTournamentPrizeList" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto" resultType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+        SELECT tp.seq
+        , ti.tournament_name
+        , date_format(ti.start_date, '%Y-%m-%d') as start_date
+        , tp.reg_name
+        , pu.nick_name
+        , pa.agent_name
+        , pu.phone_num
+        , tp.reg_id
+        , tp.bank_num
+        , format(tp.prize, 0) as prize_str
+        , format(tp.add_prize, 0) as add_prize_str
+        , tp.rank_num
+        , tp.add_prize_yn
+        , tp.prize
+        , tp.add_prize
+        , tpm.memo
+        FROM t_prize tp
+        LEFT JOIN p_user pu ON pu.phone_num = tp.reg_phone_num
+        LEFT JOIN p_agent pa ON pa.agent_code = pu.agent_code
+        LEFT JOIN t_info ti ON ti.seq = tp.tournament_seq
+        LEFT JOIN t_prize_memo tpm ON tpm.tournament_seq = tp.tournament_seq
+        WHERE 1=1
+        AND tp.tournament_seq = #{tournamentSeq}
+        ORDER BY tp.rank_num ASC
     </select>
 
     <select id="selectPrintInfo" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto" resultType="com.enclouds.enpoint.tournament.dto.TournamentDto">
@@ -74,12 +124,14 @@
 		( tournament_name
 		, reg_date
 		, start_date
-		, reg_id )
+		, reg_id
+        , ticket_cnt)
 		VALUES
 		( #{tournamentName}
 		, NOW()
         , #{startDate}
-		, #{regId})
+		, #{regId}
+        , #{ticketCnt})
 	</insert>
 
     <select id="selectLastInsertId" resultType="long">
@@ -90,6 +142,7 @@
 		UPDATE t_info
 		SET tournament_name = #{tournamentName}
 		, start_date = #{startDate}
+        , ticket_cnt = #{ticketCnt}
 		WHERE 1=1
 		AND seq = #{seq}
 	</update>
@@ -121,15 +174,93 @@
         , reg_date
         , reg_user_id
         , info_desc
-        , entry_count)
+        , entry_count
+        , klpt_cnt
+        , free_cnt
+        , invi_cnt )
         VALUES
         ( #{tournamentSeq}
         , #{phoneNum}
         , NOW()
         , #{regId}
         , #{infoDesc}
-        , #{entryCount})
+        , #{entryCount}
+        , #{klptCnt}
+        , #{freeCnt}
+        , #{inviCnt} )
     </insert>
+
+    <insert id="prizeInsert" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+        INSERT INTO t_prize
+        ( tournament_seq
+        , reg_phone_num
+        , reg_name
+        , reg_id
+        , bank_num
+        , reg_date
+        , reg_user_id
+        , prize
+        , add_prize
+        , rank_num )
+        VALUES
+        ( #{tournamentSeq}
+        , #{phoneNum}
+        , #{regName}
+        , #{regId}
+        , #{bankNum}
+        , NOW()
+        , #{regUserId}
+        , #{prize}
+        , #{addPrize}
+        , #{rankNum})
+    </insert>
+
+    <update id="updatePrize" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+        UPDATE t_prize
+        SET reg_name = #{regName}
+        , reg_id = #{regId}
+        , bank_num = #{bankNum}
+        , prize = #{prize}
+        , add_prize = #{addPrize}
+        , rank_num = #{rankNum}
+        WHERE 1=1
+        AND seq = #{seq}
+    </update>
+
+    <update id="updateAddPrize" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+        UPDATE p_user
+        SET ticket4 = ticket4 + (SELECT add_prize FROM t_prize WHERE seq = #{seq})
+        WHERE 1=1
+        AND phone_num = (SELECT reg_phone_num FROM t_prize WHERE seq = #{seq})
+    </update>
+
+    <update id="updateAddPrizeYn" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+        UPDATE t_prize
+        SET add_prize_yn = 'Y'
+        WHERE 1=1
+        AND seq = #{seq}
+    </update>
+
+    <delete id="deletePrize" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+        DELETE FROM t_prize
+        WHERE 1=1
+        AND seq = #{seq}
+    </delete>
+
+    <delete id="deleteTournamentPrizeInfo" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+        DELETE FROM t_prize
+        WHERE 1=1
+        AND tournament_seq = #{seq}
+    </delete>
+
+    <update id="updateMemo" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+        INSERT INTO t_prize_memo (tournament_seq, memo, reg_date, reg_user_id)
+        VALUES ( #{seq}, #{memo}, NOW(), #{regId})
+        ON DUPLICATE KEY UPDATE
+        memo = VALUES(memo),
+        reg_date = VALUES(reg_date),
+        reg_user_id = VALUES(reg_user_id)
+    </update>
 
 </mapper>
 

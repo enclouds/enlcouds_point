@@ -16,7 +16,9 @@ import javax.print.*;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TournamentServiceImpl implements TournamentService{
@@ -44,6 +46,16 @@ public class TournamentServiceImpl implements TournamentService{
     }
 
     @Override
+    public List<TournamentDto> selectTournamentPrizeList(TournamentDto tournamentDto) throws Exception{
+        return tournamentMapper.selectTournamentPrizeList(tournamentDto);
+    }
+
+    @Override
+    public TournamentDto selectTournamentRegTotalCnt(TournamentDto tournamentDto) throws Exception{
+        return tournamentMapper.selectTournamentRegTotalCnt(tournamentDto);
+    }
+
+    @Override
     public int insertTournament(TournamentDto tournamentDto) throws Exception {
         return tournamentMapper.insertTournament(tournamentDto);
     }
@@ -54,20 +66,59 @@ public class TournamentServiceImpl implements TournamentService{
     }
 
     @Override
+    public int updatePrize(TournamentDto tournamentDto) throws Exception {
+        return tournamentMapper.updatePrize(tournamentDto);
+    }
+
+    @Override
     public int deleteTournament(TournamentDto tournamentDto) throws Exception {
         // 등록 내역 삭제
         tournamentMapper.deleteTournamentRegInfo(tournamentDto);
+        tournamentMapper.deleteTournamentPrizeInfo(tournamentDto);
         return tournamentMapper.deleteTournament(tournamentDto);
     }
 
     @Override
+    public int deletePrize(TournamentDto tournamentDto) throws Exception {
+        return tournamentMapper.deletePrize(tournamentDto);
+    }
+
+    @Override
+    public int updateMemo(TournamentDto tournamentDto) throws Exception{
+        return tournamentMapper.updateMemo(tournamentDto);
+    }
+
+    @Override
     @Transactional
-    public int registration(TournamentDto tournamentDto) throws Exception{
-        int returnCode = 1;
+    public int updateAddPrize(TournamentDto tournamentDto) throws Exception{
+        int result = tournamentMapper.updateAddPrize(tournamentDto);
+
+        if(result > 0){
+            //내역 남기기
+            UserDto userDto = new UserDto();
+            userDto.setAgentCode(tournamentDto.getAgentCode());
+            userDto.setPhoneNum(tournamentDto.getRegPhoneNum());
+            userDto.setAddTicket(String.valueOf(tournamentDto.getAddPrize()));
+
+            customUserService.updateUserAddTicket4(userDto);
+            result = tournamentMapper.updateAddPrizeYn(tournamentDto);
+        }else {
+            result = -1;
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional
+    public HashMap<String, Object> registration(TournamentDto tournamentDto) throws Exception{
+        int resultCode = 1;
         String infoDesc = "";
 
         if(tournamentDto.getOnlineChecked().equals("true")){
             infoDesc += "온라인 예약 등록";
+
+            TournamentDto tournamentInfo = tournamentMapper.selectTournamentInfo(tournamentDto);
+            tournamentDto.setKlptCnt(tournamentInfo.getTicketCnt());
         }else {
             //프리티켓 차감
             if(Integer.parseInt(tournamentDto.getTicket2()) > 0){
@@ -78,6 +129,7 @@ public class TournamentServiceImpl implements TournamentService{
                 customUserService.updateUserMinusTicket2(userDto3);
 
                 infoDesc += " 프리티켓 : " + tournamentDto.getTicket2() + "장";
+                tournamentDto.setFreeCnt(Integer.parseInt(tournamentDto.getTicket2()));
             }
 
             //초대권 차감
@@ -89,6 +141,7 @@ public class TournamentServiceImpl implements TournamentService{
                 customUserService.updateUserMinusTicket4(userDto2);
 
                 infoDesc += " 초대권 : " + tournamentDto.getTicket4() + "장";
+                tournamentDto.setInviCnt(Integer.parseInt(tournamentDto.getTicket4()));
             }
 
             //KLPT차감
@@ -100,6 +153,7 @@ public class TournamentServiceImpl implements TournamentService{
                 customUserService.updateUserMinusTicket5(userDto);
 
                 infoDesc += " KLPT : " + tournamentDto.getTicket5() + "장";
+                tournamentDto.setKlptCnt(Integer.parseInt(tournamentDto.getTicket5()));
             }
         }
 
@@ -109,14 +163,28 @@ public class TournamentServiceImpl implements TournamentService{
         int entryCount = tournamentMapper.registrationCount(tournamentDto);
         tournamentDto.setEntryCount(entryCount);
 
-        tournamentMapper.registration(tournamentDto);
+        resultCode = tournamentMapper.registration(tournamentDto);
 
         long seq = tournamentMapper.selectLastInsertId();
-        tournamentDto.setSeq(seq);
-        TournamentDto printDto = tournamentMapper.selectPrintInfo(tournamentDto);
+        //tournamentDto.setSeq(seq);
+        //TournamentDto printDto = tournamentMapper.selectPrintInfo(tournamentDto);
         //this.printReceipt(printDto);
 
-        return returnCode;
+        HashMap<String, Object> resultMap = new HashMap<String, Object>();
+        resultMap.put("resultCode", resultCode);
+        resultMap.put("seq", seq);
+
+        return resultMap;
+    }
+
+    @Override
+    public TournamentDto selectPrintInfo(TournamentDto tournamentDto) throws Exception{
+        return tournamentMapper.selectPrintInfo(tournamentDto);
+    }
+
+    @Override
+    public int prizeInsert(TournamentDto tournamentDto) throws Exception {
+        return tournamentMapper.prizeInsert(tournamentDto);
     }
 
     @Override
