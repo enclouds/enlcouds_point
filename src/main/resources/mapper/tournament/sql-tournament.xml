@@ -51,7 +51,10 @@
         SELECT SUM(IFNULL(tru.klpt_cnt, 0)) AS totalKlptCnt
         , SUM(IFNULL(tru.invi_cnt, 0)) AS totalInviCnt
         , SUM(IFNULL(tru.free_cnt, 0)) AS totalFreeCnt
+        , (SELECT date_format(ti.start_date, '%Y-%m-%d') FROM t_info ti WHERE seq = 57) AS  start_date
+        , (SELECT ti2.tournament_name  FROM t_info ti2 WHERE seq = 57) AS  tournament_name
         FROM t_reg_user tru
+        LEFT JOIN t_info ti on ti.seq = tru.tournament_seq
         WHERE tru.tournament_seq = #{tournamentSeq}
     </select>
 

@@ -24,6 +24,9 @@
                 <button type="button" class="add_btn" th:onclick="javascript:fnRegModal()">등록</button>
                 <button type="button" class="add_btn" id="printButton" style="display:none;">출력</button>
 
+                <p style="font-size: x-large;color: darkblue;-webkit-user-modify: read-write-plaintext-only;" th:text="|   ${totalInfo.startDate}|"></p>
+                <p style="font-size: x-large;color: darkblue;-webkit-user-modify: read-write-plaintext-only;" th:text="|   ${totalInfo.tournamentName}|"></p>
+
                 <p style="font-size: x-large;color: crimson;-webkit-user-modify: read-write-plaintext-only;" th:text="|   KLPT : ${totalInfo != null ? totalInfo.totalKlptCnt : 0}|"></p>
                 <p style="font-size: x-large;color: crimson;-webkit-user-modify: read-write-plaintext-only;" th:text="|   초대권 : ${totalInfo != null ? totalInfo.totalInviCnt : 0}|"></p>
                 <p style="font-size: x-large;color: crimson;-webkit-user-modify: read-write-plaintext-only;" th:text="|   프리티켓 : ${totalInfo != null ? totalInfo.totalFreeCnt : 0}|"></p>
@@ -86,8 +89,24 @@
     }
 
     function fnRegModal(){
-        var url = "/user/list/popup";
-        window.open(url, "userList", "width=1200,height=600,scrollbars=yes,resizable=yes");
+        $.ajax({
+            contentType: false,
+            processData: false,
+            type: "POST",
+            url: "/user/userAuthAjax",
+            success: function(response) {
+                if(response.userInfo.agentGbn == "GAME" || response.userInfo.agentGbn == "A"){
+                    var url = "/user/list/popup";
+                    window.open(url, "userList", "width=1200,height=600,scrollbars=yes,resizable=yes");
+                }else {
+                    alert("등록 권한이 없습니다. 로그인 정보를 확인 하여 주십시오.");
+                    return false;
+                }
+            },
+            error: function(err) {
+                console.error("등록 실패:", err);
+            }
+        });
     }
 
     function registration(phoneNum, ticket5, ticket2, ticket4, onlineChecked) {

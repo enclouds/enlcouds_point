@@ -293,17 +293,24 @@ public class TournamentController {
                 userId = userDetails.getUsername();
                 userInfo = userService.getUserInfo(userId);
 
-                tournamentDto.setRegId(userId);
-                tournamentDto.setAgentCode(userInfo.getAgentCode());
-                HashMap<String, Object> map = tournamentService.registration(tournamentDto);
+                boolean hasRole = userDetails.getAuthorities().stream().anyMatch(auth -> auth.getAuthority().equals("ROLE_GAME") || auth.getAuthority().equals("ROLE_ADMIN"));
 
-                if ((Integer) map.get("resultCode") > 0) {
-                    result.put("resultCode", 0);
-                    result.put("resultMsg", "정상적으로 등록 되었습니다.");
-                    result.put("seq", map.get("seq"));
-                } else {
+                if(hasRole){
+                    tournamentDto.setRegId(userId);
+                    tournamentDto.setAgentCode(userInfo.getAgentCode());
+                    HashMap<String, Object> map = tournamentService.registration(tournamentDto);
+
+                    if ((Integer) map.get("resultCode") > 0) {
+                        result.put("resultCode", 0);
+                        result.put("resultMsg", "정상적으로 등록 되었습니다.");
+                        result.put("seq", map.get("seq"));
+                    } else {
+                        result.put("resultCode", -1);
+                        result.put("resultMsg", "등록에 실패 하였습니다.");
+                    }
+                }else {
                     result.put("resultCode", -1);
-                    result.put("resultMsg", "등록에 실패 하였습니다.");
+                    result.put("resultMsg", "권한이 없습니다. 로그인 정보를 확인 하여 주십시오.");
                 }
             }
         } catch (ClassCastException cce){

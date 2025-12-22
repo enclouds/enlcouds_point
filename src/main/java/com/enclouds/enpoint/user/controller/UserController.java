@@ -169,6 +169,8 @@ public class UserController {
 
                 List<UserDto> userList = customUserService.selectCustomUserList(userDto);
                 mv.addObject("userList", userList);
+
+                mv.addObject("agentTotalList", agentService.selectAgentTotalListAsAG());
             }else {
                 return new ModelAndView("redirect:/");
             }
@@ -182,6 +184,34 @@ public class UserController {
         mv.addObject("params", userDto);
 
         return mv;
+    }
+
+    @PostMapping("/user/userAuthAjax")
+    public @ResponseBody Map<String, Object> userAuthAjax() throws Exception{
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDto userInfo = null;
+        String userId = "";
+        int resultCode;
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            if (principal != "anonymousUser") {
+                UserDetails userDetails = (UserDetails) principal;
+                userId = userDetails.getUsername();
+                userInfo = userService.getUserInfo(userId);
+
+                result.put("resultCode", 0);
+                result.put("resultMsg", "정상적으로 등록 되었습니다.");
+                result.put("userInfo", userInfo);
+                result.put("userAuth", userDetails.getAuthorities());
+            }
+        } catch (ClassCastException cce){
+            DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+            userId = auth2User.getName();
+            userInfo = userService.getUserInfo(userId);
+        }
+
+        return result;
     }
 
     @RequestMapping(value = "/user/list/popupPrize", method = RequestMethod.GET)
