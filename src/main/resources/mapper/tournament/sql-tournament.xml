@@ -21,9 +21,12 @@
 		, date_format(ti.reg_date, '%Y-%m-%d') as regDate
         , ti.start_date
         , ti.ticket_cnt
+        , gt.name AS ticket_kind
+        , ti.ticket_kind AS ticket_kind_code
         , tpm.memo
 		from t_info ti
         left join t_prize_memo tpm on tpm.tournament_seq = ti.seq
+        left outer join g_ticket gt on gt.code = ti.ticket_kind
 		where 1=1
 
         <if test="schCond1 == 'name'">
@@ -51,13 +54,12 @@
         SELECT SUM(IFNULL(tru.klpt_cnt, 0)) AS totalKlptCnt
         , SUM(IFNULL(tru.invi_cnt, 0)) AS totalInviCnt
         , SUM(IFNULL(tru.free_cnt, 0)) AS totalFreeCnt
-        , (SELECT date_format(ti.start_date, '%Y-%m-%d') FROM t_info ti WHERE seq = 57) AS  start_date
-        , (SELECT ti2.tournament_name  FROM t_info ti2 WHERE seq = 57) AS  tournament_name
+        , (SELECT date_format(ti.start_date, '%Y-%m-%d') FROM t_info ti WHERE seq = #{tournamentSeq}) AS  start_date
+        , (SELECT ti2.tournament_name  FROM t_info ti2 WHERE seq = #{tournamentSeq}) AS  tournament_name
         FROM t_reg_user tru
         LEFT JOIN t_info ti on ti.seq = tru.tournament_seq
         WHERE tru.tournament_seq = #{tournamentSeq}
     </select>
-
 
     <select id="selectTournamentRegList" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto" resultType="com.enclouds.enpoint.tournament.dto.TournamentDto">
         SELECT (@rnum := @rnum + 1) AS rnum
@@ -128,13 +130,15 @@
 		, reg_date
 		, start_date
 		, reg_id
-        , ticket_cnt)
+        , ticket_cnt
+        , ticket_kind)
 		VALUES
 		( #{tournamentName}
 		, NOW()
         , #{startDate}
 		, #{regId}
-        , #{ticketCnt})
+        , #{ticketCnt}
+        , #{ticketKind})
 	</insert>
 
     <select id="selectLastInsertId" resultType="long">
@@ -146,6 +150,7 @@
 		SET tournament_name = #{tournamentName}
 		, start_date = #{startDate}
         , ticket_cnt = #{ticketCnt}
+        , ticket_kind = #{ticketKind}
 		WHERE 1=1
 		AND seq = #{seq}
 	</update>

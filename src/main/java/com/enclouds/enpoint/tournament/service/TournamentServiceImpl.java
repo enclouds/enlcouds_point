@@ -118,7 +118,11 @@ public class TournamentServiceImpl implements TournamentService{
             infoDesc += "온라인 예약 등록";
 
             TournamentDto tournamentInfo = tournamentMapper.selectTournamentInfo(tournamentDto);
-            tournamentDto.setKlptCnt(tournamentInfo.getTicketCnt());
+            //if(tournamentDto.getTicketKind().equals("ticket5")){
+                tournamentDto.setKlptCnt(tournamentInfo.getTicketCnt());
+            //}else if(tournamentDto.getTicketKind().equals("ticket2")){
+            //    tournamentDto.setFreeCnt(tournamentInfo.getTicketCnt());
+            //}
         }else {
             //프리티켓 차감
             if(Integer.parseInt(tournamentDto.getTicket2()) > 0){

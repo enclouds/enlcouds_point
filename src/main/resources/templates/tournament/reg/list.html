@@ -9,6 +9,7 @@
 <!-- container S -->
 <div class="container">
     <input type="hidden" id="tournamentSeq" name="tournamentSeq" th:value="${params.tournamentSeq}">
+    <input type="hidden" id="ticketKind" name="ticketKind" th:value="${params.ticketKind}">
     <!-- content S -->
     <div>
         <div class="con_top">
@@ -120,6 +121,7 @@
         formData.append("ticket2", ticket2);
         formData.append("ticket4", ticket4);
         formData.append("onlineChecked", onlineChecked);
+        formData.append("ticketKind", $("#ticketKind").val());
 
         $.ajax({
             contentType: false,
