@@ -30,6 +30,8 @@ public class TournamentDto extends CommonDto {
     private int inviCnt;
     private int freeCnt;
     private int ticketCnt;
+    private String ticketKind;
+    private String ticketKindCode;
 
     private int totalKlptCnt;
     private int totalInviCnt;

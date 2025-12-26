@@ -32,6 +32,18 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th scope="row"><em class="required">*</em>티켓 종류</th>
+                                <td>
+                                    <select id="ticketKind" name="ticketKind" style="width:150px;">
+                                        <option value="ticket">주간 티켓</option>
+                                        <option value="ticket2">프리 티켓</option>
+                                        <option value="ticket3">월간 티켓</option>
+                                        <option value="ticket4">K초대권 티켓</option>
+                                        <option value="ticket5" selected>KLPT 시드권</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th scope="row"><em class="required">*</em>티켓 사용 장수</th>
                                 <td>
                                     <input type="number" style="height: 30px;" name="ticketCnt" id="ticketCnt">
@@ -79,6 +91,18 @@
                             <th scope="row"><em class="required">*</em>토너먼트 명</th>
                             <td>
                                 <input type="text" name="uptTournamentName" id="uptTournamentName">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><em class="required">*</em>티켓 종류</th>
+                            <td>
+                                <select id="uptTicketKind" name="uptTicketKind" style="width:150px;">
+                                    <option value="ticket">주간 티켓</option>
+                                    <option value="ticket2">프리 티켓</option>
+                                    <option value="ticket3">월간 티켓</option>
+                                    <option value="ticket4">K초대권 티켓</option>
+                                    <option value="ticket5">KLPT 시드권</option>
+                                </select>
                             </td>
                         </tr>
                         <tr>
@@ -187,6 +211,7 @@
                 <tr>
                     <th scope="col">code</th>
                     <th scope="col">토너먼트 명</th>
+                    <th scope="col">토너먼트 이용 Ticket 종류</th>
                     <th scope="col">토너먼트 이용 Ticket 장수</th>
                     <th scope="col">등록일자</th>
                     <th scope="col">대회시작일시</th>
@@ -199,12 +224,13 @@
                 <tbody>
                 <tr th:each="list:${tournamentList}">
                     <td th:text="${list.seq}"></td>
-                    <td><a href="javascript:callFunction();" th:text="${list.tournamentName}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.seq}]], [[${list.tournamentName}]], [[${list.startDate}]], [[${list.ticketCnt}]])"></a></td>
+                    <td><a href="javascript:callFunction();" th:text="${list.tournamentName}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.seq}]], [[${list.tournamentName}]], [[${list.startDate}]], [[${list.ticketKindCode}]], [[${list.ticketCnt}]])"></a></td>
+                    <td th:text="${list.ticketKind}"></td>
                     <td th:text="${list.ticketCnt}"></td>
                     <td th:text="${list.regDate}"></td>
                     <td th:text="${list.startDate}"></td>
                     <td>
-                        <button type="button" class="tb_btn green" th:onclick="javascript:fnRegUserForm([[${list.seq}]]);">View</button>
+                        <button type="button" class="tb_btn green" th:onclick="javascript:fnRegUserForm([[${list.seq}]], [[${list.ticketKindCode}]]);">View</button>
                     </td>
                     <td>
                         <button type="button" class="tb_btn blue" th:onclick="javascript:fnPrizeForm([[${list.seq}]]);">Prize</button>
@@ -268,18 +294,19 @@
         $("#reg_modal").show();
     }
 
-    function fnUptModal(seq, tournamentName, startDate, ticketCnt){
+    function fnUptModal(seq, tournamentName, startDate, ticketKind, ticketCnt){
         selectTrSeq = seq;
 
         $("#uptTournamentName").val(tournamentName);
         $("#uptStartDate").val(startDate);
+        $("#uptTicketKind").val(ticketKind);
         $("#uptTicketCnt").val(ticketCnt);
 
         $("#upt_modal").show();
     }
 
-    function fnRegUserForm(seq){
-        var url = "/tournament/tournamentRegList?tournamentSeq="+seq;
+    function fnRegUserForm(seq, ticketKind){
+        var url = "/tournament/tournamentRegList?tournamentSeq="+seq+"&ticketKind="+ticketKind;
         window.open(url, "regInfo"+seq, "width=1200,height=800,scrollbars=yes,resizable=yes");
     }
 
@@ -309,6 +336,12 @@
             return;
         }
 
+        if($("#ticketKind").val() == ''){
+            alert("티켓 사용 종류는 필수 입니다.");
+            $("#ticketKind").focus();
+            return;
+        }
+
         if($("#ticketCnt").val() == ''){
             alert("티켓 사용 장수는 필수 입니다.");
             $("#ticketCnt").focus();
@@ -323,6 +356,7 @@
 
         formData.append("tournamentName", $("#tournamentName").val());
         formData.append("startDate", $("#startDate").val());
+        formData.append("ticketKind", $("#ticketKind").val());
         formData.append("ticketCnt", $("#ticketCnt").val());
 
         $.ajax({
@@ -351,6 +385,12 @@
             return;
         }
 
+        if($("#uptTicketKind").val() == ''){
+            alert("티켓 사용 종류는 필수 입니다.");
+            $("#uptTicketKind").focus();
+            return;
+        }
+
         if($("#uptTicketCnt").val() == ''){
             alert("티켓 사용 장수는 필수 입니다.");
             $("#uptTicketCnt").focus();
@@ -366,6 +406,7 @@
         formData.append("seq", selectTrSeq);
         formData.append("tournamentName", $("#uptTournamentName").val());
         formData.append("startDate", $("#uptStartDate").val());
+        formData.append("ticketKind", $("#uptTicketKind").val());
         formData.append("ticketCnt", $("#uptTicketCnt").val());
 
         $.ajax({
