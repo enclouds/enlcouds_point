@@ -89,4 +89,6 @@ public class UserDto extends CommonDto {
 
     private String schPhoneNum;
 
+    private String tournamentSeq;
+    private String ticketKind;
 }

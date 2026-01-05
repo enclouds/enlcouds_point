@@ -76,9 +76,6 @@
     var selectTrSeq;
 
     $( function() {
-        $("#gameSeq").change(function(){
-            location.href = "/game/blind/list?gameSeq="+$(this).val();
-        })
     });
 
     function fnSearch(){
@@ -97,7 +94,7 @@
             url: "/user/userAuthAjax",
             success: function(response) {
                 if(response.userInfo.agentGbn == "GAME" || response.userInfo.agentGbn == "A"){
-                    var url = "/user/list/popup";
+                    var url = "/user/list/popup?tournamentSeq=" + $("#tournamentSeq").val() + "&ticketKind=" + $("#ticketKind").val();
                     window.open(url, "userList", "width=1200,height=600,scrollbars=yes,resizable=yes");
                 }else {
                     alert("등록 권한이 없습니다. 로그인 정보를 확인 하여 주십시오.");

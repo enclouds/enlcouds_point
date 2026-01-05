@@ -171,6 +171,8 @@ public class UserController {
                 mv.addObject("userList", userList);
 
                 mv.addObject("agentTotalList", agentService.selectAgentTotalListAsAG());
+
+                mv.addObject("params", userDto);
             }else {
                 return new ModelAndView("redirect:/");
             }

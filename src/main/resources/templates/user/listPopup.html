@@ -101,6 +101,8 @@
         <form id="schFrm">
             <input type="hidden" id="pointInt" name="pointInt" th:value="${userInfo.pointInt}">
             <input type="hidden" id="schPhoneNum" name="schPhoneNum" >
+            <input type="hidden" id="tournamentSeq" name="tournamentSeq" th:value="${params.tournamentSeq}">
+            <input type="hidden" id="ticketKind" name="ticketKind" th:value="${params.ticketKind}">
 
             <div class="search_option">
                 <span class="input_group">
@@ -204,8 +206,22 @@
         selectTicket4 = ticket4;
         selectTicket2 = ticket2;
 
+        var ticketKind = $("#ticketKind").val();
+
+console.log(ticketKind);
         $("#phoneNum").text(phoneNum);
         $("#nickName").text(nickName);
+
+        if(ticketKind == "ticket5"){
+            $("#ticket2").prop("readonly", true);
+            $("#ticket2").css('background-color', 'bisque');
+        }else if(ticketKind == "ticket2"){
+            $("#ticket5").prop("readonly", true);
+            $("#ticket5").css('background-color', 'bisque');
+            $("#ticket4").prop("readonly", true);
+            $("#ticket4").css('background-color', 'bisque');
+        }
+
         $("#orgTicket5").val(ticket5);
         $("#orgTicket2").val(ticket2);
         $("#orgTicket4").val(ticket4);
