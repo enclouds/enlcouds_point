@@ -19,7 +19,27 @@
   <script th:src="@{/static/js/common.js}"></script>
 
   <script th:inline="javascript">
+
       /*<![CDATA[*/
+
+        (function () {
+          const BASE_WIDTH = 1536;   // 설계 기준 너비
+          const MIN_ZOOM = 0.5;      // 너무 작아지는 것 방지
+          const MAX_ZOOM = 1.5;      // 너무 커지는 것 방지
+
+          function applyZoom() {
+            const screenWidth = window.innerWidth;
+            let zoom = screenWidth / BASE_WIDTH;
+
+            // 안전 범위 제한
+            zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, zoom));
+
+            document.body.style.zoom = zoom.toFixed(2);
+          }
+
+          window.addEventListener('load', applyZoom);
+          window.addEventListener('resize', applyZoom);
+        })();
 
       document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll(".rank1 dl dd, .rank1 dl dt").forEach((el) => {

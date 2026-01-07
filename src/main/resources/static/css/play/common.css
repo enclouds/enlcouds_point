@@ -133,15 +133,41 @@ font-size: 2.3rem !important;
 
 .bottom .btn1{background:url(/static/img/play/btn1.jpg)no-repeat center center #6d6d6d;}
 .bottom .btn2{background:url(/static/img/play/btn2.jpg)no-repeat center center #6d6d6d;}
-.bottom .auto_btn2{background:url(/static/img/play/auto_btn2.jpg)no-repeat center center #b8d8da;}
 .bottom .btn3{background:url(/static/img/play/btn3.jpg)no-repeat center center #6d6d6d;}
 .bottom .btn4{background:url(/static/img/play/btn4.jpg)no-repeat center center #6d6d6d;}
 .bottom .btn5{background:url(/static/img/play/btn5.jpg)no-repeat center center #6d6d6d;}
 .bottom .btn6{background:url(/static/img/play/btn6.jpg)no-repeat center center #6d6d6d;}
 
+.bottom .auto_btn2 {
+  cursor: pointer;
+  border-radius: 100%;
+  width: 5rem;
+  height: 5rem;
+  display: inline-block;
+
+  background: url(/static/img/play/auto_btn.jpg) no-repeat center center #b8d8da;
+  background-size: 100%;
+
+  box-shadow: 0 0 10px rgb(0 0 0 / 40%);
+}
 
 
 
+/* ===============================
+   FHD / STANBYME AUTO SCALE
+=============================== */
+@media (min-width: 1800px) {
+  .container {
+    transform: scale(1.25);
+    transform-origin: top center;
+  }
+}
+
+
+/* ===== AUTO ZOOM 60% ===== */
+body {
+  zoom: 0.6;
+}
 
 
 /**/
