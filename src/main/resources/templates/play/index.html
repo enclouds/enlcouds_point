@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://thymeleaf.org">
 
 <head>
   <meta charset="UTF-8">
@@ -180,24 +180,37 @@
         }
 
 
-        (function () {
-          const BASE_WIDTH = 1536;   // 설계 기준 너비
-          const MIN_ZOOM = 0.5;      // 너무 작아지는 것 방지
-          const MAX_ZOOM = 1.5;      // 너무 커지는 것 방지
+          (function () {
+            const BASE_W = 1536;
+            const BASE_H = 864;
 
-          function applyZoom() {
-            const screenWidth = window.innerWidth;
-            let zoom = screenWidth / BASE_WIDTH;
+            function applyScale() {
+              const vw = window.innerWidth;
+              const vh = window.innerHeight;
 
-            // 안전 범위 제한
-            zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, zoom));
+              const scale = Math.min(vw / BASE_W, vh / BASE_H);
 
-            document.body.style.zoom = zoom.toFixed(2);
-          }
+              const wrap = document.querySelector(".wrap");
+              if (!wrap) return;
 
-          window.addEventListener('load', applyZoom);
-          window.addEventListener('resize', applyZoom);
-        })();
+              // 스케일
+              wrap.style.transform = `scale(${scale})`;
+              wrap.style.transformOrigin = "top left";
+
+              // ✅ 가운데 정렬(레터박스)
+              const scaledW = BASE_W * scale;
+              const scaledH = BASE_H * scale;
+              const offsetX = Math.max(0, (vw - scaledW) / 2);
+              const offsetY = Math.max(0, (vh - scaledH) / 2);
+
+              wrap.style.position = "absolute";
+              wrap.style.left = offsetX + "px";
+              wrap.style.top = offsetY + "px";
+            }
+
+            window.addEventListener("load", applyScale);
+            window.addEventListener("resize", applyScale);
+          })();
 
       document.addEventListener("DOMContentLoaded", () => {
         document.querySelectorAll(".rank1 dl dd, .rank1 dl dt").forEach((el) => {
@@ -763,8 +776,10 @@
     }
 
     function nextBeep() {
-        var snd = new Audio("../../static/sound/next_beep.mp3");
-        snd.play();
+        if (!isDisplay) {
+            var snd = new Audio("../../static/sound/next_beep.mp3");
+            snd.play();
+        }
     }
 
     function getPrizeInfo(seq){

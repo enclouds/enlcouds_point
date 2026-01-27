@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
 
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000; /* 레터박스 배경 */
+}
+
 html,body,div,ul,li,p,h3,h1,h2,h4,h5{padding:0;margin:0;}
 ul,li{list-style:none}
 a{text-decoration:none;color:#303030;position:relative;}
@@ -38,15 +45,100 @@ i,em {font-size:inherit;line-height: inherit;font-style: normal}
 span,b,i,strong,em {font-size: inherit;font-weight: inherit;line-height: inherit;color: inherit; letter-spacing: inherit;}
 table{width:100%;border:0;border-collapse:collapse;border-spacing:0;empty-cells:show;}
 
-.wrap{width:100%;height:100%;position:relative;}
-.container{position:fixed;top:0;left:0;width:100%;height:100%;background:url(/static/img/play/bg.jpg) no-repeat top center #0e0e0e;background-size: 100%;display:flex;align-items:center;justify-content:center;flex-direction:column;}
+.wrap{
+  width:1536px;          /* ✅ 기준 캔버스 */
+  height:864px;          /* ✅ 기준 캔버스 */
+  position:absolute;     /* ✅ JS가 left/top으로 중앙배치 할거임 */
+  transform-origin: top left;
+}
+
+.container{
+  position:fixed;
+  inset:0;
+  background:url(/static/img/play/bg.jpg) no-repeat top center #0e0e0e;
+  background-size: cover;   /* ✅ 100% 대신 cover가 기기 대응에 안정적 */
+  overflow:hidden;
+}
+
 .container .content {position:relative;width:100%;height:calc(100% - 10rem);max-width:1536px;max-height:864px;display:flex;padding-bottom:4rem;}
+.container .content .left{
+  padding-top: 2.0rem !important;
+}
+.container .content .left .inner{
+  height: 48.4rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;   /* flex-end 해제 */
+  overflow: hidden !important;              /* rank가 total을 침범 못하게 */
+}
+.container .content .left h1 {
+  height: 16rem !important;
+  min-height: 16rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.container .content .left h1 img {
+  width: 120px !important;   /* ✅ 56px 고정 제거 */
+  height: auto !important;
+  margin-bottom: 0 !important;
+}
+/* 1~3등은 위쪽 고정 */
+.container .content .left .rank1{
+  flex: 0 0 auto !important;
+}
 
+/* 4등 이하 영역은 남은 높이를 먹고, 안에서만 보여주기 */
+.container .content .left .rank2{
+  flex: 1 1 auto !important;                /* 남은 공간 채움 */
+  height: auto !important;                  /* 기존 28.2rem 고정 해제 */
+  overflow: hidden !important;              /* 페이지 전환/페이드용 */
+  margin-bottom: 1.6rem !important;
+}
 
-.left{width:320px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.container .content .left .rank1 dl dt,
+.container .content .left .rank1 dl dd {
+  font-size: 1.8rem !important;   /* 2.7 → 2.2 */
+}
+
+.container .content .left .rank2 dl dt,
+.container .content .left .rank2 dl dd {
+  font-size: 1.8rem !important;   /* 2.3 → 2.0 */
+}
+
+.container .content .left .total dl dt {
+  font-size: 2.0rem !important;   /* 2.2 → 2.0 */
+}
+
+.container .content .left .total dl dd {
+  font-size: 3.2rem !important;   /* 3.8 → 3.2 */
+}
+
+/* TOTAL은 항상 맨 아래 */
+.container .content .left .total{
+  flex: 0 0 auto !important;
+  margin-top: auto !important;
+}
+
+.left{
+  width:320px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;   /* 🔥 center → flex-start */
+}
 .left h1{height:12rem;min-height:12rem;display:flex;align-items:center;}
 .left h1 img{width:56px;margin-bottom:2rem;}
-.left .inner{border-right:1px solid #d8b34b;padding:0 4rem;width:100%;height:48.4rem;display:flex;flex-direction:column;justify-content:flex-end;}
+.left .inner{
+  border-right:1px solid #d8b34b;
+  padding:0 4rem;
+  width:100%;
+  height:48.4rem;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;   /* 🔥 flex-end → flex-start */
+}
 
 .rank1{width:100%;padding:0 0 1rem 0;margin-bottom:1rem;border-bottom:1px dashed #878688;}
 .rank1 dl{display:flex;justify-content:space-between;margin-bottom:0.8rem;}
@@ -72,7 +164,12 @@ font-size: 2.3rem !important;
 .rank2 dl dt{font-size:2.3rem;color:#aeaeae;}
 .rank2 dl dd{font-size:2.3rem;color:darksalmon;}
 
-.total{}
+.rank1,
+.rank2{
+  flex-shrink:0;
+}
+
+.total{margin-top:auto;}
 .total dl{width:100%;text-align:center;}
 .total dl dt{font-size:2.2rem;font-weight:bold;margin-bottom:0.4rem;}
 .total dl dd{font-size:3.8rem;color:#d8b34b;font-weight:bold;}
@@ -150,24 +247,5 @@ font-size: 2.3rem !important;
 
   box-shadow: 0 0 10px rgb(0 0 0 / 40%);
 }
-
-
-
-/* ===============================
-   FHD / STANBYME AUTO SCALE
-=============================== */
-@media (min-width: 1800px) {
-  .container {
-    transform: scale(1.25);
-    transform-origin: top center;
-  }
-}
-
-
-/* ===== AUTO ZOOM 60% ===== */
-body {
-  zoom: 0.6;
-}
-
 
 /**/
