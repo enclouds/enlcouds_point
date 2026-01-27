@@ -31,6 +31,9 @@
                     <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_VIEW', 'ROLE_GAME')">
                         <button type="button" class="depth2" th:onclick="|location.href='@{/user/list}'|">회원 목록</button>
                     </li>
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_VIEW', 'ROLE_GAME')">
+                        <button type="button" class="depth2" th:onclick="|location.href='@{/user/univ/list}'|">대학부 회원 목록</button>
+                    </li>
                     <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_VIEW')">
                         <button type="button" class="depth2" th:onclick="|location.href='@{/user/visit/list}'|">회원 최근 방문 목록</button>
                     </li>
@@ -66,6 +69,15 @@
                     </li>
                     <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
                         <button type="button" class="depth2" th:onclick="|location.href='@{/agent/point/list}'|">가맹점 적립/차감 목록</button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="menu_box active" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
+                <h2 class="menu2">대학부 관리</h2>
+                <ul>
+                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
+                        <button type="button" class="depth2" th:onclick="|location.href='@{/user/univ/list}'|">대학부 목록</button>
                     </li>
                 </ul>
             </div>

@@ -4,7 +4,7 @@
     <div th:replace="/fragments/header.html :: fragment-header"></div>
 </head>
 
-<body>
+<body style="padding-left:20px; padding-right:20px;">
 
 <!-- modal S -->
 <div class="modal fade large" id="upt_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -102,9 +102,11 @@
 
         <form id="schFrm">
             <input type="hidden" id="tournamentSeq" name="tournamentSeq" th:value="${params.tournamentSeq}">
+            <input type="hidden" id="gbn" name="gbn" th:value="${params.gbn}">
 
             <div class="search_option">
                 <button type="button" class="add_btn" th:onclick="javascript:fnRegModal()">등록</button>
+                <button type="button" class="change_btn" th:onclick="javascript:fnRegKlpi()">KLPI 점수 적용</button>
                 <button type="button" class="download_btn" th:onclick="javascript:fnExcelExport()">출력</button>
             </div>
         </form>
@@ -118,7 +120,7 @@
                     <th scope="col">등수</th>
                     <th scope="col">이름</th>
                     <th scope="col">닉네임</th>
-                    <th scope="col">지점</th>
+                    <th scope="col" th:text="${params.gbn == 'N' ? '지점' : (params.gbn == 'U' ? '대학부' : '')}"></th>
                     <th scope="col">전화번호</th>
                     <th scope="col">주민번호</th>
                     <th scope="col">계좌번호</th>
@@ -173,8 +175,33 @@
     }
 
     function fnRegModal(){
-        var url = "/user/list/popupPrize";
-        window.open(url, "userPrizeList", "width=1200,height=600,scrollbars=yes,resizable=yes");
+        var url = "/user/list/popupPrize?gbn=" + $("#gbn").val();
+        window.open(url, "userPrizeList", "width=1200,height=600, left=200, scrollbars=yes,resizable=yes");
+    }
+
+    function fnRegKlpi(){
+        $("#loading_modal").show();
+
+        var formData = new FormData();
+        formData.append("tournamentSeq", $("#tournamentSeq").val());
+        formData.append("gbn", $("#gbn").val());
+
+        if(confirm("점수 적용 처리 하시겠습니까?")){
+            $.ajax({
+                contentType: false,
+                processData: false,
+                type: "POST",
+                url: "/tournament/klpiUpdateAjax",
+                data: formData,
+                success: function(response) {
+                    alert(response.resultMsg);
+                    location.reload();
+                },
+                error: function(err) {
+                    console.error("등록 실패:", err);
+                }
+            });
+        }
     }
 
     function prizeInsert(phoneNum, rankNum, regName, regId, bankNum, prize, addPrize) {

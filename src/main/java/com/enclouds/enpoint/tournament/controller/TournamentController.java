@@ -1,11 +1,8 @@
 package com.enclouds.enpoint.tournament.controller;
 
-import com.enclouds.enpoint.game.dto.GameDto;
-import com.enclouds.enpoint.game.dto.PrizeDto;
 import com.enclouds.enpoint.tournament.dto.TournamentDto;
 import com.enclouds.enpoint.tournament.service.EscposFormatter;
 import com.enclouds.enpoint.tournament.service.TournamentService;
-import com.enclouds.enpoint.user.dto.PointDto;
 import com.enclouds.enpoint.user.dto.UserDto;
 import com.enclouds.enpoint.user.service.UserService;
 import org.apache.poi.ss.usermodel.*;
@@ -22,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,7 +88,14 @@ public class TournamentController {
                 userId = userDetails.getUsername();
                 userInfo = userService.getUserInfo(userId);
 
-                List<TournamentDto> tournamentRegList = tournamentService.selectTournamentRegList(tournamentDto);
+                List<TournamentDto> tournamentRegList = new ArrayList<>();
+
+                if(tournamentDto.getGbn().equals("N")){
+                    tournamentRegList = tournamentService.selectTournamentRegList(tournamentDto);
+                }else {
+                    tournamentRegList = tournamentService.selectTournamentRegListUniv(tournamentDto);
+                }
+
                 TournamentDto totalInfo = tournamentService.selectTournamentRegTotalCnt(tournamentDto);
 
                 mv.addObject("tournamentRegList", tournamentRegList);
@@ -124,7 +129,13 @@ public class TournamentController {
                 userId = userDetails.getUsername();
                 userInfo = userService.getUserInfo(userId);
 
-                List<TournamentDto> tournamentPrizeList = tournamentService.selectTournamentPrizeList(tournamentDto);
+                List<TournamentDto> tournamentPrizeList = new ArrayList<>();
+
+                if(tournamentDto.getGbn().equals("U")){
+                    tournamentPrizeList = tournamentService.selectTournamentPrizeListUniv(tournamentDto);
+                }else {
+                    tournamentPrizeList = tournamentService.selectTournamentPrizeList(tournamentDto);
+                }
 
                 mv.addObject("tournamentPrizeList", tournamentPrizeList);
             }else {
@@ -340,6 +351,11 @@ public class TournamentController {
                 tournamentDto.setRegUserId(userId);
                 tournamentDto.setAgentCode(userInfo.getAgentCode());
                 resultCode = tournamentService.prizeInsert(tournamentDto);
+
+                /**
+                 * 대학부 KLPI 점수 적용
+                 */
+
 
                 if (resultCode > 0) {
                     result.put("resultCode", 0);
@@ -644,5 +660,38 @@ public class TournamentController {
         }
     }
 
+    @PostMapping("/klpiUpdateAjax")
+    public @ResponseBody Map<String, Object> klpiUpdateAjax(@ModelAttribute("tournamentDto") TournamentDto tournamentDto) throws Exception{
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDto userInfo = null;
+        String userId = "";
+        int resultCode;
+        Map<String, Object> result = new HashMap<String, Object>();
 
+        try {
+            if (principal != "anonymousUser") {
+                UserDetails userDetails = (UserDetails) principal;
+                userId = userDetails.getUsername();
+                userInfo = userService.getUserInfo(userId);
+
+                tournamentDto.setRegUserId(userId);
+
+                resultCode = tournamentService.klpiUpdate(tournamentDto);
+
+                if (resultCode > 0) {
+                    result.put("resultCode", 0);
+                    result.put("resultMsg", "정상적으로 적용 처리 되었습니다.");
+                } else {
+                    result.put("resultCode", -1);
+                    result.put("resultMsg", "적용에 실패 하였습니다.");
+                }
+            }
+        } catch (ClassCastException cce){
+            DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+            userId = auth2User.getName();
+            userInfo = userService.getUserInfo(userId);
+        }
+
+        return result;
+    }
 }

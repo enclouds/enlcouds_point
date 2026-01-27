@@ -31,8 +31,8 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-            <!-- 개발시 제거 -->
-            <scope>provided</scope>
+            <!-- 개발시 제거
+            <scope>provided</scope> -->
         </dependency>
 
         <dependency>
@@ -201,6 +201,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
             </plugin>
         </plugins>
         <defaultGoal>install</defaultGoal>

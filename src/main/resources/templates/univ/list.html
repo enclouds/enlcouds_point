@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+
+<body>
+
+<!-- modal S -->
+<div class="modal fade small" id="reg_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">대학부 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">대학부 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th scope="row"><em class="required">*</em>대학부 명</th>
+                                <td>
+                                    <input type="text" name="univNm" id="univNm">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:regUniv();">저장</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('reg_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="upt_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">대학부 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">대학부 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <th scope="row"><em class="required">*</em>대학부 명</th>
+                                <td>
+                                    <input type="text" name="uptUnivNm" id="uptUnivNm">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:uptUniv();">저장</button>
+                <button type="button" class="btn red btn-primary" th:onclick="javascript:delUniv();">삭제</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('upt_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- container S -->
+<div class="container">
+    <!-- header S -->
+    <div th:replace="/fragments/left.html :: fragment-left('m3', '/univ/list')"></div>
+    <!-- header E -->
+
+    <!-- content S -->
+    <div class="content">
+        <div class="con_top">
+            <ul>
+                <li>대학부 관리</li>
+                <li>대학부 목록</li>
+            </ul>
+        </div>
+        <p class="page_info">대학부 목록</p>
+
+        <form id="schFrm">
+            <div class="search_option">
+                <span class="input_group">
+                    <select id="schCond1" name="schCond1" style="width:100px;">
+                        <option value="name">대학부 명</option>
+                    </select>
+                    <input type="text" style="width:1000px;" id="schText" name="schText" placeholder="검색어" th:value="${params.schText}">
+                </span>
+                <button type="button" class="search_btn" th:onclick="javascript:fnSearch();">조회</button>
+                <button type="button" class="add_btn" th:onclick="javascript:fnRegModal()">등록</button>
+            </div>
+        </form>
+
+        <div class="list_box">
+            <table class="list">
+                <colgroup>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">대학부 ID</th>
+                    <th scope="col">대학부 명</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="list:${univList}">
+                    <td th:text="${list.univId}"></td>
+                    <td><a href="javascript:callFunction();" th:text="${list.univNm}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.univId}]], [[${list.univNm}]])"></a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- pagination -->
+        <div class="paging" title="페이지">
+
+            <th:block layout:fragment="paging">
+                <nav th:replace="/fragments/pagination.html :: fragment-pagination"></nav>
+            </th:block>
+
+            <th:block layout:fragment="script">
+                <script th:inline="javascript">
+						/*<![CDATA[*/
+
+						function movePage(uri, queryString) {
+							location.href = uri + queryString;
+						}
+
+						/*]]>*/
+					</script>
+            </th:block>
+
+        </div>
+        <!-- /pagination -->
+
+    </div>
+    <!-- content E -->
+
+</div>
+<!-- container E -->
+</body>
+<script th:src="@{/static/js/common.js}"></script>
+<script th:inline="javascript">
+
+    var selectTrSeq;
+
+    $( function() {
+    });
+
+    function fnSearch(){
+        $("#schFrm").submit();
+    }
+
+    function fnModalClose(id){
+        $("#"+id).hide();
+    }
+
+    function fnRegModal(){
+        $("#reg_modal").show();
+    }
+
+    function fnUptModal(univId, univNm){
+        selectTrSeq = univId;
+
+        $("#uptUnivNm").val(univNm);
+        $("#upt_modal").show();
+    }
+
+    function regUniv(){
+        var formData = new FormData();
+
+        if($("#univNm").val() == ''){
+            alert("대학부 명은 필수 입니다.");
+            $("#univNm").focus();
+            return;
+        }
+
+        formData.append("univNm", $("#univNm").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/univ/insertUnivAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function uptUniv(){
+
+        if($("#uptUnivNm").val() == ''){
+            alert("대학부 명은 필수 입니다.");
+            $("#uptUnivNm").focus();
+            return;
+        }
+
+        var formData = new FormData();
+
+        formData.append("univId", selectTrSeq);
+        formData.append("univNm", $("#uptUnivNm").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/univ/updateUnivAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function delUniv(){
+        var formData = new FormData();
+
+        formData.append("univId", selectTrSeq);
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/univ/deleteUnivAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function callFunction() {
+        console.log('call function');
+    }
+
+</script>
+
+</html>

@@ -1,24 +1,21 @@
 package com.enclouds.enpoint.tournament.service;
 
+import com.enclouds.enpoint.cmm.gpi.GpiScoreService;
 import com.enclouds.enpoint.cmm.paging.PaginationInfo;
-import com.enclouds.enpoint.game.dto.GameDto;
-import com.enclouds.enpoint.game.mapper.GameMapper;
+import com.enclouds.enpoint.klpi.dto.KlpiDto;
+import com.enclouds.enpoint.klpi.service.KlpiService;
 import com.enclouds.enpoint.tournament.dto.TournamentDto;
 import com.enclouds.enpoint.tournament.mapper.TournamentMapper;
 import com.enclouds.enpoint.user.dto.UserDto;
 import com.enclouds.enpoint.user.service.CustomUserService;
-import com.enclouds.enpoint.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.print.*;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class TournamentServiceImpl implements TournamentService{
@@ -28,6 +25,12 @@ public class TournamentServiceImpl implements TournamentService{
 
     @Autowired
     private CustomUserService customUserService;
+
+    @Autowired
+    private KlpiService klpiService;
+
+    @Autowired
+    private GpiScoreService gpiScoreService;
 
     @Override
     public List<TournamentDto> selectTournamentList(TournamentDto tournamentDto) throws Exception {
@@ -46,8 +49,18 @@ public class TournamentServiceImpl implements TournamentService{
     }
 
     @Override
+    public List<TournamentDto> selectTournamentRegListUniv(TournamentDto tournamentDto) throws Exception{
+        return tournamentMapper.selectTournamentRegListUniv(tournamentDto);
+    }
+
+    @Override
     public List<TournamentDto> selectTournamentPrizeList(TournamentDto tournamentDto) throws Exception{
         return tournamentMapper.selectTournamentPrizeList(tournamentDto);
+    }
+
+    @Override
+    public List<TournamentDto> selectTournamentPrizeListUniv(TournamentDto tournamentDto) throws Exception{
+        return tournamentMapper.selectTournamentPrizeListUniv(tournamentDto);
     }
 
     @Override
@@ -84,6 +97,38 @@ public class TournamentServiceImpl implements TournamentService{
     }
 
     @Override
+    @Transactional
+    public int klpiUpdate(TournamentDto tournamentDto) throws Exception {
+        List<TournamentDto> prizeList = new ArrayList<>();
+        int result = 0;
+
+        if(tournamentDto.getGbn().equals("N")){
+            prizeList = tournamentMapper.selectTournamentPrizeList(tournamentDto);
+        }else {
+            prizeList = tournamentMapper.selectTournamentPrizeListUniv(tournamentDto);
+        }
+
+        KlpiDto klpiDto = new KlpiDto();
+        klpiDto.setTournamentSeq(tournamentDto.getTournamentSeq());
+        klpiService.deleteKlpi(klpiDto);
+
+        for (TournamentDto dto : prizeList) {
+            double point = gpiScoreService.calculateTournamentScore(dto.getRankNum(), dto.getRegTotalCnt(), dto.getPoint());
+
+            KlpiDto insKlpiDto = new KlpiDto();
+            insKlpiDto.setGbn(tournamentDto.getGbn());
+            insKlpiDto.setPhoneNum(dto.getPhoneNum());
+            insKlpiDto.setPoint(point);
+            insKlpiDto.setRegUserId(tournamentDto.getRegUserId());
+            insKlpiDto.setTournamentSeq(tournamentDto.getTournamentSeq());
+
+            result = klpiService.insertKlpi(insKlpiDto);
+        }
+
+        return result;
+    }
+
+    @Override
     public int updateMemo(TournamentDto tournamentDto) throws Exception{
         return tournamentMapper.updateMemo(tournamentDto);
     }
@@ -91,20 +136,17 @@ public class TournamentServiceImpl implements TournamentService{
     @Override
     @Transactional
     public int updateAddPrize(TournamentDto tournamentDto) throws Exception{
-        int result = tournamentMapper.updateAddPrize(tournamentDto);
+        int result = 0;
 
-        if(result > 0){
-            //내역 남기기
-            UserDto userDto = new UserDto();
-            userDto.setAgentCode(tournamentDto.getAgentCode());
-            userDto.setPhoneNum(tournamentDto.getRegPhoneNum());
-            userDto.setAddTicket(String.valueOf(tournamentDto.getAddPrize()));
+        //내역 남기기
+        UserDto userDto = new UserDto();
+        userDto.setAgentCode(tournamentDto.getAgentCode());
+        userDto.setPhoneNum(tournamentDto.getRegPhoneNum());
+        userDto.setAddTicket(String.valueOf(tournamentDto.getAddPrize()));
 
-            customUserService.updateUserAddTicket4(userDto);
-            result = tournamentMapper.updateAddPrizeYn(tournamentDto);
-        }else {
-            result = -1;
-        }
+        customUserService.updateUserAddTicket4(userDto);
+        result = tournamentMapper.updateAddPrizeYn(tournamentDto);
+
         return result;
     }
 
@@ -130,7 +172,12 @@ public class TournamentServiceImpl implements TournamentService{
                 userDto3.setMinusTicket(tournamentDto.getTicket2());
                 userDto3.setPhoneNum(tournamentDto.getPhoneNum());
                 userDto3.setAgentCode(tournamentDto.getAgentCode());
-                customUserService.updateUserMinusTicket2(userDto3);
+
+                if(tournamentDto.getGbn().equals("N")){
+                    customUserService.updateUserMinusTicket2(userDto3);
+                }else {
+                    customUserService.updateUserMinusTicket2Univ(userDto3);
+                }
 
                 infoDesc += " 프리티켓 : " + tournamentDto.getTicket2() + "장";
                 tournamentDto.setFreeCnt(Integer.parseInt(tournamentDto.getTicket2()));

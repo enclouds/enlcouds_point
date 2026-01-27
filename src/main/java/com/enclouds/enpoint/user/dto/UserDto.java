@@ -31,6 +31,9 @@ public class UserDto extends CommonDto {
     private Integer ticketInt;
     private String couponPoint;
     private String phoneNumMasking;
+    private String univId;
+    private String univNm;
+    private String klpiRankPoint;
 
     private String phoneNum;
     private String nickName;
@@ -91,4 +94,5 @@ public class UserDto extends CommonDto {
 
     private String tournamentSeq;
     private String ticketKind;
+    private String gbn;
 }

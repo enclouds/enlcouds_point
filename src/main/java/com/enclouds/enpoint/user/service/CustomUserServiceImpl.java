@@ -38,6 +38,17 @@ public class CustomUserServiceImpl implements CustomUserService{
     }
 
     @Override
+    public List<UserDto> selectUnivUserList(UserDto userDto) throws Exception {
+        int userTotalCount = userMapper.selectUnivUserListTotalCount(userDto);
+
+        PaginationInfo paginationInfo = new PaginationInfo(userDto);
+        paginationInfo.setTotalRecordCount(userTotalCount);
+        userDto.setPaginationInfo(paginationInfo);
+
+        return userMapper.selectUnivUserList(userDto);
+    }
+
+    @Override
     public List<UserDto> selectCustomUserListByVisit(UserDto userDto) throws Exception {
         int userTotalCount = userMapper.selectCustomUserListByVisitTotalCount(userDto);
 
@@ -99,6 +110,16 @@ public class CustomUserServiceImpl implements CustomUserService{
     @Override
     public int selectDuplUser(UserDto userDto) throws Exception {
         return userMapper.selectDuplUser(userDto);
+    }
+
+    @Override
+    public int selectDuplUnivUser(UserDto userDto) throws Exception {
+        return userMapper.selectDuplUnivUser(userDto);
+    }
+
+    @Override
+    public int selectDuplUnivUser2(UserDto userDto) throws Exception {
+        return userMapper.selectDuplUnivUser2(userDto);
     }
 
     @Override
@@ -175,13 +196,37 @@ public class CustomUserServiceImpl implements CustomUserService{
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int insertUnivUser(UserDto userDto) throws Exception {
+        try {
+            int result = -1;
+
+            result = userMapper.insertUnivUser(userDto);
+
+            return result;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public int updateUser(UserDto userDto) throws Exception {
         return userMapper.updateUser(userDto);
     }
 
     @Override
+    public int updateUnivUser(UserDto userDto) throws Exception {
+        return userMapper.updateUnivUser(userDto);
+    }
+
+    @Override
     public int deleteUser(UserDto userDto) throws Exception {
         return userMapper.deleteUser(userDto);
+    }
+
+    @Override
+    public int deleteUnivUser(UserDto userDto) throws Exception {
+        return userMapper.deleteUnivUser(userDto);
     }
 
     @Override
@@ -348,6 +393,63 @@ public class CustomUserServiceImpl implements CustomUserService{
             result = userMapper.updateUserAddTicket2(userDto);
             //방문일자 업데이트
             userMapper.updateVisitDate(userDto);
+
+            //티켓 내역 생성
+            if(result > 0){
+                userDto.setDefTicket(agentInfo.getTicketInt2());
+                userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
+                result = userMapper.insertAddTicket2(userDto);
+
+                /*if(result > 0){
+                    //카카오톡 전송
+                    PointDto pointDto = userMapper.getTotalPoint(userDto);
+
+                    KakaoDto kakaoDto = new KakaoDto();
+                    kakaoDto.setTemplateId("KA01TP221011062400156k4kpTZGoW5f");
+                    kakaoDto.setRcvNum(userDto.getPhoneNum());
+                    kakaoDto.setAddPoint(userDto.getAddPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
+                    kakaoDto.setTotalPoint(pointDto.getPoint().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ","));
+                    kakaoDto.setStoreNm(pointDto.getAgentName());
+
+                    KakaoExampleController kakaoExampleController = new KakaoExampleController();
+                    kakaoExampleController.sendOneAta(kakaoDto);
+                }*/
+
+                //해당 가맹점 티켓 차감
+                if(result > 0){
+                    AgentDto agentDto1 = new AgentDto();
+                    agentDto1.setAgentCode(userDto.getAgentCode());
+                    agentDto1.setMinusTicket(userDto.getAddTicket());
+
+                    agentService.updateAgentMinusTicket2(agentDto1);
+                }
+            }
+            return result;
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateUserAddTicket2Univ(UserDto userDto) throws Exception {
+        try {
+            int result = -1;
+
+            PointDto preTicketDto = userMapper.getTotalTicket2Univ(userDto);
+            AgentDto agentDto = new AgentDto();
+            agentDto.setAgentCode(userDto.getAgentCode());
+            AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
+
+            if(agentInfo.getTicketInt2() < Integer.parseInt(userDto.getAddTicket())){
+                result = -2;
+                return  result;
+            }
+
+            //총 티켓 증가
+            result = userMapper.updateUserAddTicket2Univ(userDto);
+            //방문일자 업데이트
+            userMapper.updateVisitDateUniv(userDto);
 
             //티켓 내역 생성
             if(result > 0){
@@ -778,6 +880,29 @@ public class CustomUserServiceImpl implements CustomUserService{
     }
 
     @Override
+    public int updateUserMinusTicket2Univ(UserDto userDto) throws Exception {
+        int result = 0;
+
+        AgentDto agentDto = new AgentDto();
+        agentDto.setAgentCode(userDto.getAgentCode());
+        AgentDto agentInfo = agentService.selectAgentInfo(agentDto);
+
+        PointDto preTicketDto = userMapper.getTotalTicket2Univ(userDto);
+
+        if(Integer.parseInt(preTicketDto.getTicket()) < Integer.parseInt(userDto.getMinusTicket())){
+            return result = -2;
+        }
+
+        userDto.setDefTicket(agentInfo.getTicketInt2());
+        userDto.setPrivateDefTicket(preTicketDto.getTicketInt());
+        userMapper.insertMinusTicketAsCnt2(userDto);
+        //방문일자 업데이트
+        userMapper.updateVisitDateUniv(userDto);
+
+        return userMapper.useTicketAsCnt2Univ(userDto);
+    }
+
+    @Override
     public int updateUserMinusTicket3(UserDto userDto) throws Exception {
         int result = 0;
 
@@ -1052,6 +1177,11 @@ public class CustomUserServiceImpl implements CustomUserService{
     @Override
     public List<PointDto> selectTicketHistory2(UserDto userDto) throws Exception {
         return userMapper.selectTicketHistory2(userDto);
+    }
+
+    @Override
+    public List<PointDto> selectTicketHistory2Univ(UserDto userDto) throws Exception {
+        return userMapper.selectTicketHistory2Univ(userDto);
     }
 
     @Override

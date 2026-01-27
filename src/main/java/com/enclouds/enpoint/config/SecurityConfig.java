@@ -49,7 +49,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity webSecurity) throws Exception {
-        webSecurity.ignoring().antMatchers("/css/**").antMatchers("/img/**").antMatchers("/js/**").antMatchers("/app/**");
+        webSecurity.ignoring()
+                .antMatchers("/css/**")
+                .antMatchers("/img/**")
+                .antMatchers("/js/**")
+                .antMatchers("/app/**")
+                .antMatchers("/ws/**");
         webSecurity.httpFirewall(defaultHttpFirewall());
     }
 

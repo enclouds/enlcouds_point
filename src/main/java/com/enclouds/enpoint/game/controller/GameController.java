@@ -89,7 +89,8 @@ public class GameController {
     }
 
     @RequestMapping(value = "/play", method = RequestMethod.GET)
-    public ModelAndView gamePlayList(HttpServletResponse response, @ModelAttribute GameDto gameDto) throws Exception{
+    public ModelAndView gamePlayList(HttpServletResponse response, @ModelAttribute GameDto gameDto
+                                    , @RequestParam(value="room", required=false) String room) throws Exception{
         ModelAndView mv = new ModelAndView("play/index");
 
         BlindDto blindDto = new BlindDto();
@@ -129,6 +130,7 @@ public class GameController {
         mv.addObject("gameInfo", gameInfo);
         mv.addObject("imgUrl", "/static/img/play/logo_"+gameInfo.getRegUserId()+".png");
         mv.addObject("title", title);
+        mv.addObject("room", room);
 
         return mv;
     }

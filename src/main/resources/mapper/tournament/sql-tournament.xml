@@ -24,6 +24,7 @@
         , gt.name AS ticket_kind
         , ti.ticket_kind AS ticket_kind_code
         , tpm.memo
+        , ti.gbn
 		from t_info ti
         left join t_prize_memo tpm on tpm.tournament_seq = ti.seq
         left outer join g_ticket gt on gt.code = ti.ticket_kind
@@ -45,6 +46,7 @@
         , date_format(reg_date, '%Y-%m-%d') as regDate
         , start_date
         , ticket_cnt
+        , gbn
         from t_info ti
         where 1=1
         and ti.seq = #{tournamentSeq}
@@ -80,6 +82,25 @@
         ORDER BY tru.seq ASC
     </select>
 
+    <select id="selectTournamentRegListUniv" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto" resultType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+        SELECT (@rnum := @rnum + 1) AS rnum
+        , tru.seq
+        , tru.reg_phone_num
+        , pu.nick_name
+        , tru.reg_date
+        , tru.info_desc
+        , ti.tournament_name
+        , ti.start_date
+        , tru.entry_count
+        FROM t_reg_user tru
+        LEFT JOIN p_user_univ pu ON pu.phone_num = tru.reg_phone_num
+        LEFT JOIN t_info ti ON ti.seq = tru.tournament_seq
+        , (SELECT @rnum := 0) AS r
+        WHERE 1=1
+        AND tournament_seq = #{tournamentSeq}
+        ORDER BY tru.seq ASC
+    </select>
+
     <select id="selectTournamentPrizeList" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto" resultType="com.enclouds.enpoint.tournament.dto.TournamentDto">
         SELECT tp.seq
         , ti.tournament_name
@@ -97,11 +118,48 @@
         , tp.prize
         , tp.add_prize
         , tpm.memo
+        , (select count(*) from t_reg_user tru where tru.tournament_seq = ti.seq ) * ti.ticket_cnt  AS reg_total_cnt
+        , ti.ticket_cnt
+        , ti.ticket_kind
+        , ti.ticket_cnt * gt.klpi_point AS point
         FROM t_prize tp
         LEFT JOIN p_user pu ON pu.phone_num = tp.reg_phone_num
         LEFT JOIN p_agent pa ON pa.agent_code = pu.agent_code
         LEFT JOIN t_info ti ON ti.seq = tp.tournament_seq
         LEFT JOIN t_prize_memo tpm ON tpm.tournament_seq = tp.tournament_seq
+        LEFT JOIN g_ticket gt ON gt.code = ti.ticket_kind
+        WHERE 1=1
+        AND tp.tournament_seq = #{tournamentSeq}
+        ORDER BY tp.rank_num ASC
+    </select>
+
+    <select id="selectTournamentPrizeListUniv" parameterType="com.enclouds.enpoint.tournament.dto.TournamentDto" resultType="com.enclouds.enpoint.tournament.dto.TournamentDto">
+        SELECT tp.seq
+        , ti.tournament_name
+        , date_format(ti.start_date, '%Y-%m-%d') as start_date
+        , tp.reg_name
+        , pu.nick_name
+        , pa.univ_nm AS agent_name
+        , pu.phone_num
+        , tp.reg_id
+        , tp.bank_num
+        , format(tp.prize, 0) as prize_str
+        , format(tp.add_prize, 0) as add_prize_str
+        , tp.rank_num
+        , tp.add_prize_yn
+        , tp.prize
+        , tp.add_prize
+        , tpm.memo
+        , (select count(*) from t_reg_user tru where tru.tournament_seq = ti.seq ) * ti.ticket_cnt  AS reg_total_cnt
+        , ti.ticket_cnt
+        , ti.ticket_kind
+        , ti.ticket_cnt * gt.klpi_point AS point
+        FROM t_prize tp
+        LEFT JOIN p_user_univ pu ON pu.phone_num = tp.reg_phone_num
+        LEFT JOIN p_univ pa ON pa.univ_id = pu.univ_id
+        LEFT JOIN t_info ti ON ti.seq = tp.tournament_seq
+        LEFT JOIN t_prize_memo tpm ON tpm.tournament_seq = tp.tournament_seq
+        LEFT JOIN g_ticket gt ON gt.code = ti.ticket_kind
         WHERE 1=1
         AND tp.tournament_seq = #{tournamentSeq}
         ORDER BY tp.rank_num ASC
@@ -131,14 +189,16 @@
 		, start_date
 		, reg_id
         , ticket_cnt
-        , ticket_kind)
+        , ticket_kind
+        , gbn)
 		VALUES
 		( #{tournamentName}
 		, NOW()
         , #{startDate}
 		, #{regId}
         , #{ticketCnt}
-        , #{ticketKind})
+        , #{ticketKind}
+        , #{gbn})
 	</insert>
 
     <select id="selectLastInsertId" resultType="long">

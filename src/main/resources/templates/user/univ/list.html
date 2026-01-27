@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="/fragments/header.html :: fragment-header"></div>
+</head>
+
+<style>
+    #my-spinner { width: 100%; height: 100%; top: 0; left: 0; display: none; opacity: .6; background: silver; position: absolute; z-index: 2; }
+    #my-spinner div { width: 100%; height: 100%; display: table; }
+    #my-spinner span { display: table-cell; text-align: center; vertical-align: middle; }
+    #my-spinner img { background: white; padding: 1em; border-radius: .7em; }
+</style>
+
+<body>
+<div class="modal fade small" id="loading_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div id='my-spinner'>
+    <div>
+    <span>
+    	<img src='//cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif'>
+    </span>
+    </div>
+</div>
+</div>
+
+<!-- modal S -->
+<div class="modal fade small" id="memo_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center" id="">메모</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul id="memo_ul">
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('memo_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="reg_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">대학부 회원 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">대학부 회원정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row"><em class="required">*</em>전화번호</th>
+                            <td>
+                                <input type="text" name="phoneNum" id="phoneNum" maxlength="11" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">닉네임</th>
+                            <td>
+                                <input type="text" name="nickName" id="nickName">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><em class="required">*</em>등록 대학부</th>
+                            <td>
+                                <select id="univId" name="univId">
+                                    <option value="">--선택--</option>
+                                    <option th:each="univList:${univTotalList}" th:value="${univList.univId}" th:utext="${univList.univNm}" th:selected="${univList.univId == univId}"></option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">메모</th>
+                            <td>
+                                <textarea name="memo" id="memo"></textarea>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:regUnivMember();">저장</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('reg_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="upt_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">대학부 회원 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">대학부 회원 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row"><em class="required">*</em>전화번호</th>
+                            <td>
+                                <input type="text" name="uptPhoneNum" id="uptPhoneNum" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">닉네임</th>
+                            <td>
+                                <input type="text" name="uptNickName" id="uptNickName">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">등록 대학부</th>
+                            <td>
+                                <select id="uptUnivId" name="uptUnivId">
+                                    <option value="">--선택--</option>
+                                    <option th:each="univList:${univTotalList}" th:value="${univList.univId}" th:utext="${univList.univNm}"></option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">메모</th>
+                            <td>
+                                <textarea id="uptMemo" name="uptMemo"></textarea>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:uptUnivMember();">저장</button>
+                <button type="button" class="btn red btn-primary" th:onclick="javascript:delUnivMember();">삭제</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('upt_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="add_ticket_modal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">회원 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">프리 티켓 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">별명</th>
+                            <td>
+                                <input type="text" name="addTicketNickName2" id="addTicketNickName2" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">총 티켓</th>
+                            <td>
+                                <input type="text" name="totalTicket2" id="totalTicket2" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">적립 티켓</th>
+                            <td>
+                                <input type="text" name="addTicket2" id="addTicket2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:addTicket2();">적립</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('add_ticket_modal2');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade small" id="minus_ticket_modal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center">회원 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box">
+                    <p class="tb_tit">프리 티켓 정보</p>
+                    <table class="form">
+                        <colgroup>
+                            <col width="20%;">
+                            <col width="80%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th scope="row">별명</th>
+                            <td>
+                                <input type="text" name="minusTicketNickName2" id="minusTicketNickName2" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">총 티켓</th>
+                            <td>
+                                <input type="text" name="totalMinusTicket2" id="totalMinusTicket2" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">차감 티켓</th>
+                            <td>
+                                <input type="text" name="minusTicket2" id="minusTicket2" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn blue btn-primary" th:onclick="javascript:minusTicket2();">차감</button>
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('minus_ticket_modal2');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- modal S -->
+<div class="modal fade large" id="history_ticket_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title center"><span id="ticketName1"></span> 티켓 내역 정보</h1>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form_box" style="height:400px;">
+                    <p class="tb_tit"><span id="ticketName2"></span> 티켓 내역 정보</p>
+                    <table class="form">
+                        <thead>
+                        <tr>
+                            <th scope="col">적립구분</th>
+                            <th scope="col"><span id="ticketName3"></span> 티켓수량</th>
+                            <th scope="col">일자</th>
+                            <th scope="col">처리자</th>
+                        </tr>
+                        </thead>
+                        <tbody id="historyTbodyTicket">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn_cancel" th:onclick="javascript:fnModalClose('history_ticket_modal');">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal E -->
+
+<!-- container S -->
+<div class="container">
+    <!-- header S -->
+    <div th:replace="/fragments/left.html :: fragment-left('m2', '/user/univ/list')"></div>
+    <!-- header E -->
+
+    <!-- content S -->
+    <div class="content">
+        <div class="con_top">
+            <ul>
+                <li>회원관리</li>
+                <li>대학부 회원 목록</li>
+            </ul>
+        </div>
+        <p class="page_info">대학부 회원 목록</p>
+
+        <form id="schFrm">
+            <input type="hidden" id="schPhoneNum" name="schPhoneNum" >
+
+            <div class="search_option">
+                <span class="input_group">
+                    <select id="schCond1" name="schCond1" style="width:100px;">
+                        <option value="nick" th:selected="${params.schCond1} == 'nick'">별명</option>
+                        <option value="phone" th:selected="${params.schCond1} == 'phone'">전화번호</option>
+                    </select>
+
+                    <select id="schCond2" name="schCond2" style="width:150px;">
+                        <option value="">전체</option>
+                        <option th:each="list:${univTotalList}" th:value="${list.univId}" th:text="${list.univNm}" th:selected="${list.univId} == ${params.schCond2}"></option>
+                    </select>
+
+                    <input type="text" style="width:1000px;" id="schText" name="schText" placeholder="검색어" th:value="${params.schText}" onkeyup="if(window.event.keyCode==13){fnSearch()}">
+                </span>
+                <button type="button" class="search_btn" th:onclick="javascript:fnSearch();">조회</button>
+                <button sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')"  type="button" class="add_btn" th:onclick="javascript:fnRegModal()">등록</button>
+            </div>
+        </form>
+
+        <div class="list_box">
+            <table class="list">
+                <colgroup>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col" rowspan="2">별명</th>
+                    <th scope="col" rowspan="2">대학부 명</th>
+                    <th sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VIEW')" scope="col" rowspan="2">전화번호</th>
+                    <th scope="col" rowspan="2">전화번호</th>
+                    <th scope="col" rowspan="2">KLPI</th>
+                    <th scope="col" rowspan="2">프리T</th>
+                    <th scope="col" colspan="2" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >처리</th>
+                    <th scope="col" rowspan="2">내역</th>
+                    <th scope="col" rowspan="2">메모</th>
+                    <th scope="col" rowspan="2">등록 일자</th>
+                    <th scope="col" rowspan="2">최근 방문 일자</th>
+                </tr>
+                <tr>
+                    <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >적립</th>
+                    <th scope="col" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >사용</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="list:${univUserList}">
+                    <td th:text="${list.nickName}"></td>
+                    <td th:text="${list.univNm}"></td>
+                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_VIEW')"><a href="javascript:callFunction();" th:text="${list.phoneNum}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.phoneNumMasking}]], [[${list.phoneNum}]], [[${list.nickName}]], [[${list.memo}]], [[${list.univId}]])"></a></td>
+                    <td sec:authorize="hasAnyRole('ROLE_AGENT', 'ROLE_VIEW')"><a href="javascript:callFunction();" th:text="${list.phoneNumMasking}" style="color:blue;" th:onclick="javascript:fnUptModalMas([[${list.phoneNumMasking}]], [[${list.phoneNum}]], [[${list.nickName}]], [[${list.memo}]], [[${list.univId}]])"></a></td>
+                    <td th:text="${list.klpiRankPoint}"></td>
+                    <td th:text="${list.ticket2}"></td>
+                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnAddTicket2([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket2}]])">적립</button>
+                    </td>
+                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
+                        <button type="button" class="tb_btn red" th:if="${list.ticket2}>0" th:onclick="javascript:fnTicketUse2([[${list.phoneNum}]], [[${list.nickName}]], [[${list.ticket2}]])">차감</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn yellow" th:onclick="javascript:fnTicketHistory2([[${list.phoneNum}]])">내역</button>
+                    </td>
+                    <td>
+                        <button type="button" class="tb_btn green" th:if="${list.memo} != null and ${list.memo} != ''" th:onclick="javascript:fnMemoPopup([[${list.memo}]])">메모</button>
+                    </td>
+                    <td th:text="${list.regDate}"></td>
+                    <td th:text="${list.maxDate}"></td>
+                    <td sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_AGENT','ROLE_ADMIN')" >
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- pagination -->
+        <div class="paging" title="페이지">
+
+            <th:block layout:fragment="paging">
+                <nav th:replace="/fragments/pagination.html :: fragment-pagination"></nav>
+            </th:block>
+
+            <th:block layout:fragment="script">
+                <script th:inline="javascript">
+						/*<![CDATA[*/
+
+						function movePage(uri, queryString) {
+							location.href = uri + queryString;
+						}
+
+						/*]]>*/
+					</script>
+            </th:block>
+
+        </div>
+        <!-- /pagination -->
+
+    </div>
+    <!-- content E -->
+
+</div>
+<!-- container E -->
+</body>
+<script th:src="@{/static/js/common.js}"></script>
+<script th:inline="javascript">
+
+    var selectTrSeq;
+    var pointVal = 0;
+
+    $( function() {
+    });
+
+    function fnSearch(){
+        $("#schFrm").submit();
+    }
+
+    function fnModalClose(id){
+        $("#"+id).hide();
+    }
+
+    function fnRegModal(){
+        $("#reg_modal").show();
+    }
+
+    function fnUptModal(phoneNumMasking, phoneNum, nickName, memo, univId){
+        selectTrSeq = phoneNum;
+
+        $("#uptPhoneNum").val(phoneNum);
+        $("#uptNickName").val(nickName);
+        $("#uptUnivId").val(univId);
+        $("#uptMemo").val(memo);
+        $("#upt_modal").show();
+    }
+
+    function fnUptModalMas(phoneNumMasking, phoneNum, nickName, memo, univId){
+        selectTrSeq = phoneNum;
+
+        $("#uptPhoneNum").val(phoneNumMasking);
+        $("#uptNickName").val(nickName);
+        $("#uptUnivId").val(univId);
+        $("#uptMemo").val(memo);
+        $("#upt_modal").show();
+    }
+
+    function regUnivMember(){
+        var formData = new FormData();
+
+        if($("#phoneNum").val() == ''){
+            alert("전화번호는 필수 입니다.");
+            $("#phoneNum").focus();
+            return;
+        }
+
+        if($("#univId").val() == ''){
+            alert("등록 대학부는 필수 입니다.");
+            $("#univId").focus();
+            return;
+        }
+
+        formData.append("phoneNum", $("#phoneNum").val());
+        formData.append("nickName", $("#nickName").val());
+        formData.append("univId", $("#univId").val());
+        formData.append("memo", $("#memo").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/user/insertUnivUserAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                if(response.resultCode > -1){
+                    fnSearch();
+                }
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function uptUnivMember(){
+        var formData = new FormData();
+
+        formData.append("phoneNum", selectTrSeq);
+        formData.append("nickName", $("#uptNickName").val());
+        formData.append("univId", $("#uptUnivId").val());
+        formData.append("memo", $("#uptMemo").val());
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/user/updateUnivUserAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                if(response.resultCode > -1){
+                    fnSearch();
+                }
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+    function delUnivMember(){
+
+        if(confirm("정말 삭제 하시겠습니까?")){
+            var formData = new FormData();
+
+            formData.append("phoneNum", selectTrSeq);
+
+            $.ajax({
+                contentType:false,
+                processData:false,
+                type: "POST",
+                url: "/user/deleteUnivUserAjax",
+                data: formData,
+                success: function(response) {
+                    // 성공 시 동작
+                    alert(response.resultMsg);
+                    fnSearch();
+                },
+                error: function(error) {
+                    // 실패 시 동작
+                }
+            });
+        }
+    }
+
+    function callFunction() {
+        console.log('call function');
+    }
+
+    function fnMemoPopup(memo){
+        $("#memo_modal #memo_ul").children().remove();
+        $("#memo_modal #memo_ul").append("<li>" + memo + "</li>" );
+        $("#memo_modal").show();
+    }
+
+    function fnAddTicket2(phoneNum, nickName, ticket){
+        selectTrSeq = phoneNum;
+
+        $("#addTicketNickName2").val(nickName);
+        $("#totalTicket2").val(ticket);
+        $("#add_ticket_modal2").show();
+
+        $("#addTicketPoint2").focus();
+    }
+
+    function addTicket2(){
+        var formData = new FormData();
+
+        formData.append("phoneNum", selectTrSeq);
+        formData.append("addTicket", $("#addTicket2").val());
+
+        $("#add_ticket_modal2").hide();
+        $("#loading_modal").show();
+        $("#my-spinner").show();
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/user/updateUserAddTicket2UnivAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                $("#loading_modal").hide();
+                $("#my-spinner").hide();
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+                $("#loading_modal").hide();
+                $("#my-spinner").hide();
+            }
+        });
+    }
+
+    function fnTicketUse2(phoneNum, nickName, ticket){
+        if(ticket < 1){
+            alert("사용할 티켓이 없습니다.");
+            return;
+        }
+
+        selectTrSeq = phoneNum;
+
+        $("#minusTicketNickName2").val(nickName);
+        $("#totalMinusTicket2").val(ticket);
+        $("#minus_ticket_modal2").show();
+
+        $("#minusTicket2").focus();
+    }
+
+    function minusTicket4(){
+        var formData = new FormData();
+
+        formData.append("phoneNum", selectTrSeq);
+        formData.append("minusTicket", $("#minusTicket4").val());
+
+        $("#minus_ticket_modal3").hide();
+        $("#loading_modal").show();
+        $("#my-spinner").show();
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/user/updateUserMinusTicket4Ajax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                $("#loading_modal").hide();
+                $("#my-spinner").hide();
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+                $("#loading_modal").hide();
+                $("#my-spinner").hide();
+            }
+        });
+    }
+
+    function minusTicket2(){
+        var formData = new FormData();
+
+        formData.append("phoneNum", selectTrSeq);
+        formData.append("minusTicket", $("#minusTicket2").val());
+
+        $("#minus_ticket_modal2").hide();
+        $("#loading_modal").show();
+        $("#my-spinner").show();
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/user/updateUserMinusTicket2UnivAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                alert(response.resultMsg);
+                $("#loading_modal").hide();
+                $("#my-spinner").hide();
+                fnSearch();
+            },
+            error: function(error) {
+                // 실패 시 동작
+                $("#loading_modal").hide();
+                $("#my-spinner").hide();
+            }
+        });
+    }
+
+    function fnTicketHistory2(phoneNum){
+        $("#historyTbodyTicket").empty();
+
+        var formData = new FormData();
+
+        formData.append("phoneNum", phoneNum);
+
+        $.ajax({
+            contentType:false,
+            processData:false,
+            type: "POST",
+            url: "/user/ticket/selectTicketHistory2UnivAjax",
+            data: formData,
+            success: function(response) {
+                // 성공 시 동작
+                if(response.historyTicketList != null){
+                    var appendStr = '';
+                    for(var i=0 ; i<response.historyTicketList.length ; i++){
+                        var appendStr_01 = "<td>"+response.historyTicketList[i]['ticketGbnNm']+"</td>>";
+                        var appendStr_02 = "<td>"+response.historyTicketList[i]['ticket']+"</td>>";
+                        var appendStr_03 = "<td>"+response.historyTicketList[i]['regDate']+"</td>>";
+                        var appendStr_04 = "<td>"+response.historyTicketList[i]['agentName']+"</td>>";
+
+                        appendStr += "<tr>" + appendStr_01 + appendStr_02 + appendStr_03 + appendStr_04 + "</>tr>";
+                    }
+
+                    $("#historyTbodyTicket").append(appendStr);
+
+                    $("#ticketName1").text("프리");
+                    $("#ticketName2").text("프리");
+                    $("#ticketName3").text("프리");
+                }
+
+                $("#history_ticket_modal").show();
+            },
+            error: function(error) {
+                // 실패 시 동작
+            }
+        });
+    }
+
+</script>
+
+</html>

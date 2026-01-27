@@ -22,6 +22,10 @@
         $("#loginFrm").submit();
     }
 
+    function fnKlpiRank(){
+        window.open("/rank/general", "klpiRank", "width=800,height=800,scrollbars=yes");
+    }
+
     function fnAppDownload(){
         $("#loginFrm").attr("action", "/download/app");
         $("#loginFrm").submit();
@@ -46,7 +50,7 @@
       <div class="login_wrap">
         <h1><img src="/static/img/jackpot/kingsloungelogo.png" alt="킹스힐포인트"></h1>
         <div class="login_box">
-          <p class="tit">로그인</p>
+          <p class="tit">LOG IN</p>
           <div class="input_box">
             <p class="group">
               <input type="text" id="username" name="username" placeholder="로그인 ID">
@@ -66,8 +70,9 @@
             <font style="color:orange;">ID 와 비밀번호를 확인 바랍니다.</font>
           </div>
           <P class="bt_link">
-            <a href="javascript:fnAppDownload();">APP 다운로드</a>
-            <a href="javascript:fnGameDownload();">킹스포커 다운로드</a>
+              <a href="javascript:fnKlpiRank();"><span style="color:green;">KLPI 순위</span></a>
+              <a href="javascript:fnAppDownload();"><span style="color:blue;">APP 다운로드</span></a>
+              <a href="javascript:fnGameDownload();"><span style="color:blue;">킹스포커 다운로드</span><a>
           </p>
 
         </div>

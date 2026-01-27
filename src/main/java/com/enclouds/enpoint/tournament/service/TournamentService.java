@@ -11,7 +11,11 @@ public interface TournamentService {
 
     List<TournamentDto> selectTournamentRegList(TournamentDto tournamentDto) throws Exception;
 
+    List<TournamentDto> selectTournamentRegListUniv(TournamentDto tournamentDto) throws Exception;
+
     List<TournamentDto> selectTournamentPrizeList(TournamentDto tournamentDto) throws Exception;
+
+    List<TournamentDto> selectTournamentPrizeListUniv(TournamentDto tournamentDto) throws Exception;
 
     TournamentDto selectTournamentRegTotalCnt(TournamentDto tournamentDto) throws Exception;
 
@@ -36,5 +40,7 @@ public interface TournamentService {
     public int updateAddPrize(TournamentDto tournamentDto) throws Exception;
 
     public TournamentDto selectPrintInfo(TournamentDto tournamentDto) throws Exception;
+
+    public int klpiUpdate(TournamentDto tournamentDto) throws Exception;
 
 }

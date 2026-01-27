@@ -56,12 +56,19 @@
         // ★ 선택한 ROOM 으로 이동
         function enterRoom(seq, roomId) {
             // 바로 게임 페이지로 이동하면서 roomId 전달
-            location.href = "/game/play?seq=" + seq + "&room=" + roomId;
+            location.href = "/game/play?seq=" + seq + "&room=" + roomId + "&display=1";
         }
 
         // 게임 시작
         function playGame(seq){
-            location.href = "/game/play?seq=" + seq;
+         $.post("/api/rooms/create?seq=" + seq, function (roomId) {
+              // 생성된 roomId로 게임 페이지 이동
+              location.href = "/game/play?seq=" + seq + "&room=" + roomId;
+          }).fail(function(xhr){
+              alert("ROOM 생성 실패: " + xhr.responseText);
+          });
+
+          <!-- location.href = "/game/play?seq=" + seq + "&room=" + roomId;-->
         }
     </script>
 </head>

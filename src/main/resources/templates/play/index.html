@@ -17,10 +17,168 @@
   <script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script th:src="@{/static/js/common.js}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 
-  <script th:inline="javascript">
+    <script th:inline="javascript">
 
       /*<![CDATA[*/
+
+         // ===== room / mode =====
+        var room = /*[[${room}]]*/ null;
+        var WS_ENDPOINT = /*[[@{/ws}]]*/ "/ws";
+
+        // URL 파라미터로 모드 결정
+        // 전광판: ?room=ABCD&display=1
+        // 컨트롤: ?room=ABCD&ctrl=1
+        var qs = new URLSearchParams(window.location.search);
+        var isDisplay = qs.get("display") === "1";
+        var syncEnabled = !!room;
+
+        // ✅ ctrl 파라미터 없더라도 room 있고 display 아니면 컨트롤로 본다
+        var isCtrl = (qs.get("ctrl") === "1") || (syncEnabled && !isDisplay);
+
+        // ===== STOMP =====
+        var stompClient = null;
+
+        function connectStomp() {
+          if (!syncEnabled) return;
+
+          var socket = new SockJS(WS_ENDPOINT);
+          stompClient = Stomp.over(socket);
+          stompClient.debug = null; // 콘솔 로그 끄기
+
+          stompClient.connect({}, function () {
+            // room 토픽 구독
+            stompClient.subscribe("/topic/rooms/" + room, function (msg) {
+              // ✅ 컨트롤 화면은 구독 메시지 적용 금지(에코 방지)
+              if (isCtrl) return;
+
+              try {
+                var data = JSON.parse(msg.body);
+                applyRemoteState(data);
+              } catch (e) {
+                console.error("bad ws msg", e);
+              }
+            });
+
+            // 접속 직후 현재 상태 1번 요청(전광판이 새로 켜져도 즉시 동기화)
+            stompClient.send("/app/rooms/" + room + "/sync", {}, "");
+          }, function (err) {
+            console.error("stomp connect fail", err);
+          });
+        }
+
+        // 컨트롤 화면이 현재 상태를 방송
+        function broadcastState(statusText) {
+          if (!syncEnabled) return;
+          if (!stompClient || !stompClient.connected) return;
+
+          // NEXT BREAK 계산
+          //breakTimeSum(); // breakTime 갱신됨
+
+          // AVG STACK 계산
+          var avg = Math.floor(avgStackTotal / player);
+          if (!isFinite(avg)) avg = 0;
+
+          var payload = {
+            blindLvl: blindLvl,
+            remainingSec: time,
+            player: player,
+            totalPlayer: totalPlayer,
+            status: statusText || "RUNNING",
+
+            nextBreakSec: breakTime,
+            avgStack: avg,
+            totalRunningSec: totalRunTime
+          };
+
+          stompClient.send("/app/rooms/" + room + "/state", {}, JSON.stringify(payload));
+        }
+
+        // 전광판이 서버 상태를 받아 적용
+        function applyRemoteState(s) {
+            if (!isDisplay) return;
+
+          // blindLvl/time/player/totalPlayer 갱신
+          if (typeof s.blindLvl === "number") blindLvl = s.blindLvl;
+          if (typeof s.remainingSec === "number") time = s.remainingSec;
+          if (typeof s.player === "number") player = s.player;
+          if (typeof s.totalPlayer === "number") totalPlayer = s.totalPlayer;
+          if (typeof s.nextBreakSec === "number") {
+            renderHMS("#breakTime", s.nextBreakSec);
+          }
+
+          if (typeof s.avgStack === "number") {
+            $("#avgStackTotal").text(addComma(s.avgStack));
+          }
+
+          if (typeof s.totalRunningSec === "number") {
+            renderHMS("#totalRunTime", s.totalRunningSec);
+          }
+          // 화면 반영(기존 함수 재사용)
+          renderByBlindLvl();
+          renderTime(time);
+          $("#nowPlayer").text(player);
+          $("#totalPlayer").text(totalPlayer);
+
+          // 전광판은 로컬 타이머 절대 돌리지 않음
+          if (isDisplay) {
+            clearInterval(timer);
+            starFlag = true;
+          }
+        }
+
+        // blindLvl 기준으로 화면 갱신(기존 nextLvl 로직을 “표시 전용”으로 분리)
+        function renderByBlindLvl() {
+          if (!isDisplay) {
+            breakTimeSum();
+          }
+
+          if (blindList[blindLvl] && blindList[blindLvl].breakYn == 'Y') {
+            $("#lvl").text("BREAK");
+            $("#smallBlind").text("0");
+            $("#bigBlind").text("0");
+            $("#ante").text("0");
+
+            if (blindList[blindLvl + 1]) {
+              $("#nextLvlSmallBlind").text(blindList[blindLvl + 1].smallBlind);
+              $("#nextLvlBigBlind").text(blindList[blindLvl + 1].bigBlind);
+              $("#nextLvlAnte").text(blindList[blindLvl + 1].ante);
+            }
+          } else if (blindList[blindLvl]) {
+            $("#lvl").text(blindList[blindLvl].lvl);
+            $("#smallBlind").text(blindList[blindLvl].smallBlind);
+            $("#bigBlind").text(blindList[blindLvl].bigBlind);
+            $("#ante").text(blindList[blindLvl].ante);
+
+            if (blindList[blindLvl + 1]) {
+              if (blindList[blindLvl + 1].breakYn == 'Y') {
+                $("#nextLvlSmallBlind").text("0");
+                $("#nextLvlBigBlind").text("0");
+                $("#nextLvlAnte").text("0");
+              } else {
+                $("#nextLvlSmallBlind").text(blindList[blindLvl + 1].smallBlind);
+                $("#nextLvlBigBlind").text(blindList[blindLvl + 1].bigBlind);
+                $("#nextLvlAnte").text(blindList[blindLvl + 1].ante);
+              }
+            }
+          }
+        }
+
+        function renderTime(secLeft) {
+          var m = Math.floor(secLeft / 60);
+          var s = secLeft % 60;
+          if (m < 0) m = 0;
+          if (s < 0) s = 0;
+
+          var tm = (m < 10 ? "0" : "") + m;
+          var ts = (s < 10 ? "0" : "") + s;
+
+          document.getElementById("timeMi").innerHTML = tm;
+          document.getElementById("timeSs").innerHTML = ts;
+        }
+
 
         (function () {
           const BASE_WIDTH = 1536;   // 설계 기준 너비
@@ -68,6 +226,22 @@
       let autoPaging;
 
       $(document).ready(function(){
+            // WS 연결
+            connectStomp();
+
+            // 전광판 모드면 조작 UI 숨김 + 로컬 타이머/이벤트 안 붙임
+            if (isDisplay) {
+              $(".bottom").hide();
+              $("#stopbtn").hide();
+
+              // 표시용 초기 렌더
+              renderByBlindLvl();
+              renderTime(time);
+
+              return;
+            }
+
+
           paginateRank2();
           autoPaging = setInterval(changePageAuto, 10000);
           breakTimeSum();
@@ -126,10 +300,14 @@
           $("#breakTime").text(b_th + ":" + b_tm + ":" + b_ts);
 
           $("#pausebtn").click(function(){
-              if(time != 0){
-                  clearInterval(timer);
-                  starFlag = true;
-              }
+                if (isCtrl) {
+                    broadcastState("PAUSED");
+                }
+
+                if(time != 0){
+                    clearInterval(timer);
+                    starFlag = true;
+                }
           });
 
           $("#stopbtn").click(function(){
@@ -427,10 +605,19 @@
         if(starFlag){
             starFlag = false;
 
+            if (isCtrl) {
+                broadcastState("RUNNING"); // ✅ 시작 즉시 1번 방송
+            }
+
             timer = setInterval(function(){
+
                 time--;
                 breakTime--;
                 totalRunTime++;
+
+                if (isCtrl) {
+                    broadcastState("RUNNING");
+                }
 
                 min = Math.floor(time/60);
                 hour = Math.floor(min/60);
@@ -569,6 +756,10 @@
 
         nextBeep();
         timeGo();
+
+        if (isCtrl) {
+            broadcastState("RUNNING");
+        }
     }
 
     function nextBeep() {
@@ -696,6 +887,19 @@
         paginateRank2();
       }
     }
+
+    function renderHMS(selector, sec) {
+      var h = Math.floor(sec / 3600);
+      var m = Math.floor((sec % 3600) / 60);
+      var s = sec % 60;
+
+      var hh = (h < 10 ? "0" : "") + h;
+      var mm = (m < 10 ? "0" : "") + m;
+      var ss = (s < 10 ? "0" : "") + s;
+
+      $(selector).text(hh + ":" + mm + ":" + ss);
+    }
+
 
     /*]]>*/
 </script>

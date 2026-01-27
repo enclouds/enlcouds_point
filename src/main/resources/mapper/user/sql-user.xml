@@ -56,6 +56,22 @@
 		</if>
 	</select>
 
+    <select id="selectUnivUserListTotalCount" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="int">
+        select count(*)
+        from p_user_univ pu
+        left join p_univ pun on pun.univ_id = pu.univ_id
+        where 1=1
+        <if test="schCond1 == 'nick'">
+            AND pu.nick_name like '%${schText}%'
+        </if>
+        <if test="schCond1 == 'phone'">
+            AND pu.phone_num like '%${schText}%'
+        </if>
+        <if test="schCond2 != ''">
+            AND pu.univ_id = #{schCond2}
+        </if>
+    </select>
+
 	<select id="selectCustomUserList" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.UserDto">
 		select phone_num
 		, case when length(phone_num) = 10 then concat(concat(SUBSTR(phone_num, 1 ,3), '***'), SUBSTR(phone_num, 7 ,10))
@@ -87,6 +103,19 @@
 		, rank_sum_point
 		, pu.agent_code
 		, pa.agent_name
+        , FORMAT(IFNULL((
+            SELECT SUM(t.point)
+            FROM (
+                SELECT sub.phone_num, sub.point
+                FROM p_klpi sub
+                WHERE sub.gbn = 'N'
+                AND sub.reg_date <![CDATA[>=]]> DATE_SUB(NOW(), INTERVAL 3 YEAR)
+                ORDER BY sub.point DESC
+            ) t
+            WHERE t.phone_num = pu.phone_num
+            LIMIT 4
+            ), 0)
+        , 2) AS klpiRankPoint
 		from p_user pu
 		left join p_agent pa on pa.agent_code = pu.agent_code
 		where 1=1
@@ -111,6 +140,68 @@
 		LIMIT
 		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
 	</select>
+
+    <select id="selectUnivUserList" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.UserDto">
+        select pu.phone_num
+        , case when length(pu.phone_num) = 10 then concat(concat(SUBSTR(pu.phone_num, 1 ,3), '***'), SUBSTR(pu.phone_num, 7 ,10))
+        when length(pu.phone_num) = 11 then concat(concat(SUBSTR(pu.phone_num, 1 ,4), '***'), SUBSTR(pu.phone_num, 8 ,11))
+        when length(pu.phone_num) = 12 then concat(concat(SUBSTR(pu.phone_num, 1 ,4), '***'), SUBSTR(pu.phone_num, 8 ,11))
+        end as phone_num_masking
+        , nick_name
+        , user_gbn
+        , format(pu.point, 0) as point
+        , format(pu.kp_point, 0) as kpPoint
+        , kp_use_yn as kpUseYn
+        , pu.point as org_point
+        , format(pu.ticket, 0) as ticket
+        , format(pu.ticket2, 0) as ticket2
+        , format(pu.ticket3, 0) as ticket3
+        , format(pu.ticket4, 0) as ticket4
+        , format(pu.ticket5, 0) as ticket5
+        , pu.ticket as org_ticket
+        , pu.ticket2 as org_ticket2
+        , pu.ticket3 as org_ticket3
+        , pu.ticket4 as org_ticket4
+        , pu.ticket5 as org_ticket5
+        , date_format(pu.reg_date, '%Y-%m-%d') as regDate
+        , pu.memo
+        , date_format(visit_date, '%Y-%m-%d %H:%i:%s') as maxDate
+        , rank_point
+        , coupon_point as coupon_point
+        , coupon_point as org_coupon_point
+        , rank_sum_point
+        , pu.univ_id
+        , pun.univ_nm
+        , FORMAT(IFNULL((
+            SELECT SUM(t.point)
+            FROM (
+                SELECT sub.phone_num, sub.point
+                FROM p_klpi sub
+                WHERE sub.gbn = 'U'
+                AND sub.reg_date <![CDATA[>=]]> DATE_SUB(NOW(), INTERVAL 3 YEAR)
+                ORDER BY sub.point DESC
+            ) t
+            WHERE t.phone_num = pu.phone_num
+            LIMIT 4
+            ), 0)
+        , 2) AS klpiRankPoint
+        from p_user_univ pu
+        left join p_univ pun on pun.univ_id = pu.univ_id
+        where 1=1
+
+        <if test="schCond1 == 'nick'">
+            AND pu.nick_name like '%${schText}%'
+        </if>
+        <if test="schCond1 == 'phone'">
+            AND pu.phone_num like '%${schText}%'
+        </if>
+        <if test="schCond2 != ''">
+            AND pu.univ_id = #{schCond2}
+        </if>
+
+        LIMIT
+        #{paginationInfo.firstRecordIndex}, #{recordsPerPage}
+    </select>
 
 	<select id="selectCustomUserListByVisit" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.UserDto">
 		SELECT TAB.*
@@ -174,6 +265,13 @@
 		and phone_num = #{phoneNum}
 	</select>
 
+    <select id="selectDuplUnivUser" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="int">
+        select count(*)
+        from p_user_univ
+        where 1=1
+        and phone_num = #{phoneNum}
+    </select>
+
 	<select id="selectDuplUser2" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="int">
 		select count(*)
 		from p_user
@@ -181,6 +279,14 @@
 		and nick_name = #{nickName}
 		and agent_code = #{agentCode}
 	</select>
+
+    <select id="selectDuplUnivUser2" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="int">
+        select count(*)
+        from p_user_univ
+        where 1=1
+        and nick_name = #{nickName}
+        and univ_id = #{univId}
+    </select>
 
 	<insert id="insertUser" parameterType="com.enclouds.enpoint.user.dto.UserDto">
 		INSERT INTO p_user
@@ -203,6 +309,25 @@
 		, '1')
 	</insert>
 
+    <insert id="insertUnivUser" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+        INSERT INTO p_user_univ
+        ( phone_num
+        , nick_name
+        , user_gbn
+        , reg_date
+        , memo
+        , univ_id
+        , visit_date)
+        VALUES
+        ( TRIM(#{phoneNum})
+        , #{nickName}
+        , 'UNIV'
+        , NOW()
+        , #{memo}
+        , #{univId}
+        , NOW() )
+    </insert>
+
 	<update id="updateUser" parameterType="com.enclouds.enpoint.user.dto.UserDto">
 		UPDATE p_user
 		SET nick_name = #{nickName}
@@ -212,11 +337,26 @@
 		AND phone_num = #{phoneNum}
 	</update>
 
+    <update id="updateUnivUser" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+        UPDATE p_user_univ
+        SET nick_name = #{nickName}
+        , memo = #{memo}
+        , univ_id = #{univId}
+        WHERE 1=1
+        AND phone_num = #{phoneNum}
+    </update>
+
 	<delete id="deleteUser" parameterType="com.enclouds.enpoint.user.dto.UserDto">
 		DELETE FROM p_user
 		WHERE 1=1
 		AND phone_num = #{phoneNum}
 	</delete>
+
+    <delete id="deleteUnivUser" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+        DELETE FROM p_user_univ
+        WHERE 1=1
+        AND phone_num = #{phoneNum}
+    </delete>
 
 	<update id="updateUserAddPoint" parameterType="com.enclouds.enpoint.user.dto.UserDto">
 		UPDATE p_user
@@ -584,6 +724,20 @@
 		order by pt.reg_date desc
 	</select>
 
+    <select id="selectTicketHistory2Univ" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
+        select case when ticket_gbn = 'ADD' then '적립' else '차감' end as ticketGbnNm
+        , case when ticket_gbn = 'ADD' then format(pt.ticket, 0) else format(pt.ticket * -1, 0) end as ticket
+        , pt.phone_num
+        , pa.agent_name
+        , date_format(pt.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+        from p_ticket2 pt
+        left join p_agent pa on pa.agent_code = pt.agent_code
+        WHERE 1=1
+        AND phone_num = #{phoneNum}
+        AND pt.reg_date BETWEEN DATE_ADD(NOW(), INTERVAL -3 MONTH) AND NOW()
+        order by pt.reg_date desc
+    </select>
+
 	<select id="selectTicketHistory3" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
 		select case when ticket_gbn = 'ADD' then '적립' else '차감' end as ticketGbnNm
 		, case when ticket_gbn = 'ADD' then format(pt.ticket, 0) else format(pt.ticket * -1, 0) end as ticket
@@ -675,6 +829,15 @@
 		where 1=1
 		and phone_num = #{phoneNum}
 	</select>
+
+    <select id="getTotalTicket2Univ" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
+        select format(ticket2, 0) as ticket
+        , ticket2 as ticketInt
+        , (select agent_name from p_agent pa where pa.agent_code = #{agentCode}) as agent_name
+        from p_user_univ pu
+        where 1=1
+        and phone_num = #{phoneNum}
+    </select>
 
 	<select id="getTotalTicket3" parameterType="com.enclouds.enpoint.user.dto.UserDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
 		select format(ticket3, 0) as ticket
@@ -1280,6 +1443,13 @@
 		AND phone_num = #{phoneNum}
 	</update>
 
+    <update id="updateUserAddTicket2Univ" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+        UPDATE p_user_univ
+        SET ticket2 = ticket2 + #{addTicket}
+        WHERE 1=1
+        AND phone_num = #{phoneNum}
+    </update>
+
 	<update id="updateUserAddTicket3" parameterType="com.enclouds.enpoint.user.dto.UserDto">
 		UPDATE p_user
 		SET ticket3 = ticket3 + #{addTicket}
@@ -1321,6 +1491,13 @@
 		WHERE 1=1
 		AND phone_num = #{phoneNum}
 	</update>
+
+    <update id="useTicketAsCnt2Univ" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+        UPDATE p_user_univ
+        SET ticket2 = ticket2 - #{minusTicket}
+        WHERE 1=1
+        AND phone_num = #{phoneNum}
+    </update>
 
 	<update id="useTicketAsCnt3" parameterType="com.enclouds.enpoint.user.dto.UserDto">
 		UPDATE p_user
@@ -1639,6 +1816,12 @@
 		SET visit_date = NOW()
 		WHERE phone_num = TRIM(#{phoneNum})
 	</update>
+
+    <update id="updateVisitDateUniv" parameterType="com.enclouds.enpoint.user.dto.UserDto">
+        UPDATE p_user_univ
+        SET visit_date = NOW()
+        WHERE phone_num = TRIM(#{phoneNum})
+    </update>
 
 </mapper>
 

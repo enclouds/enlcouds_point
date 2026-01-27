@@ -4,7 +4,7 @@
     <div th:replace="/fragments/header.html :: fragment-header"></div>
 </head>
 
-<body>
+<body style="padding-left:20px; padding-right:20px;">
 <div class="modal fade small" id="loading_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div id='my-spinner'>
         <div>
@@ -101,15 +101,16 @@
     <div>
         <div class="con_top">
             <ul>
-                <li>회원관리</li>
+                <li th:text="${params.gbn == 'N' ? '일반부 회원 목록' : (params.gbn == 'U' ? '대학부 회원 목록' : '')}"></li>
                 <li>목록</li>
             </ul>
         </div>
-        <p class="page_info">회원 목록</p>
+        <p class="page_info" th:text="${params.gbn == 'N' ? '일반부 회원 목록' : (params.gbn == 'U' ? '대학부 회원 목록' : '')}"></p>
 
         <form id="schFrm">
             <input type="hidden" id="pointInt" name="pointInt" th:value="${userInfo.pointInt}">
             <input type="hidden" id="schPhoneNum" name="schPhoneNum" >
+            <input type="hidden" id="gbn" name="gbn" th:value="${params.gbn}">
 
             <div class="search_option">
                 <span class="input_group">
@@ -120,7 +121,11 @@
 
                     <select id="schCond2" name="schCond2" style="width:150px;">
                         <option value="">전체</option>
-                        <option th:each="list:${agentTotalList}" th:value="${list.agentCode}" th:text="${list.agentName}" th:selected="${list.agentCode} == ${params.schCond2}"></option>
+                        <option th:each="list:${params.gbn == 'N' ? agentTotalList : univTotalList}"
+                                th:value="${params.gbn == 'N' ? list.agentCode : list.univId}"
+                                th:text="${params.gbn == 'N' ? list.agentName : list.univNm}"
+                                th:selected="${params.gbn == 'N' ? (list.agentCode == params.schCond2) : (list.univId == params.schCond2)}">
+                        </option>
                     </select>
 
                     <input type="text" style="width:1000px;" id="schText" name="schText" placeholder="검색어" th:value="${params.schText}" onkeyup="if(window.event.keyCode==13){fnSearch()}">

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.enclouds.enpoint.klpi.mapper.KlpiMapper">
+
+    <delete id="deleteKlpi" parameterType="com.enclouds.enpoint.klpi.dto.KlpiDto">
+        DELETE FROM p_klpi
+        WHERE 1=1
+        AND tournament_seq = #{tournamentSeq}
+    </delete>
+
+    <insert id="insertKlpi" parameterType="com.enclouds.enpoint.klpi.dto.KlpiDto">
+        INSERT INTO p_klpi
+        ( gbn
+        , phone_num
+        , point
+        , reg_date
+        , reg_user_id
+        , tournament_seq )
+        VALUES
+        ( #{gbn}
+        , #{phoneNum}
+        , #{point}
+        , NOW()
+        , #{regUserId}
+        , #{tournamentSeq} )
+    </insert>
+
+    <select id="selectKlpiRankList" parameterType="String" resultType="com.enclouds.enpoint.klpi.dto.KlpiRankDto">
+        SELECT @rank := @rank + 1 AS rank,
+        t.nick_name AS nickName,
+        t.agent_name AS branch,
+        format(t.klpiRankPoint, 2) as score
+        FROM (
+            SELECT pu.nick_name,
+            pa.agent_name,
+            SUM(sub.point) AS klpiRankPoint
+            FROM p_user pu
+            INNER JOIN p_agent pa ON pa.agent_code = pu.agent_code
+            INNER JOIN p_klpi sub ON sub.phone_num = pu.phone_num AND sub.gbn = 'N' AND sub.reg_date >= DATE_SUB(NOW(), INTERVAL 3 YEAR)
+            GROUP BY pu.phone_num, pu.nick_name, pa.agent_name
+            ORDER BY klpiRankPoint DESC
+        ) t, (SELECT @rank := 0) r
+    </select>
+
+    <select id="selectKlpiRankListUniv" parameterType="String" resultType="com.enclouds.enpoint.klpi.dto.KlpiRankDto">
+        SELECT @rank := @rank + 1 AS rank,
+        t.nick_name AS nickName,
+        t.univ_nm AS branch,
+        format(t.klpiRankPoint, 2) as score
+        FROM (
+            SELECT
+            pu.nick_name,
+            pa.univ_nm ,
+            SUM(sub.point) AS klpiRankPoint
+            FROM p_user_univ pu
+            INNER JOIN p_univ pa ON pa.univ_id = pu.univ_id
+            INNER JOIN p_klpi sub ON sub.phone_num = pu.phone_num AND sub.gbn = 'U' AND sub.reg_date >= DATE_SUB(NOW(), INTERVAL 3 YEAR)
+            GROUP BY pu.phone_num, pu.nick_name, pa.univ_nm
+            ORDER BY klpiRankPoint DESC
+        ) t, (SELECT @rank := 0) r
+    </select>
+
+</mapper>
+
+

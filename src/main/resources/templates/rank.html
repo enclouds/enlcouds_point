@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>KLPI 랭킹</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        }
+        .rank-card {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .rank-header {
+            background: #343a40;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: bold;
+        }
+        .rank-table thead {
+            background: #495057;
+            color: #fff;
+        }
+        .rank-first {
+            background: linear-gradient(135deg, #ff1a1a, #cc0000);
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 0 12px rgba(255, 0, 0, 0.6);
+            border-left: 6px solid #ff0000;
+        }
+        .rank-second {
+            background: linear-gradient(135deg, #3399ff, #0066cc);
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.05rem;
+            box-shadow: 0 0 8px rgba(0, 102, 204, 0.4);
+            border-left: 4px solid #0066cc;
+        }
+        .rank-third {
+            background: linear-gradient(135deg, #66cc66, #339933);
+            color: #fff;
+            font-weight: bold;
+            font-size: 1rem;
+            border-left: 3px solid #339933;
+        }
+        .scroll-table {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="container py-5">
+
+<div class="rank-card">
+    <div class="rank-header">KLPI 랭킹</div>
+
+    <!-- 탭 메뉴 -->
+    <ul class="nav nav-tabs justify-content-center mt-3" id="rankTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general"
+                    type="button" role="tab">일반부</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="university-tab" data-bs-toggle="tab" data-bs-target="#university"
+                    type="button" role="tab">대학부</button>
+        </li>
+    </ul>
+
+    <!-- 탭 컨텐츠 -->
+    <div class="tab-content p-4">
+        <!-- 일반부 -->
+        <div class="tab-pane fade show active scroll-table" id="general" role="tabpanel">
+            <table class="table table-hover rank-table text-center align-middle">
+                <thead>
+                <tr>
+                    <th>🏆 순위</th>
+                    <th>📊 점수</th>
+                    <th>👤 닉네임</th>
+                    <th>📍 지점</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="rank, stat : ${generalRanks}"
+                    th:classappend="${stat.index == 0} ? 'rank-first' :
+                            (${stat.index == 1} ? 'rank-second' :
+                            (${stat.index == 2} ? 'rank-third' : ''))">
+                    <td>
+                        <span th:if="${stat.index == 0}">🔥🥇</span>
+                        <span th:if="${stat.index == 1}">⭐🥈</span>
+                        <span th:if="${stat.index == 2}">🌟🥉</span>
+                        <span th:text="${rank.rank}"></span>
+                    </td>
+                    <td th:text="${rank.score}"></td>
+                    <td th:text="${rank.nickname}"></td>
+                    <td th:text="${rank.branch}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 대학부 -->
+        <div class="tab-pane fade scroll-table" id="university" role="tabpanel">
+            <table class="table table-hover rank-table text-center align-middle">
+                <thead>
+                <tr>
+                    <th>🏆 순위</th>
+                    <th>📊 점수</th>
+                    <th>👤 닉네임</th>
+                    <th>📍 지점</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="rank, stat : ${universityRanks}"
+                    th:classappend="${stat.index == 0} ? 'rank-first' :
+                            (${stat.index == 1} ? 'rank-second' :
+                            (${stat.index == 2} ? 'rank-third' : ''))">
+                    <td>
+                        <span th:if="${stat.index == 0}">🔥🥇</span>
+                        <span th:if="${stat.index == 1}">⭐🥈</span>
+                        <span th:if="${stat.index == 2}">🌟🥉</span>
+                        <span th:text="${rank.rank}"></span>
+                    </td>
+                    <td th:text="${rank.score}"></td>
+                    <td th:text="${rank.nickname}"></td>
+                    <td th:text="${rank.branch}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

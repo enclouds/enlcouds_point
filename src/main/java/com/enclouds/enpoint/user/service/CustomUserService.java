@@ -9,6 +9,8 @@ public interface CustomUserService {
 
     List<UserDto> selectCustomUserList(UserDto userDto) throws Exception;
 
+    List<UserDto> selectUnivUserList(UserDto userDto) throws Exception;
+
     List<UserDto> selectCustomUserListByVisit(UserDto userDto) throws Exception;
 
     UserDto selectCustomUserInfo(UserDto userDto) throws Exception;
@@ -27,19 +29,31 @@ public interface CustomUserService {
 
     int selectDuplUser(UserDto userDto) throws Exception;
 
+    int selectDuplUnivUser(UserDto userDto) throws Exception;
+
     int selectDuplUser2(UserDto userDto) throws Exception;
+
+    int selectDuplUnivUser2(UserDto userDto) throws Exception;
 
     int insertUser(UserDto userDto) throws Exception;
 
+    int insertUnivUser(UserDto userDto) throws Exception;
+
     int updateUser(UserDto userDto) throws Exception;
 
+    int updateUnivUser(UserDto userDto) throws Exception;
+
     int deleteUser(UserDto userDto) throws Exception;
+
+    int deleteUnivUser(UserDto userDto) throws Exception;
 
     int updateUserAddPoint(UserDto userDto) throws Exception;
 
     int updateUserAddTicket(UserDto userDto) throws Exception;
 
     int updateUserAddTicket2(UserDto userDto) throws Exception;
+
+    int updateUserAddTicket2Univ(UserDto userDto) throws Exception;
 
     int updateUserAddTicket3(UserDto userDto) throws Exception;
 
@@ -63,6 +77,8 @@ public interface CustomUserService {
 
     int updateUserMinusTicket2(UserDto userDto) throws Exception;
 
+    int updateUserMinusTicket2Univ(UserDto userDto) throws Exception;
+
     int updateUserMinusTicket3(UserDto userDto) throws Exception;
 
     int updateUserMinusTicket4(UserDto userDto) throws Exception;
@@ -84,6 +100,8 @@ public interface CustomUserService {
     List<PointDto> selectTicketHistory(UserDto userDto) throws Exception;
 
     List<PointDto> selectTicketHistory2(UserDto userDto) throws Exception;
+
+    List<PointDto> selectTicketHistory2Univ(UserDto userDto) throws Exception;
 
     List<PointDto> selectTicketHistory3(UserDto userDto) throws Exception;
 

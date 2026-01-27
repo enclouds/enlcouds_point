@@ -32,6 +32,15 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th scope="row"><em class="required">*</em>토너먼트 구분</th>
+                                <td>
+                                    <select id="gbn" name="gbn" style="width:150px;">
+                                        <option value="N">일반부</option>
+                                        <option value="U">대학부</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th scope="row"><em class="required">*</em>티켓 종류</th>
                                 <td>
                                     <select id="ticketKind" name="ticketKind" style="width:150px;">
@@ -211,6 +220,7 @@
                 <tr>
                     <th scope="col">code</th>
                     <th scope="col">토너먼트 명</th>
+                    <th scope="col">토너먼트 구분</th>
                     <th scope="col">토너먼트 이용 Ticket 종류</th>
                     <th scope="col">토너먼트 이용 Ticket 장수</th>
                     <th scope="col">등록일자</th>
@@ -225,15 +235,16 @@
                 <tr th:each="list:${tournamentList}">
                     <td th:text="${list.seq}"></td>
                     <td><a href="javascript:callFunction();" th:text="${list.tournamentName}" style="color:blue;" th:onclick="javascript:fnUptModal([[${list.seq}]], [[${list.tournamentName}]], [[${list.startDate}]], [[${list.ticketKindCode}]], [[${list.ticketCnt}]])"></a></td>
+                    <td th:text="${list.gbn == 'N' ? '일반부' : (list.gbn == 'U' ? '대학부' : '')}"></td>
                     <td th:text="${list.ticketKind}"></td>
                     <td th:text="${list.ticketCnt}"></td>
                     <td th:text="${list.regDate}"></td>
                     <td th:text="${list.startDate}"></td>
                     <td>
-                        <button type="button" class="tb_btn green" th:onclick="javascript:fnRegUserForm([[${list.seq}]], [[${list.ticketKindCode}]]);">View</button>
+                        <button type="button" class="tb_btn green" th:onclick="javascript:fnRegUserForm([[${list.seq}]], [[${list.ticketKindCode}]], [[${list.gbn}]]);">View</button>
                     </td>
                     <td>
-                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnPrizeForm([[${list.seq}]]);">Prize</button>
+                        <button type="button" class="tb_btn blue" th:onclick="javascript:fnPrizeForm([[${list.seq}]], [[${list.gbn}]]);">Prize</button>
                     </td>
                     <td>
                         <button type="button" class="tb_btn blue" th:onclick="javascript:fnMemo([[${list.seq}]], [[${list.memo}]]);">Memo</button>
@@ -305,14 +316,14 @@
         $("#upt_modal").show();
     }
 
-    function fnRegUserForm(seq, ticketKind){
-        var url = "/tournament/tournamentRegList?tournamentSeq="+seq+"&ticketKind="+ticketKind;
-        window.open(url, "regInfo"+seq, "width=1200,height=800,scrollbars=yes,resizable=yes");
+    function fnRegUserForm(seq, ticketKind, gbn){
+        var url = "/tournament/tournamentRegList?tournamentSeq="+seq+"&ticketKind="+ticketKind+"&gbn="+gbn;
+        window.open(url, "regInfo"+seq, "width=1200,height=800, left=100,scrollbars=yes,resizable=yes");
     }
 
-    function fnPrizeForm(seq){
-        var url = "/tournament/tournamentPrizeList?tournamentSeq="+seq;
-        window.open(url, "regInfo"+seq, "width=1200,height=800,scrollbars=yes,resizable=yes");
+    function fnPrizeForm(seq, gbn){
+        var url = "/tournament/tournamentPrizeList?tournamentSeq="+seq+"&gbn="+gbn;
+        window.open(url, "regInfo"+seq, "width=1200,height=800, left=100,scrollbars=yes,resizable=yes");
     }
 
     function fnMemo(seq, memo){
@@ -355,6 +366,7 @@
         }
 
         formData.append("tournamentName", $("#tournamentName").val());
+        formData.append("gbn", $("#gbn").val());
         formData.append("startDate", $("#startDate").val());
         formData.append("ticketKind", $("#ticketKind").val());
         formData.append("ticketCnt", $("#ticketCnt").val());

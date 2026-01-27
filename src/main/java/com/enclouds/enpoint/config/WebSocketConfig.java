@@ -13,17 +13,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOrigins("*")  // 모든 지점 접속 허용
-                .withSockJS();                  // SockJS fallback 지원
+                .withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        // 클라이언트가 보낼 때 (send)
-        registry.setApplicationDestinationPrefixes("/app");
-
-        // 서버가 브로드캐스트 할 때 (subscribe)
+        // 서버 -> 클라이언트 publish (전광판이 구독하는 곳)
         registry.enableSimpleBroker("/topic");
-    }
 
+        // 클라이언트 -> 서버 send (컨트롤 화면에서 명령 보낼 때 쓸 prefix)
+        registry.setApplicationDestinationPrefixes("/app");
+    }
 }

@@ -15,7 +15,11 @@ public interface TournamentMapper {
 
     List<TournamentDto> selectTournamentRegList(TournamentDto tournamentDto) throws Exception;
 
+    List<TournamentDto> selectTournamentRegListUniv(TournamentDto tournamentDto) throws Exception;
+
     List<TournamentDto> selectTournamentPrizeList(TournamentDto tournamentDto) throws Exception;
+
+    List<TournamentDto> selectTournamentPrizeListUniv(TournamentDto tournamentDto) throws Exception;
 
     public int insertTournament(TournamentDto tournamentDto) throws Exception;
 
@@ -29,7 +33,7 @@ public interface TournamentMapper {
 
     public int deletePrize(TournamentDto tournamentDto) throws Exception;
 
-    public int updateAddPrize(TournamentDto tournamentDto) throws Exception;
+    public int klpiUpdate(TournamentDto tournamentDto) throws Exception;
 
     public int updateAddPrizeYn(TournamentDto tournamentDto) throws Exception;
 

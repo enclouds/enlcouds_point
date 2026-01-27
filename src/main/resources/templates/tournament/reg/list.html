@@ -4,12 +4,13 @@
     <div th:replace="/fragments/header.html :: fragment-header"></div>
 </head>
 
-<body>
+<body style="padding-left:20px; padding-right:20px;">
 
 <!-- container S -->
 <div class="container">
     <input type="hidden" id="tournamentSeq" name="tournamentSeq" th:value="${params.tournamentSeq}">
     <input type="hidden" id="ticketKind" name="ticketKind" th:value="${params.ticketKind}">
+    <input type="hidden" id="gbn" name="gbn" th:value="${params.gbn}">
     <!-- content S -->
     <div>
         <div class="con_top">
@@ -94,8 +95,8 @@
             url: "/user/userAuthAjax",
             success: function(response) {
                 if(response.userInfo.agentGbn == "GAME" || response.userInfo.agentGbn == "A"){
-                    var url = "/user/list/popup?tournamentSeq=" + $("#tournamentSeq").val() + "&ticketKind=" + $("#ticketKind").val();
-                    window.open(url, "userList", "width=1200,height=600,scrollbars=yes,resizable=yes");
+                    var url = "/user/list/popup?tournamentSeq=" + $("#tournamentSeq").val() + "&ticketKind=" + $("#ticketKind").val() + "&gbn=" + $("#gbn").val();
+                    window.open(url, "userList", "width=1200,height=600, left=200,scrollbars=yes,resizable=yes");
                 }else {
                     alert("등록 권한이 없습니다. 로그인 정보를 확인 하여 주십시오.");
                     return false;
@@ -119,6 +120,7 @@
         formData.append("ticket4", ticket4);
         formData.append("onlineChecked", onlineChecked);
         formData.append("ticketKind", $("#ticketKind").val());
+        formData.append("gbn", $("#gbn").val());
 
         $.ajax({
             contentType: false,
@@ -133,7 +135,7 @@
                 if(seq == ""){
                     alert("프린트 할 상대가 없습니다.");
                 }else {
-                    fnPrint(seq);
+                    //fnPrint(seq);
                 }
 
                 location.reload();

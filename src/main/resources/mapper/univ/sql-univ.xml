@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.enclouds.enpoint.univ.mapper.UnivMapper">
+
+	<select id="selectUnivListTotalCount" parameterType="com.enclouds.enpoint.univ.dto.UnivDto" resultType="int">
+		select count(*)
+		from p_univ pu
+		where 1=1
+
+		<if test="schCond1 == 'name'">
+			AND pu.univ_nm like '%${schText}%'
+		</if>
+
+	</select>
+
+	<select id="selectUnivList" parameterType="com.enclouds.enpoint.univ.dto.UnivDto" resultType="com.enclouds.enpoint.univ.dto.UnivDto">
+		select univ_id
+		, univ_nm
+		from p_univ pu
+		where 1=1
+
+        <if test="schCond1 == 'name'">
+            AND pu.univ_nm like '%${schText}%'
+        </if>
+
+		LIMIT
+		#{paginationInfo.firstRecordIndex}, #{recordsPerPage}
+	</select>
+
+    <select id="selectUnivTotalList" resultType="com.enclouds.enpoint.univ.dto.UnivDto">
+        select univ_id
+        , univ_nm
+        from p_univ pu
+        where 1=1
+    </select>
+
+	<insert id="insertUniv" parameterType="com.enclouds.enpoint.univ.dto.UnivDto">
+		INSERT INTO p_univ
+		( univ_nm )
+		VALUES
+		( #{univNm} )
+	</insert>
+
+	<update id="updateUniv" parameterType="com.enclouds.enpoint.univ.dto.UnivDto">
+		UPDATE p_univ
+		SET univ_nm = #{univNm}
+		WHERE 1=1
+		AND univ_id = #{univId}
+	</update>
+
+	<delete id="deleteUniv" parameterType="com.enclouds.enpoint.univ.dto.UnivDto">
+		DELETE FROM p_univ
+		WHERE 1=1
+        AND univ_id = #{univId}
+	</delete>
+
+</mapper>
+
+
