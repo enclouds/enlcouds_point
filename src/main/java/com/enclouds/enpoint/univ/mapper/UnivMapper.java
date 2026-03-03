@@ -20,4 +20,8 @@ public interface UnivMapper {
 
     int deleteUniv(UnivDto univDto) throws Exception;
 
+    int updateUnivAddTicket(UnivDto univDto) throws Exception;
+
+    int updateUnivMinusTicket(UnivDto univDto) throws Exception;
+
 }

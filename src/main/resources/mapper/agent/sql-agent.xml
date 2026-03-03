@@ -323,6 +323,19 @@
 		, NOW() )
 	</insert>
 
+    <insert id="insertAddAgentTicket6" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+        INSERT INTO p_agent_ticket6
+        ( ticket_gbn
+        , ticket
+        , agent_code
+        , reg_date)
+        VALUES
+        ( 'ADD'
+        , #{addTicket}
+        , #{agentCode}
+        , NOW() )
+    </insert>
+
 	<update id="updateAgentMinusPoint" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
 		UPDATE p_agent
 		SET point = point - #{minusPoint}
@@ -456,6 +469,19 @@
 		, NOW() )
 	</insert>
 
+    <insert id="insertMinusAgentTicket6" parameterType="com.enclouds.enpoint.agent.dto.AgentDto">
+        INSERT INTO p_agent_ticket6
+        ( ticket_gbn
+        , ticket
+        , agent_code
+        , reg_date)
+        VALUES
+        ( 'MINUS'
+        , #{minusTicket}
+        , #{agentCode}
+        , NOW() )
+    </insert>
+
 	<select id="selectAgentPointHistory" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
 		SELECT seq
 		, point_gbn
@@ -552,6 +578,22 @@
 		order by pat.reg_date desc
 	</select>
 
+    <select id="selectAgentTicketHistory6" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="com.enclouds.enpoint.user.dto.PointDto">
+        SELECT seq
+        , ticket_gbn
+        , case when ticket_gbn = 'ADD' then '적립' else '차감' end as ticketGbnNm
+        , case when ticket_gbn = 'ADD' then format(pat.ticket, 0) else format(pat.ticket * -1, 0) end as ticket
+        , date_format(pat.reg_date, '%Y-%m-%d %H:%i:%s') as regDate
+        , pat.agent_code
+        , pa.agent_name
+        FROM p_agent_ticket6 pat
+        left join p_agent pa on pat.agent_code = pa.agent_code
+        WHERE 1=1
+        AND pat.agent_code = #{agentCode}
+        AND pat.reg_date BETWEEN DATE_ADD(NOW(), INTERVAL -1 MONTH) AND NOW()
+        order by pat.reg_date desc
+    </select>
+
 	<select id="selectAgentInfo" parameterType="com.enclouds.enpoint.agent.dto.AgentDto" resultType="com.enclouds.enpoint.agent.dto.AgentDto">
 		SELECT *
 		, point as pointInt
@@ -560,6 +602,7 @@
 		, ticket3 as ticketInt3
 		, ticket4 as ticketInt4
 		, ticket5 as ticketInt5
+        , ticket6 as ticketInt6
 		FROM p_agent
 		WHERE 1=1
 		AND agent_code = #{agentCode}

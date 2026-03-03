@@ -1,6 +1,5 @@
 package com.enclouds.enpoint.univ.contorller;
 
-import com.enclouds.enpoint.game.dto.GameDto;
 import com.enclouds.enpoint.univ.dto.UnivDto;
 import com.enclouds.enpoint.univ.service.UnivService;
 import com.enclouds.enpoint.user.dto.UserDto;
@@ -154,6 +153,81 @@ public class UnivController {
                 } else {
                     result.put("resultCode", -1);
                     result.put("resultMsg", "삭제에 실패 하였습니다.");
+                }
+            }
+        } catch (ClassCastException cce){
+            DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+            userId = auth2User.getName();
+            userInfo = userService.getUserInfo(userId);
+        }
+
+        return result;
+    }
+
+    @PostMapping("/updateUnivAddTicketAjax")
+    public @ResponseBody Map<String, Object> updateUnivAddTicketAjax(@ModelAttribute("univDto") UnivDto univDto) throws Exception{
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDto userInfo = null;
+        String userId = "";
+        int resultCode;
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            if (principal != "anonymousUser") {
+                UserDetails userDetails = (UserDetails) principal;
+                userId = userDetails.getUsername();
+                userInfo = userService.getUserInfo(userId);
+
+                univDto.setAgentCode(userInfo.getAgentCode());
+
+                resultCode = univService.updateUnivAddTicket(univDto);
+
+                if (resultCode > 0) {
+                    result.put("resultCode", 0);
+                    result.put("resultMsg", "정상적으로 적립 되었습니다.");
+                } else {
+                    if(resultCode == -2){
+                        result.put("resultCode", -2);
+                        result.put("resultMsg", "적립할 티켓이 보유티켓보다 작습니다. 확인 바랍니다.");
+                    }else {
+                        result.put("resultCode", -1);
+                        result.put("resultMsg", "적립에 실패 하였습니다.");
+                    }
+                }
+            }
+        } catch (ClassCastException cce){
+            DefaultOAuth2User auth2User = (DefaultOAuth2User) principal;
+            userId = auth2User.getName();
+            userInfo = userService.getUserInfo(userId);
+        }
+
+        return result;
+    }
+
+    @PostMapping("/updateUnivMinusTicketAjax")
+    public @ResponseBody Map<String, Object> updateUnivMinusTicketAjax(@ModelAttribute("univDto") UnivDto univDto) throws Exception{
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UserDto userInfo = null;
+        String userId = "";
+        int resultCode;
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        try {
+            if (principal != "anonymousUser") {
+                UserDetails userDetails = (UserDetails) principal;
+                userId = userDetails.getUsername();
+                userInfo = userService.getUserInfo(userId);
+
+                univDto.setAgentCode(userInfo.getAgentCode());
+
+                resultCode = univService.updateUnivMinusTicket(univDto);
+
+                if (resultCode > 0) {
+                    result.put("resultCode", 0);
+                    result.put("resultMsg", "정상적으로 차감 되었습니다.");
+                } else {
+                    result.put("resultCode", -1);
+                    result.put("resultMsg", "차감에 실패 하였습니다.");
                 }
             }
         } catch (ClassCastException cce){

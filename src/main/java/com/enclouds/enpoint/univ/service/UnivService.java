@@ -1,6 +1,5 @@
 package com.enclouds.enpoint.univ.service;
 
-import com.enclouds.enpoint.game.dto.GameDto;
 import com.enclouds.enpoint.univ.dto.UnivDto;
 
 import java.util.List;
@@ -16,5 +15,9 @@ public interface UnivService {
     int updateUniv(UnivDto univDto) throws Exception;
 
     int deleteUniv(UnivDto univDto) throws Exception;
+
+    int updateUnivAddTicket(UnivDto univDto) throws Exception;
+
+    int updateUnivMinusTicket(UnivDto univDto) throws Exception;
 
 }

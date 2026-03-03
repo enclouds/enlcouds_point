@@ -54,7 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/img/**")
                 .antMatchers("/js/**")
                 .antMatchers("/app/**")
-                .antMatchers("/ws/**");
+                .antMatchers("/ws/**")
+                .antMatchers("/api/**");
         webSecurity.httpFirewall(defaultHttpFirewall());
     }
 

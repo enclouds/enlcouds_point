@@ -24,6 +24,11 @@
         VALUES (#{gameSeq}, #{roomCode}, 'OPEN')
     </insert>
 
+    <delete id="deleteOldRooms">
+        DELETE FROM sync_room
+        WHERE created_at <![CDATA[<]]> NOW() - INTERVAL 15 HOUR
+    </delete>
+
 </mapper>
 
 

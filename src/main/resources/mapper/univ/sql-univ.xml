@@ -18,6 +18,7 @@
 	<select id="selectUnivList" parameterType="com.enclouds.enpoint.univ.dto.UnivDto" resultType="com.enclouds.enpoint.univ.dto.UnivDto">
 		select univ_id
 		, univ_nm
+        , univ_ticket
 		from p_univ pu
 		where 1=1
 
@@ -32,20 +33,24 @@
     <select id="selectUnivTotalList" resultType="com.enclouds.enpoint.univ.dto.UnivDto">
         select univ_id
         , univ_nm
+        , univ_ticket
         from p_univ pu
         where 1=1
     </select>
 
 	<insert id="insertUniv" parameterType="com.enclouds.enpoint.univ.dto.UnivDto">
 		INSERT INTO p_univ
-		( univ_nm )
+		( univ_nm
+        , univ_ticket)
 		VALUES
-		( #{univNm} )
+		( #{univNm}
+        , #{univ_ticket})
 	</insert>
 
 	<update id="updateUniv" parameterType="com.enclouds.enpoint.univ.dto.UnivDto">
 		UPDATE p_univ
 		SET univ_nm = #{univNm}
+        , univ_ticket = #{univTicket}
 		WHERE 1=1
 		AND univ_id = #{univId}
 	</update>
@@ -55,6 +60,29 @@
 		WHERE 1=1
         AND univ_id = #{univId}
 	</delete>
+
+    <select id="getTotalTicket" parameterType="com.enclouds.enpoint.univ.dto.UnivDto" resultType="com.enclouds.enpoint.univ.dto.UnivDto">
+        select univ_id
+        , univ_nm
+        , univ_ticket
+        from p_univ pu
+        where 1=1
+        AND univ_id = #{univId}
+    </select>
+
+    <update id="updateUnivAddTicket" parameterType="com.enclouds.enpoint.univ.dto.UnivDto">
+        UPDATE p_univ
+        SET univ_ticket = univ_ticket + #{addTicket}
+        WHERE 1=1
+        AND univ_id = #{univId}
+    </update>
+
+    <update id="updateUnivMinusTicket" parameterType="com.enclouds.enpoint.univ.dto.UnivDto">
+        UPDATE p_univ
+        SET univ_ticket = univ_ticket - #{minusTicket}
+        WHERE 1=1
+        AND univ_id = #{univId}
+    </update>
 
 </mapper>
 

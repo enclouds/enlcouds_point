@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="/fragments/header.html :: fragment-header"></div>
 </head>
@@ -323,7 +323,7 @@
 
     function fnPrizeForm(seq, gbn){
         var url = "/tournament/tournamentPrizeList?tournamentSeq="+seq+"&gbn="+gbn;
-        window.open(url, "regInfo"+seq, "width=1200,height=800, left=100,scrollbars=yes,resizable=yes");
+        window.open(url, "_blank", "width=1200,height=800, left=100,scrollbars=yes,resizable=yes");
     }
 
     function fnMemo(seq, memo){

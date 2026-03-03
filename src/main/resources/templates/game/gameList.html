@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="/fragments/header.html :: fragment-header"></div>
 
@@ -30,14 +30,23 @@
     </style>
 
     <script>
-        // ★ 특정 게임(seq)의 ROOM 리스트 표시
-        function openRoomList(seq) {
+        const contextPath = /*[[${#httpServletRequest.contextPath}]]*/ '';
 
+        function playGame(seq){
+                $.post(contextPath + "/api/rooms/create?seq=" + seq, function (roomId) {
+                    // 생성된 roomId로 게임 페이지 이동
+                    location.href = contextPath + "/game/play?seq=" + seq + "&room=" + roomId;
+                }).fail(function(xhr){
+                    alert("ROOM 생성 실패: " + xhr.responseText);
+                });
+            }
+
+        // 특정 게임(seq)의 ROOM 리스트 표시
+        function openRoomList(seq) {
             $("#roomList").empty();
             $("#roomListModal").show();
 
-            $.get("/api/rooms?seq=" + seq, function (data) {
-
+            $.get(contextPath + "/api/rooms?seq=" + seq, function (data) {
                 if (data.length === 0) {
                     $("#roomList").append("<li>생성된 방 없음</li>");
                     return;
@@ -53,22 +62,9 @@
             });
         }
 
-        // ★ 선택한 ROOM 으로 이동
+        // 선택한 ROOM으로 이동
         function enterRoom(seq, roomId) {
-            // 바로 게임 페이지로 이동하면서 roomId 전달
-            location.href = "/game/play?seq=" + seq + "&room=" + roomId + "&display=1";
-        }
-
-        // 게임 시작
-        function playGame(seq){
-         $.post("/api/rooms/create?seq=" + seq, function (roomId) {
-              // 생성된 roomId로 게임 페이지 이동
-              location.href = "/game/play?seq=" + seq + "&room=" + roomId;
-          }).fail(function(xhr){
-              alert("ROOM 생성 실패: " + xhr.responseText);
-          });
-
-          <!-- location.href = "/game/play?seq=" + seq + "&room=" + roomId;-->
+            location.href = contextPath + "/game/play?seq=" + seq + "&room=" + roomId + "&display=1";
         }
     </script>
 </head>

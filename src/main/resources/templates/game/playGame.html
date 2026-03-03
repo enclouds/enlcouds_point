@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -69,6 +69,9 @@ function connectWS(seq, roomId) {
         // 서버에서 오는 메시지 구독
         stompClient.subscribe(`/topic/game/${seq}/${roomId}`, function(message) {
             const event = JSON.parse(message.body);
+
+            fetch(`/api/rooms/${roomId}/touch`, { method: "POST" });
+
             applyBlindEvent(event);
         });
 

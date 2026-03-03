@@ -14,4 +14,6 @@ public interface RoomMapper {
 
     int insertRoom(@Param("gameSeq") Long gameSeq,
                    @Param("roomCode") String roomCode);
+
+    int deleteOldRooms();
 }

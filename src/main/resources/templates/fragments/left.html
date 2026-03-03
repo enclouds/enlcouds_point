@@ -16,7 +16,8 @@
                     <em style="font-size: smaller;color:deepskyblue;" th:text="|프리 티켓 : ${userInfo.ticket2}장|"></em></br>
                     <em style="font-size: smaller;color:chartreuse;" th:text="|월간 티켓 : ${userInfo.ticket3}장|"></em></br>
                     <em style="font-size: smaller;color:red;" th:text="|K초대권 : ${userInfo.ticket4}장|"></em></br>
-                    <em style="font-size: smaller;color:coral;" th:text="|KLPT 시드권 : ${userInfo.ticket5}장|"></em>
+                    <em style="font-size: smaller;color:coral;" th:text="|KLPT 시드권 : ${userInfo.ticket5}장|"></em></br>
+                    <!--<em style="font-size: smaller;color:#ff50f8;" th:text="|대학부 티켓 : ${userInfo.ticket6}장|"></em>-->
                 </p>
                 <span class="btn_group">
                     <button type="button" class="btn_logout" th:onclick="|location.href='@{/logout}'|">로그아웃</button>
@@ -31,9 +32,9 @@
                     <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_VIEW', 'ROLE_GAME')">
                         <button type="button" class="depth2" th:onclick="|location.href='@{/user/list}'|">회원 목록</button>
                     </li>
-                    <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_VIEW', 'ROLE_GAME')">
+                    <!--<li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_VIEW', 'ROLE_GAME')">
                         <button type="button" class="depth2" th:onclick="|location.href='@{/user/univ/list}'|">대학부 회원 목록</button>
-                    </li>
+                    </li>-->
                     <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_AGENT', 'ROLE_VIEW')">
                         <button type="button" class="depth2" th:onclick="|location.href='@{/user/visit/list}'|">회원 최근 방문 목록</button>
                     </li>
@@ -73,14 +74,14 @@
                 </ul>
             </div>
 
-            <div class="menu_box active" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
+            <!--<div class="menu_box active" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
                 <h2 class="menu2">대학부 관리</h2>
                 <ul>
                     <li sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')">
-                        <button type="button" class="depth2" th:onclick="|location.href='@{/user/univ/list}'|">대학부 목록</button>
+                        <button type="button" class="depth2" th:onclick="|location.href='@{/univ/list}'|">대학부 목록</button>
                     </li>
                 </ul>
-            </div>
+            </div>-->
 
             <div class="menu_box active" sec:authorize="hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_GAME')">
                 <h2 class="menu2">대회관리</h2>

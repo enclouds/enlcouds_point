@@ -237,7 +237,9 @@
     wrap.style.overflow = "hidden";
 
     // 디버깅용 (필요 없으면 삭제)
-
+    if ($("#screen_size").length) {
+      $("#screen_size").text(`${vw} X ${vh} (Full Resolution Mode)`);
+    }
   }
 
   // 초기 실행 및 리사이즈 이벤트 등록

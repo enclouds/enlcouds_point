@@ -26,6 +26,7 @@ public class UserDto extends CommonDto {
     private String ticket3;
     private String ticket4;
     private String ticket5;
+    private String ticket6;
     private String loginIp;
     private Integer pointInt;
     private Integer ticketInt;

@@ -24,4 +24,5 @@ public class RoomController {
     public String createRoom(@RequestParam("seq") Long gameSeq) {
         return roomService.createOrGetRoom(gameSeq);
     }
+
 }

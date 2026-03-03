@@ -15,6 +15,7 @@
 		, format(ticket3, 0) as ticket3
 		, format(ticket4, 0) as ticket4
 		, format(ticket5, 0) as ticket5
+        , format(ticket6, 0) as ticket6
 		, point as pointInt
 		, agent_gbn
 		, agent_up_code

@@ -57,6 +57,8 @@ public interface AgentMapper {
 
     int insertAddAgentTicket5(AgentDto agentDto) throws Exception;
 
+    int insertAddAgentTicket6(AgentDto agentDto) throws Exception;
+
     int updateAgentMinusPoint(AgentDto agentDto) throws Exception;
 
     int insertMinusAgentPoint(AgentDto agentDto) throws Exception;
@@ -82,6 +84,8 @@ public interface AgentMapper {
     int insertMinusAgentTicket4(AgentDto agentDto) throws Exception;
 
     int insertMinusAgentTicket5(AgentDto agentDto) throws Exception;
+
+    int insertMinusAgentTicket6(AgentDto agentDto) throws Exception;
 
     List<PointDto> selectAgentPointHistory(AgentDto agentDto) throws Exception;
 
