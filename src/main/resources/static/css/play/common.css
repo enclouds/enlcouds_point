@@ -248,4 +248,40 @@ font-size: 2.3rem !important;
   box-shadow: 0 0 10px rgb(0 0 0 / 40%);
 }
 
+.pause-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1536px;
+  height: 864px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+}
+
+.pause-box {
+  padding: 40px 80px;
+  border-radius: 20px;
+  background: rgba(20,20,20,0.85);
+  border: 2px solid rgba(255,255,255,0.2);
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.pause-title {
+  font-size: 64px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 4px;
+}
+
+.pause-sub {
+  margin-top: 10px;
+  font-size: 20px;
+  color: #bbb;
+}
+
 /**/

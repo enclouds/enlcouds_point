@@ -206,46 +206,40 @@
           }
 
 
-(function () {
-  // 기준 해상도 (원본 디자인 사이즈)
-  const BASE_W = 1536;
-  const BASE_H = 864;
+            (function () {
+              const BASE_W = 1536;
+              const BASE_H = 864;
 
-  function applyScale() {
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
+              function applyScale() {
+                const vw = window.innerWidth;
+                const vh = window.innerHeight;
 
-    const wrap = document.querySelector(".wrap");
-    if (!wrap) return;
+                const scale = Math.min(vw / BASE_W, vh / BASE_H);
 
-    // 1. 가로와 세로의 확대/축소 비율을 각각 독립적으로 계산합니다.
-    const scaleX = vw / BASE_W;
-    const scaleY = vh / BASE_H;
+                const wrap = document.querySelector(".wrap");
+                if (!wrap) return;
 
-    // 2. transform을 이용해 화면에 강제로 꽉 채웁니다. (비율 무시 Stretch)
-    wrap.style.transform = `scale(${scaleX}, ${scaleY})`;
-    wrap.style.transformOrigin = "top left";
+                // 스케일
+                wrap.style.transform = `scale(${scale})`;
+                wrap.style.transformOrigin = "top left";
 
-    // 3. 위치를 왼쪽 상단 0,0으로 고정합니다.
-    wrap.style.position = "fixed";
-    wrap.style.left = "0px";
-    wrap.style.top = "0px";
-    wrap.style.width = BASE_W + "px";
-    wrap.style.height = BASE_H + "px";
-    wrap.style.margin = "0";
-    wrap.style.padding = "0";
-    wrap.style.overflow = "hidden";
+                // ✅ 가운데 정렬(레터박스)
+                const scaledW = BASE_W * scale;
+                const scaledH = BASE_H * scale;
+                const offsetX = Math.max(0, (vw - scaledW) / 2);
+                const offsetY = Math.max(0, (vh - scaledH) / 2);
 
-    // 디버깅용 (필요 없으면 삭제)
+                wrap.style.position = "absolute";
+                wrap.style.left = offsetX + "px";
+                wrap.style.top = offsetY + "px";
 
-  }
+                $("#screen_size").text(scaledW + " X " + scaledH + "(" + offsetX + " X " + offsetY + ")");
 
-  // 초기 실행 및 리사이즈 이벤트 등록
-  window.addEventListener("load", applyScale);
-  window.addEventListener("resize", applyScale);
-  // TV 브라우저 특성을 고려해 약간의 지연 후 재실행 (확실한 적용을 위함)
-  setTimeout(applyScale, 500);
-})();
+              }
+
+              window.addEventListener("load", applyScale);
+              window.addEventListener("resize", applyScale);
+            })();
 
         document.addEventListener("DOMContentLoaded", () => {
           document.querySelectorAll(".rank1 dl dd, .rank1 dl dt").forEach((el) => {
@@ -982,9 +976,6 @@
                         <dl th:if="${#lists.isEmpty(prizeList1)}">
                             <p style="font-size: xx-large;">Prize shows on end of level 10</p>
                         </dl>
-                        <dl>
-                            <p style="text-align: center;" id="screen_size"></p>
-                        </dl>
                     </div>
 
                     <div class="rank2" id="rank2">
@@ -1040,6 +1031,7 @@
                         </dd>
                     </dl>
                     <p style="text-align: center;">Copyright 2022 JTW Nal'K', All Right Reserved.</p>
+                    <p style="text-align: center;" id="screen_size"></p>
                 </div>
             </div>
 
