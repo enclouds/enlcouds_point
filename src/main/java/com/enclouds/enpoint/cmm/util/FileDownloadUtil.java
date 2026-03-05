@@ -6,7 +6,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.net.URLConnection;
 
 @RestController
@@ -18,7 +21,7 @@ public class FileDownloadUtil {
 
         System.out.println("FILE DOWN!");
 
-        File file = new File("/risdi/file/kingsLoungeBlind.apk");
+        File file = new File("/file/kingsLoungeBlind.apk");
 
         System.out.println(file.exists());
 
@@ -62,7 +65,7 @@ public class FileDownloadUtil {
 
         System.out.println("FILE DOWN!");
 
-        File file = new File("/risdi/file/kingsPoker.apk");
+        File file = new File("/file/kingsPoker.apk");
 
         System.out.println(file.exists());
 
