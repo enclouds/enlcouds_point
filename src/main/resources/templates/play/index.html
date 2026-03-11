@@ -236,10 +236,8 @@
     wrap.style.padding = "0";
     wrap.style.overflow = "hidden";
 
-    // 디버깅용 (필요 없으면 삭제)
-    if ($("#screen_size").length) {
-      $("#screen_size").text(`${vw} X ${vh} (Full Resolution Mode)`);
-    }
+    $("#roomNumber").text("ROOM CODE : "+room);
+
   }
 
   // 초기 실행 및 리사이즈 이벤트 등록
@@ -247,7 +245,34 @@
   window.addEventListener("resize", applyScale);
   // TV 브라우저 특성을 고려해 약간의 지연 후 재실행 (확실한 적용을 위함)
   setTimeout(applyScale, 500);
+
+
 })();
+
+    // ============================
+    // 1️⃣ 전역에서 Audio 객체 생성
+    // ============================
+    let beepSound = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        beepSound = new Audio("/static/sound/next_beep.mp3");
+
+        // 최초 사용자 제스처에서 AudioContext unlock
+        function unlockAudio() {
+            if (!beepSound) return;
+            beepSound.play().then(() => {
+                beepSound.pause();
+                beepSound.currentTime = 0;
+            }).catch(e => console.log("audio unlock failed:", e));
+
+            // 이벤트는 한 번만
+            document.removeEventListener('click', unlockAudio);
+            document.removeEventListener('touchstart', unlockAudio);
+        }
+
+        document.addEventListener('click', unlockAudio);
+        document.addEventListener('touchstart', unlockAudio);
+    });
 
         document.addEventListener("DOMContentLoaded", () => {
           document.querySelectorAll(".rank1 dl dd, .rank1 dl dt").forEach((el) => {
@@ -281,8 +306,9 @@
 
               // 전광판 모드면 조작 UI 숨김 + 로컬 타이머/이벤트 안 붙임
               if (isDisplay) {
-                $(".bottom").hide();
-                $("#stopbtn").hide();
+                $(".bottom dl").hide(); // PLAYER ENTRY LEVEL 숨김
+                $(".bottom .btn a").hide();
+                $("#stopbtn").show();
 
                 // 표시용 초기 렌더
                 renderByBlindLvl();
@@ -291,6 +317,8 @@
                 setTimeout(paginateRank2, 100);
 
                 return;
+              }else {
+                $("#exitDisplayBtn").hide();
               }
 
 
@@ -360,10 +388,6 @@
                       clearInterval(timer);
                       starFlag = true;
                   }
-            });
-
-            $("#stopbtn").click(function(){
-                window.location.href = "/game";
             });
 
             $("#lvlUp").click(function(){
@@ -664,7 +688,7 @@
               timer = setInterval(function(){
 
                   time--;
-                  breakTime--;
+                  breakTime = Math.max(0, breakTime - 1);
                   totalRunTime++;
 
                   if (isCtrl) {
@@ -814,12 +838,15 @@
           }
       }
 
-      function nextBeep() {
-          if (!isDisplay) {
-              var snd = new Audio("../../static/sound/next_beep.mp3");
-              snd.play();
-          }
-      }
+        // ============================
+        // 2️⃣ nextBeep() 수정
+        // ============================
+        function nextBeep() {
+            if (!beepSound) return;
+
+            beepSound.currentTime = 0;
+            beepSound.play().catch(e => console.log("beep blocked:", e));
+        }
 
       function getPrizeInfo(seq){
           var formData = new FormData();
@@ -961,6 +988,9 @@
         $(selector).text(hh + ":" + mm + ":" + ss);
       }
 
+        function stop(){
+            window.location.href = "/game";
+        }
 
       /*]]>*/
     </script>
@@ -983,9 +1013,6 @@
                         </dl>
                         <dl th:if="${#lists.isEmpty(prizeList1)}">
                             <p style="font-size: xx-large;">Prize shows on end of level 10</p>
-                        </dl>
-                        <dl>
-                            <p style="text-align: center;" id="screen_size"></p>
                         </dl>
                     </div>
 
@@ -1041,7 +1068,11 @@
                             <span id="nextLvlSmallBlind">0</span>/<span id="nextLvlBigBlind">0</span>(<span id="nextLvlAnte">0</span>)
                         </dd>
                     </dl>
-                    <p style="text-align: center;">Copyright 2022 JTW Nal'K', All Right Reserved.</p>
+
+                    <p style="text-align: center;font-size: x-large;color: greenyellow;" id="roomNumber"></p>
+
+                    <p style="text-align: center;">Copyright 2022 JTW Nal'K', All Right Reserved.
+
                 </div>
             </div>
 
@@ -1104,7 +1135,7 @@
                     <a id="startbtn" class="btn2" href="#" onclick="javascript:timeGo();">play</a>
                     <a id="timePlusBtn" class="btn3" href="#">prev</a>
                     <a id="timeMinusBtn" class="btn4" href="#">next</a>
-                    <a id="stopbtn" class="btn5" href="#" th:if="${gameInfo.regUserId == 'hunters'}">on/off</a>
+                    <a id="stopbtn" class="btn5" href="#" onclick="javascript:stop();">on/off</a>
                     <a id="refreshBtn" class="btn6" href="#">refresh</a>
                     <a id="startAutobtn" class="auto_btn2" href="#" onclick="javascript:autoTimeGo();">Auto Play</a>
                 </div>

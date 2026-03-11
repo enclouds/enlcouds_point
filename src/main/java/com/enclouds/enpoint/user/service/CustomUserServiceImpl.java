@@ -927,8 +927,8 @@ public class CustomUserServiceImpl implements CustomUserService{
         if(result > 0){
             //월간 티켓 차감은 가맹점으로 환불 처리 하지 않고 소멸
             // 2026-02-02 Jason 요청사항
-            agentDto.setAddTicket(userDto.getMinusTicket());
-            result = agentService.updateAgentAddTicket3(agentDto);
+            //agentDto.setAddTicket(userDto.getMinusTicket());
+            //result = agentService.updateAgentAddTicket3(agentDto);
         }
 
         return result;

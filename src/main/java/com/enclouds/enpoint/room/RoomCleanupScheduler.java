@@ -11,8 +11,8 @@ public class RoomCleanupScheduler {
 
     private final RoomService roomService;
 
-    // 1시간마다 실행
-    @Scheduled(cron = "0 0 0 * * *")
+    // 8시 마다 실행
+    @Scheduled(cron = "0 0 10 * * *")
     public void cleanup() {
         int count = roomService.deleteOldRooms();
         if (count > 0) {
